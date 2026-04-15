@@ -169,6 +169,12 @@
     .card:active  { transform: scale(0.977); border-color: rgba(192,69,90,0.5); background: #2f2020; }
     .card:active::before, .card:active::after { opacity: 1; }
 
+    /* Featured channel card — slightly elevated */
+    .card.channel {
+      background: #2f1e22;
+      border-color: rgba(192,69,90,0.38);
+    }
+
     .card-icon {
       font-size: 22px;
       flex-shrink: 0;
@@ -305,25 +311,20 @@
 
   </div>
 
-  <p class="section-label">Featured</p>
+  <p class="section-label">Music Library</p>
   <div class="cards">
 
-    <div class="card" data-url="https://youtu.be/DDsbSRCG2Xg" data-title="M-O-T-H-E-R — Heartstrings Studio">
-      <div class="card-icon">🌸</div>
+    <div class="card channel" data-url="https://www.youtube.com/@heartstringsstudiowv" data-title="Heartstrings Studio — Full Music Library on YouTube">
+      <div class="card-icon">▶️</div>
       <div class="card-text">
-        <div class="card-title">M-O-T-H-E-R</div>
-        <div class="card-sub">Mother's Day — share now</div>
+        <div class="card-title">Full YouTube Channel</div>
+        <div class="card-sub">@heartstringsstudiowv — all songs</div>
       </div>
       <div class="card-actions">
         <button class="btn share" title="Share">⬆</button>
         <button class="btn open" title="Open">↗</button>
       </div>
     </div>
-
-  </div>
-
-  <p class="section-label">Playlists</p>
-  <div class="cards">
 
     <div class="card" data-url="https://www.youtube.com/playlist?list=PLBaBQ7Vhr-5-UuSeneZViY8WAyxJujGXa" data-title="Memorial Songs Playlist — Heartstrings Studio">
       <div class="card-icon">🕊️</div>
@@ -341,7 +342,7 @@
       <div class="card-icon">💍</div>
       <div class="card-text">
         <div class="card-title">Wedding Songs</div>
-        <div class="card-sub">Forever Starts Here — YouTube Playlist</div>
+        <div class="card-sub">YouTube Playlist</div>
       </div>
       <div class="card-actions">
         <button class="btn share" title="Share">⬆</button>
@@ -366,6 +367,23 @@
       <div class="card-text">
         <div class="card-title">Unreleased Demos</div>
         <div class="card-sub">YouTube Playlist</div>
+      </div>
+      <div class="card-actions">
+        <button class="btn share" title="Share">⬆</button>
+        <button class="btn open" title="Open">↗</button>
+      </div>
+    </div>
+
+  </div>
+
+  <p class="section-label">Featured</p>
+  <div class="cards">
+
+    <div class="card" data-url="https://youtu.be/DDsbSRCG2Xg" data-title="M-O-T-H-E-R — Heartstrings Studio">
+      <div class="card-icon">🌸</div>
+      <div class="card-text">
+        <div class="card-title">M-O-T-H-E-R</div>
+        <div class="card-sub">Mother's Day — share now</div>
       </div>
       <div class="card-actions">
         <button class="btn share" title="Share">⬆</button>
