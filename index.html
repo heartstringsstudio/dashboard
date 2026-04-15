@@ -228,6 +228,137 @@
     .btn:active { background: var(--rose-glow); transform: scale(0.88); }
     .btn.open { color: var(--text-muted); border-color: rgba(250,246,242,0.1); }
 
+    /* ── Start a Song button ── */
+    .start-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      padding: 18px;
+      background: #7a2d3e;
+      border: 1px solid rgba(192,69,90,0.45);
+      border-radius: 4px;
+      color: var(--cream);
+      font-family: 'Playfair Display', Georgia, serif;
+      font-style: italic;
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: opacity 0.2s, transform 0.15s;
+      -webkit-tap-highlight-color: transparent;
+      text-decoration: none;
+    }
+    .start-btn::before, .start-btn::after {
+      content: '';
+      position: absolute;
+      width: 10px; height: 10px;
+      border-style: solid;
+      border-color: rgba(250,246,242,0.4);
+    }
+    .start-btn::before { top: 5px; left: 5px; border-width: 1px 0 0 1px; }
+    .start-btn::after  { bottom: 5px; right: 5px; border-width: 0 1px 1px 0; }
+    .start-btn:active  { opacity: 0.85; transform: scale(0.977); }
+
+    /* ── Price card ── */
+    .price-card {
+      background: var(--charcoal-soft);
+      border: 1px solid var(--divider);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 10px;
+    }
+    .price-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px 14px;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+    .price-toggle-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .price-icon {
+      font-size: 22px;
+      width: 42px; height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(192,69,90,0.1);
+      border-radius: 3px;
+      border: 1px solid var(--divider);
+      flex-shrink: 0;
+    }
+    .price-toggle-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--cream);
+    }
+    .price-toggle-sub {
+      font-size: 11px;
+      font-weight: 300;
+      color: var(--text-muted);
+      margin-top: 3px;
+      letter-spacing: 0.03em;
+    }
+    .price-chevron {
+      color: var(--rose-light);
+      font-size: 14px;
+      transition: transform 0.25s;
+      flex-shrink: 0;
+    }
+    .price-card.open .price-chevron { transform: rotate(180deg); }
+    .price-body {
+      display: none;
+      padding: 0 14px 16px;
+      border-top: 1px solid var(--divider);
+    }
+    .price-card.open .price-body { display: block; }
+    .price-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 11px 0;
+      border-bottom: 1px solid rgba(192,69,90,0.1);
+    }
+    .price-row:last-child { border-bottom: none; }
+    .price-row-left {}
+    .price-row-label {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--cream);
+    }
+    .price-row-desc {
+      font-size: 11px;
+      font-weight: 300;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+    .price-row-amount {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--rose-light);
+      white-space: nowrap;
+      margin-left: 12px;
+    }
+    .price-note {
+      font-size: 10.5px;
+      font-weight: 300;
+      color: var(--text-muted);
+      margin-top: 12px;
+      line-height: 1.6;
+    }
+
     #pwa-hint {
       margin: 36px 2px 0;
       background: var(--charcoal-soft);
@@ -269,6 +400,47 @@
 </header>
 
 <main>
+
+  <a class="start-btn" href="https://heartstringsstudio.github.io/heartstringsstudio/#get-started" target="_blank" rel="noopener">
+    ✦ &nbsp;Start a Song — Tell Tim Your Story
+  </a>
+
+  <div class="price-card" id="priceCard">
+    <div class="price-toggle" id="priceToggle">
+      <div class="price-toggle-left">
+        <div class="price-icon">💲</div>
+        <div>
+          <div class="price-toggle-title">Pricing</div>
+          <div class="price-toggle-sub">Tap to show client</div>
+        </div>
+      </div>
+      <span class="price-chevron">▾</span>
+    </div>
+    <div class="price-body" id="priceBody">
+      <div class="price-row">
+        <div class="price-row-left">
+          <div class="price-row-label">Custom Song</div>
+          <div class="price-row-desc">Full package — MP3, MP4, art, lyrics, YouTube link</div>
+        </div>
+        <div class="price-row-amount">$150</div>
+      </div>
+      <div class="price-row">
+        <div class="price-row-left">
+          <div class="price-row-label">Rush Delivery</div>
+          <div class="price-row-desc">Guaranteed within 24 hours</div>
+        </div>
+        <div class="price-row-amount">+$50</div>
+      </div>
+      <div class="price-row">
+        <div class="price-row-left">
+          <div class="price-row-label">Commercial License</div>
+          <div class="price-row-desc">For business or public use</div>
+        </div>
+        <div class="price-row-amount">+$100</div>
+      </div>
+      <div class="price-note">Flat rate · No hidden fees · Delivered in 48–72 hours · One round of lyric revisions included · Remake guarantee</div>
+    </div>
+  </div>
 
   <p class="section-label">Studio</p>
   <div class="cards">
@@ -436,6 +608,10 @@
   function openLink(url) {
     window.open(url, '_blank', 'noopener');
   }
+
+  document.getElementById('priceToggle').addEventListener('click', () => {
+    document.getElementById('priceCard').classList.toggle('open');
+  });
 
   document.querySelectorAll('.card').forEach(card => {
     const url   = card.dataset.url;
