@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Heartstrings" />
+  <meta name="theme-color" content="#1a1214" />
+  <link rel="manifest" href="manifest.json" />
+  <title>Heartstrings Studio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --charcoal:      #1e1a1a;
+      --charcoal-soft: #2a2222;
+      --charcoal-deep: #1a1214;
+      --cream:         #faf6f2;
+      --rose:          #c0455a;
+      --rose-light:    #d4637a;
+      --rose-glow:     rgba(192,69,90,0.15);
+      --rose-border:   rgba(192,69,90,0.28);
+      --text-muted:    rgba(250,246,242,0.45);
+      --divider:       rgba(192,69,90,0.18);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--charcoal-deep);
+      color: var(--cream);
+      font-family: 'Lato', sans-serif;
+      font-weight: 300;
+      min-height: 100dvh;
+      padding-bottom: env(safe-area-inset-bottom, 24px);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: -100px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 320px;
+      background: radial-gradient(ellipse at 50% 30%, rgba(192,69,90,0.22) 0%, transparent 65%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    header {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 52px 24px 28px;
+      border-bottom: 1px solid var(--divider);
+    }
+
+    .ornament-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    .orn-line {
+      flex: 1; max-width: 56px; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(192,69,90,0.5));
+    }
+    .orn-line.r { background: linear-gradient(90deg, rgba(192,69,90,0.5), transparent); }
+    .orn-diamond {
+      width: 7px; height: 7px;
+      background: var(--rose-light);
+      transform: rotate(45deg);
+      opacity: 0.7;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(26px, 6.5vw, 36px);
+      font-weight: 700;
+      color: var(--cream);
+      letter-spacing: 0.02em;
+      line-height: 1;
+    }
+
+    .tagline {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-style: italic;
+      font-size: 13px;
+      color: var(--rose-light);
+      margin-top: 7px;
+      letter-spacing: 0.05em;
+    }
+
+    #toast {
+      position: fixed;
+      bottom: calc(env(safe-area-inset-bottom, 16px) + 16px);
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--rose);
+      color: var(--cream);
+      padding: 10px 22px;
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      white-space: nowrap;
+      z-index: 999;
+      transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+      pointer-events: none;
+    }
+    #toast.show { transform: translateX(-50%) translateY(0); }
+
+    main {
+      position: relative;
+      z-index: 1;
+      padding: 24px 16px 44px;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--rose);
+      margin: 28px 0 12px 2px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-label::after {
+      content: ''; flex: 1; height: 1px;
+      background: var(--divider);
+    }
+    .section-label:first-child { margin-top: 4px; }
+
+    .cards { display: flex; flex-direction: column; gap: 10px; }
+
+    .card {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: var(--charcoal-soft);
+      border: 1px solid var(--divider);
+      border-radius: 4px;
+      padding: 15px 14px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.2s, background 0.2s, transform 0.15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .card::before, .card::after {
+      content: '';
+      position: absolute;
+      width: 9px; height: 9px;
+      border-style: solid;
+      border-color: var(--rose-border);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .card::before { top: 5px; left: 5px; border-width: 1px 0 0 1px; }
+    .card::after  { bottom: 5px; right: 5px; border-width: 0 1px 1px 0; }
+    .card:active  { transform: scale(0.977); border-color: rgba(192,69,90,0.5); background: #2f2020; }
+    .card:active::before, .card:active::after { opacity: 1; }
+
+    .card-icon {
+      font-size: 22px;
+      flex-shrink: 0;
+      width: 42px; height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(192,69,90,0.1);
+      border-radius: 3px;
+      border: 1px solid var(--divider);
+    }
+
+    .card-text { flex: 1; min-width: 0; }
+
+    .card-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--cream);
+      line-height: 1.2;
+    }
+
+    .card-sub {
+      font-size: 11px;
+      font-weight: 300;
+      color: var(--text-muted);
+      margin-top: 3px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      letter-spacing: 0.03em;
+    }
+
+    .card-actions { display: flex; gap: 7px; flex-shrink: 0; }
+
+    .btn {
+      width: 36px; height: 36px;
+      border-radius: 3px;
+      border: 1px solid var(--rose-border);
+      background: transparent;
+      color: var(--rose-light);
+      font-size: 15px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s, transform 0.12s;
+      -webkit-tap-highlight-color: transparent;
+      flex-shrink: 0;
+    }
+    .btn:active { background: var(--rose-glow); transform: scale(0.88); }
+    .btn.open { color: var(--text-muted); border-color: rgba(250,246,242,0.1); }
+
+    #pwa-hint {
+      margin: 36px 2px 0;
+      background: var(--charcoal-soft);
+      border: 1px solid var(--divider);
+      border-radius: 4px;
+      padding: 14px 16px;
+      font-size: 12px;
+      font-weight: 300;
+      color: var(--text-muted);
+      line-height: 1.7;
+      display: none;
+    }
+    #pwa-hint strong { color: var(--rose-light); font-weight: 700; }
+
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 16px 24px 32px;
+      font-family: 'Playfair Display', Georgia, serif;
+      font-style: italic;
+      font-size: 12px;
+      color: rgba(192,69,90,0.4);
+    }
+  </style>
+</head>
+<body>
+
+<div id="toast">Link copied!</div>
+
+<header>
+  <div class="ornament-row">
+    <span class="orn-line"></span>
+    <span class="orn-diamond"></span>
+    <span class="orn-line r"></span>
+  </div>
+  <h1>Heartstrings Studio</h1>
+  <p class="tagline">Quick Share Dashboard</p>
+</header>
+
+<main>
+
+  <p class="section-label">Studio</p>
+  <div class="cards">
+
+    <div class="card" data-url="https://tinyurl.com/heartstringsstudiowv" data-title="Heartstrings Studio — Main Site">
+      <div class="card-icon">🎵</div>
+      <div class="card-text">
+        <div class="card-title">Main Studio Site</div>
+        <div class="card-sub">tinyurl.com/heartstringsstudiowv</div>
+      </div>
+      <div class="card-actions">
+        <button class="btn share" title="Share">⬆</button>
+        <button class="btn open" title="Open">↗</button>
+      </div>
+    </div>
+
+    <div class="card" data-url="https://tinyurl.com/heartstringsmemorial" data-title="Heartstrings Studio — Memorial Song Intake">
+      <div class="card-icon">🕯️</div>
+      <div class="card-text">
+        <div class="card-title">Memorial Intake Form</div>
+        <div class="card-sub">tinyurl.com/heartstringsmemorial</div>
+      </div>
+      <div class="card-actions">
+        <button class="btn share" title="Share">⬆</button>
+        <button class="btn open" title="Open">↗</button>
+      </div>
+    </div>
+
+    <div class="card" data-url="https://tinyurl.com/heartstringsfh" data-title="Heartstrings Studio — Funeral Home Partnership">
+      <div class="card-icon">🤝</div>
+      <div class="card-text">
+        <div class="card-title">Funeral Home Pitch Page</div>
+        <div class="card-sub">tinyurl.com/heartstringsfh</div>
+      </div>
+      <div class="card-actions">
+        <button class="btn share" title="Share">⬆</button>
+        <button class="btn open" title="Open">↗</button>
+      </div>
+    </div>
+
+  </div>
+
+  <p class="section-label">Featured</p>
+  <div class="cards">
+
+    <div class="card" data-url="https://youtu.be/DDsbSRCG2Xg" data-title="M-O-T-H-E-R — Heartstrings Studio">
+      <div class="card-icon">🌸</div>
+      <div class="card-text">
+        <div class="card-title">M-O-T-H-E-R</div>
+        <div class="card-sub">Mother's Day — share now</div>
+      </div>
+      <div class="card-actions">
+        <button class="btn share" title="Share">⬆</button>
+        <button class="btn open" title="Open">↗</button>
+      </div>
+    </div>
+
+  </div>
+
+  <p class="section-label">Playlists</p>
+  <div class="cards">
+
+    <div class="card" data-url="https://www.youtube.com/playlist?list=PLBaBQ7Vhr-5-UuSeneZViY8WAyxJujGXa" data-title="Memorial Songs Playlist — Heartstrings Studio">
+      <div class="card-icon">🕊️</div>
+      <div class="card-text">
+        <div class="card-title">Memorial Songs</div>
+        <div class="card-sub">YouTube Playlist</div>
+      </div>
+      <div class="card-actions">
+        <button class="btn share" title="Share">⬆</button>
+        <button class="btn open" title="Open">↗</button>
+      </div>
+    </div>
+
+    <div class="card" data-url="https://www.youtube.com/playlist?list=PLBaBQ7Vhr-59e8e10Hs42Zwx6Knhp1NCL" data-title="Forever Starts Here — Wedding Songs by Heartstrings Studio">
+      <div class="card-icon">💍</div>
+      <div class="card-text">
+        <div class="card-title">Wedding Songs</div>
+        <div class="card-sub">Forever Starts Here — YouTube Playlist</div>
+      </div>
+      <div class="card-actions">
+        <button class="btn share" title="Share">⬆</button>
+        <button class="btn open" title="Open">↗</button>
+      </div>
+    </div>
+
+    <div class="card" data-url="https://www.youtube.com/playlist?list=PLBaBQ7Vhr-58nEunbI_U_B-wfIgkCNyJv" data-title="Birthday Celebrations — Heartstrings Studio">
+      <div class="card-icon">🎂</div>
+      <div class="card-text">
+        <div class="card-title">Birthday Celebrations</div>
+        <div class="card-sub">YouTube Playlist</div>
+      </div>
+      <div class="card-actions">
+        <button class="btn share" title="Share">⬆</button>
+        <button class="btn open" title="Open">↗</button>
+      </div>
+    </div>
+
+    <div class="card" data-url="https://www.youtube.com/playlist?list=PLBaBQ7Vhr-58N6PZOuIXyr7GmKvdUxqwJ" data-title="Unreleased Demos — Heartstrings Studio">
+      <div class="card-icon">🎛️</div>
+      <div class="card-text">
+        <div class="card-title">Unreleased Demos</div>
+        <div class="card-sub">YouTube Playlist</div>
+      </div>
+      <div class="card-actions">
+        <button class="btn share" title="Share">⬆</button>
+        <button class="btn open" title="Open">↗</button>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="pwa-hint">
+    <strong>Add to your home screen:</strong><br>
+    iOS: tap <strong>Share ⬆</strong> in Safari → <strong>"Add to Home Screen"</strong><br>
+    Android: tap <strong>⋮</strong> in Chrome → <strong>"Add to Home Screen"</strong>
+  </div>
+
+</main>
+
+<footer>Heartstrings Studio · Lumberport, West Virginia</footer>
+
+<script>
+  if (!window.matchMedia('(display-mode: standalone)').matches) {
+    document.getElementById('pwa-hint').style.display = 'block';
+  }
+
+  const toast = document.getElementById('toast');
+  let toastTimer;
+  function showToast(msg) {
+    toast.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
+  }
+
+  async function shareLink(url, title) {
+    if (navigator.share) {
+      try { await navigator.share({ title, url }); } catch(e) {}
+    } else {
+      await navigator.clipboard.writeText(url);
+      showToast('Link copied!');
+    }
+  }
+
+  function openLink(url) {
+    window.open(url, '_blank', 'noopener');
+  }
+
+  document.querySelectorAll('.card').forEach(card => {
+    const url   = card.dataset.url;
+    const title = card.dataset.title;
+    card.querySelector('.btn.share').addEventListener('click', e => { e.stopPropagation(); shareLink(url, title); });
+    card.querySelector('.btn.open').addEventListener('click',  e => { e.stopPropagation(); openLink(url); });
+    card.addEventListener('click', () => shareLink(url, title));
+  });
+</script>
+
+</body>
+</html>
