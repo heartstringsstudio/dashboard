@@ -1,760 +1,502 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="Heartstrings" />
-  <meta name="theme-color" content="#110d0f" />
-  <link rel="manifest" href="manifest.json" />
-  <title>Heartstrings Studio</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
-  <style>
-    :root {
-      --bg:         #110d0f;
-      --surface:    rgba(255,255,255,0.04);
-      --surface-2:  rgba(255,255,255,0.07);
-      --border:     rgba(255,255,255,0.07);
-      --border-hot: rgba(192,69,90,0.35);
-      --rose:       #c0455a;
-      --rose-light: #d4637a;
-      --rose-dim:   #7a2d3e;
-      --rose-glow:  rgba(192,69,90,0.12);
-      --cream:      #faf6f2;
-      --cream-dim:  rgba(250,246,242,0.55);
-      --cream-faint:rgba(250,246,242,0.28);
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Heartstrings Studio — Chat</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { overflow-x: hidden; }
-    body {
-      background: var(--bg);
-      color: var(--cream);
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 300;
-      min-height: 100dvh;
-      padding-bottom: env(safe-area-inset-bottom, 32px);
-      -webkit-font-smoothing: antialiased;
-    }
+  :root {
+    --rose: #C2566B;
+    --rose-light: #f0d4da;
+    --rose-dark: #8e3a4d;
+    --charcoal: #2C2926;
+    --charcoal-mid: #4a4541;
+    --warm-bg: #FAF7F4;
+    --warm-surface: #F3EDE7;
+    --warm-border: #DDD3C8;
+    --text-primary: #2C2926;
+    --text-secondary: #6B5F57;
+    --text-muted: #9A8E87;
+    --font-display: 'Playfair Display', Georgia, serif;
+    --font-body: 'Lato', sans-serif;
+  }
 
-    .bg-orb { position: fixed; border-radius: 50%; pointer-events: none; z-index: 0; filter: blur(80px); }
-    .bg-orb-1 { width: 400px; height: 300px; top: -80px; left: 50%; transform: translateX(-50%); background: radial-gradient(ellipse, rgba(192,69,90,0.18) 0%, transparent 70%); }
-    .bg-orb-2 { width: 250px; height: 250px; bottom: 20%; right: -60px; background: radial-gradient(ellipse, rgba(192,69,90,0.07) 0%, transparent 70%); }
+  body {
+    font-family: var(--font-body);
+    background: var(--warm-bg);
+    color: var(--text-primary);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
+  }
 
-    body::after { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E"); opacity: 0.4; pointer-events: none; z-index: 0; }
+  .chat-wrapper {
+    width: 100%;
+    max-width: 680px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border-left: 1px solid var(--warm-border);
+    border-right: 1px solid var(--warm-border);
+  }
 
-    #toast { position: fixed; bottom: calc(env(safe-area-inset-bottom, 20px) + 20px); left: 50%; transform: translateX(-50%) translateY(60px); background: rgba(30,20,24,0.92); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--border-hot); color: var(--rose-light); padding: 10px 20px; border-radius: 100px; font-size: 12px; font-weight: 500; letter-spacing: 0.08em; white-space: nowrap; z-index: 999; transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1), opacity 0.35s; pointer-events: none; opacity: 0; }
-    #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+  .chat-header {
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid var(--warm-border);
+    background: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
 
-    .wrapper { position: relative; z-index: 1; max-width: 430px; margin: 0 auto; padding: 0 18px 48px; }
+  .header-inner {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
 
-    header { padding: 56px 0 32px; text-align: center; animation: fadeUp 0.6s ease both; }
-    .header-eyebrow { font-size: 9px; font-weight: 500; letter-spacing: 0.3em; text-transform: uppercase; color: var(--rose-light); opacity: 0.7; margin-bottom: 12px; }
-    h1 { font-family: 'Playfair Display', Georgia, serif; font-size: clamp(28px, 7vw, 38px); font-weight: 700; color: var(--cream); line-height: 1; letter-spacing: -0.01em; }
-    .header-sub { font-size: 11px; font-weight: 300; letter-spacing: 0.2em; text-transform: uppercase; color: var(--cream-faint); margin-top: 8px; }
+  .logo-mark {
+    width: 38px;
+    height: 38px;
+    background: var(--rose);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
 
-    .cta-wrap { margin-bottom: 10px; animation: fadeUp 0.6s 0.1s ease both; }
-    .cta-btn { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 17px 20px; background: linear-gradient(135deg, #7a2d3e 0%, #5c1e2b 100%); border: 1px solid rgba(192,69,90,0.4); border-radius: 14px; color: var(--cream); font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; cursor: pointer; position: relative; overflow: hidden; transition: transform 0.15s, box-shadow 0.15s; box-shadow: 0 4px 24px rgba(192,69,90,0.18), inset 0 1px 0 rgba(255,255,255,0.06); -webkit-tap-highlight-color: transparent; }
-    .cta-btn::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, transparent 60%); }
-    .cta-btn:active { transform: scale(0.975); box-shadow: 0 2px 12px rgba(192,69,90,0.12); }
-    .cta-icon { font-size: 16px; opacity: 0.85; }
+  .logo-mark svg { width: 20px; height: 20px; }
 
-    .price-wrap { animation: fadeUp 0.6s 0.15s ease both; }
-    .price-card { background: var(--surface); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; transition: border-color 0.2s; }
-    .price-card.open { border-color: var(--border-hot); }
-    .price-toggle { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; cursor: pointer; -webkit-tap-highlight-color: transparent; user-select: none; gap: 12px; }
-    .price-toggle-left { display: flex; align-items: center; gap: 12px; }
-    .price-emoji { font-size: 18px; width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; background: var(--rose-glow); border-radius: 10px; border: 1px solid var(--border-hot); flex-shrink: 0; }
-    .price-toggle-title { font-size: 14px; font-weight: 500; color: var(--cream); }
-    .price-toggle-sub { font-size: 11px; font-weight: 300; color: var(--cream-faint); margin-top: 1px; }
-    .price-chevron { width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--cream-faint); font-size: 11px; transition: transform 0.25s, border-color 0.2s; flex-shrink: 0; }
-    .price-card.open .price-chevron { transform: rotate(180deg); border-color: var(--border-hot); color: var(--rose-light); }
-    .price-body { max-height: 0; overflow: hidden; transition: max-height 0.35s cubic-bezier(0.4,0,0.2,1); }
-    .price-card.open .price-body { max-height: 300px; }
-    .price-inner { padding: 0 16px 16px; border-top: 1px solid var(--border); }
-    .price-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
-    .price-row:last-of-type { border-bottom: none; }
-    .price-row-label { font-size: 13px; font-weight: 500; color: var(--cream); }
-    .price-row-desc { font-size: 10.5px; font-weight: 300; color: var(--cream-faint); margin-top: 1px; }
-    .price-amount { font-family: 'Playfair Display', Georgia, serif; font-size: 17px; font-weight: 700; color: var(--rose-light); white-space: nowrap; margin-left: 10px; }
-    .price-note { font-size: 10px; font-weight: 300; color: var(--cream-faint); margin-top: 10px; line-height: 1.65; opacity: 0.7; }
+  .header-text h1 {
+    font-family: var(--font-display);
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--charcoal);
+    letter-spacing: 0.01em;
+  }
 
-    .section-head { display: flex; align-items: center; gap: 10px; margin: 28px 0 12px; }
-    .section-head-label { font-size: 9px; font-weight: 500; letter-spacing: 0.26em; text-transform: uppercase; color: var(--rose-light); opacity: 0.65; white-space: nowrap; }
-    .section-head-line { flex: 1; height: 1px; background: linear-gradient(90deg, rgba(192,69,90,0.25), transparent); }
+  .header-text p {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 1px;
+  }
 
-    .cards { display: flex; flex-direction: column; gap: 8px; }
-    .card { display: flex; align-items: center; gap: 12px; background: var(--surface); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid var(--border); border-radius: 14px; padding: 13px 13px 13px 14px; cursor: pointer; position: relative; overflow: hidden; transition: border-color 0.2s, background 0.2s, transform 0.13s, box-shadow 0.2s; -webkit-tap-highlight-color: transparent; }
-    .card::before { content: ''; position: absolute; left: 0; top: 18%; bottom: 18%; width: 2px; background: var(--rose); border-radius: 0 2px 2px 0; opacity: 0; transition: opacity 0.2s; }
-    .card:active { transform: scale(0.975); border-color: var(--border-hot); background: var(--surface-2); box-shadow: 0 0 0 1px rgba(192,69,90,0.1); }
-    .card:active::before { opacity: 1; }
-    .card.channel { background: linear-gradient(135deg, rgba(192,69,90,0.08) 0%, rgba(255,255,255,0.03) 100%); border-color: rgba(192,69,90,0.2); box-shadow: 0 2px 16px rgba(192,69,90,0.08); }
-    .card.channel::before { opacity: 0.5; }
-    .card-emoji { font-size: 20px; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: var(--surface-2); border-radius: 10px; border: 1px solid var(--border); flex-shrink: 0; }
-    .card.channel .card-emoji { background: var(--rose-glow); border-color: var(--border-hot); }
-    .card-text { flex: 1; min-width: 0; }
-    .card-title { font-size: 14px; font-weight: 500; color: var(--cream); line-height: 1.2; }
-    .card-sub { font-size: 11px; font-weight: 300; color: var(--cream-faint); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .card-actions { display: flex; gap: 6px; flex-shrink: 0; }
-    .action-btn { width: 34px; height: 34px; border-radius: 9px; border: 1px solid var(--border); background: var(--surface); color: var(--cream-dim); font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.15s, border-color 0.15s, transform 0.12s, color 0.15s; -webkit-tap-highlight-color: transparent; flex-shrink: 0; }
-    .action-btn.share { color: var(--rose-light); border-color: var(--border-hot); }
-    .action-btn:active { transform: scale(0.85); background: var(--rose-glow); }
+  .status-dot {
+    width: 7px;
+    height: 7px;
+    background: #4CAF50;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 5px;
+    vertical-align: middle;
+  }
 
-    /* ── Chat card ── */
-    .card.chat-card { background: linear-gradient(135deg, rgba(192,69,90,0.1) 0%, rgba(255,255,255,0.03) 100%); border-color: rgba(192,69,90,0.28); }
-    .card.chat-card::before { opacity: 0.6; }
-    .card.chat-card .card-emoji { background: var(--rose-glow); border-color: var(--border-hot); }
+  .messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    scroll-behavior: smooth;
+  }
 
-    /* ── Chat overlay ── */
-    #chat-overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 200;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-    #chat-overlay.open { opacity: 1; pointer-events: all; }
+  .message {
+    display: flex;
+    gap: 10px;
+    max-width: 100%;
+  }
 
-    #chat-backdrop {
-      position: absolute;
-      inset: 0;
-      background: rgba(10,7,9,0.7);
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
-    }
+  .message.user {
+    flex-direction: row-reverse;
+  }
 
-    #chat-sheet {
-      position: relative;
-      z-index: 1;
-      background: #1a1115;
-      border-top: 1px solid var(--border-hot);
-      border-radius: 20px 20px 0 0;
-      height: 88dvh;
-      display: flex;
-      flex-direction: column;
-      transform: translateY(100%);
-      transition: transform 0.4s cubic-bezier(0.32,0.72,0,1);
-      overflow: hidden;
-    }
-    #chat-overlay.open #chat-sheet { transform: translateY(0); }
+  .avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    margin-top: 2px;
+  }
 
-    .chat-handle {
-      width: 36px; height: 4px;
-      background: rgba(255,255,255,0.12);
-      border-radius: 2px;
-      margin: 12px auto 0;
-      flex-shrink: 0;
-    }
+  .avatar.bot {
+    background: var(--rose-light);
+    color: var(--rose-dark);
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-style: italic;
+  }
 
-    .chat-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 12px 18px 14px;
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-      flex-shrink: 0;
-    }
+  .avatar.user-av {
+    background: var(--warm-surface);
+    color: var(--text-secondary);
+  }
 
-    .chat-header-left { display: flex; align-items: center; gap: 10px; }
+  .bubble {
+    padding: 11px 15px;
+    border-radius: 16px;
+    font-size: 14.5px;
+    line-height: 1.6;
+    max-width: calc(100% - 50px);
+  }
 
-    .chat-logo {
-      width: 34px; height: 34px;
-      background: var(--rose-glow);
-      border: 1px solid var(--border-hot);
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 15px;
-    }
+  .message.bot .bubble {
+    background: var(--warm-surface);
+    color: var(--text-primary);
+    border-radius: 4px 16px 16px 16px;
+    border: 1px solid var(--warm-border);
+  }
 
-    .chat-header-title {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: 15px;
-      font-weight: 700;
-      color: var(--cream);
-    }
-    .chat-header-sub {
-      font-size: 10px;
-      font-weight: 300;
-      color: var(--cream-faint);
-      margin-top: 1px;
-    }
-    .chat-header-sub .dot { display: inline-block; width: 6px; height: 6px; background: #4CAF50; border-radius: 50%; margin-right: 4px; vertical-align: middle; }
+  .message.user .bubble {
+    background: var(--rose);
+    color: #fff;
+    border-radius: 16px 4px 16px 16px;
+  }
 
-    .chat-close {
-      width: 30px; height: 30px;
-      border-radius: 50%;
-      border: 1px solid rgba(255,255,255,0.1);
-      background: rgba(255,255,255,0.04);
-      color: var(--cream-faint);
-      font-size: 16px;
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      -webkit-tap-highlight-color: transparent;
-      flex-shrink: 0;
-    }
+  .bubble a {
+    color: var(--rose);
+    text-decoration: underline;
+  }
 
-    /* ── Messages ── */
-    #chat-messages {
-      flex: 1;
-      overflow-y: auto;
-      padding: 18px 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      -webkit-overflow-scrolling: touch;
-    }
+  .message.user .bubble a {
+    color: #ffd4dc;
+  }
 
-    .msg { display: flex; gap: 8px; max-width: 100%; }
-    .msg.user { flex-direction: row-reverse; }
+  .bubble p { margin-bottom: 8px; }
+  .bubble p:last-child { margin-bottom: 0; }
+  .bubble ul { padding-left: 18px; margin: 6px 0; }
+  .bubble ul li { margin-bottom: 4px; }
+  .bubble strong { font-weight: 700; }
 
-    .msg-avatar {
-      width: 28px; height: 28px;
-      border-radius: 50%;
-      flex-shrink: 0;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 12px;
-      margin-top: 2px;
-    }
-    .msg-avatar.bot { background: var(--rose-glow); border: 1px solid var(--border-hot); color: var(--rose-light); font-family: 'Playfair Display', serif; font-style: italic; font-size: 13px; }
-    .msg-avatar.you { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08); color: var(--cream-faint); font-size: 10px; font-weight: 500; }
+  .typing-indicator {
+    display: flex;
+    gap: 4px;
+    padding: 14px 16px;
+    align-items: center;
+  }
 
-    .msg-bubble {
-      padding: 10px 13px;
-      border-radius: 14px;
-      font-size: 13.5px;
-      line-height: 1.6;
-      max-width: calc(100% - 44px);
-    }
-    .msg.bot .msg-bubble { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.07); border-radius: 4px 14px 14px 14px; color: var(--cream); }
-    .msg.user .msg-bubble { background: var(--rose-dim); border: 1px solid rgba(192,69,90,0.3); border-radius: 14px 4px 14px 14px; color: var(--cream); }
-    .msg-bubble p { margin-bottom: 6px; }
-    .msg-bubble p:last-child { margin-bottom: 0; }
-    .msg-bubble a { color: var(--rose-light); text-decoration: underline; }
-    .msg-bubble strong { font-weight: 500; color: var(--cream); }
+  .typing-indicator span {
+    width: 7px;
+    height: 7px;
+    background: var(--text-muted);
+    border-radius: 50%;
+    animation: bounce 1.2s infinite;
+  }
 
-    .typing-dots { display: flex; gap: 4px; padding: 4px 0; align-items: center; }
-    .typing-dots span { width: 6px; height: 6px; background: var(--cream-faint); border-radius: 50%; animation: bounce 1.2s infinite; }
-    .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
-    .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
-    @keyframes bounce { 0%,60%,100% { transform: translateY(0); } 30% { transform: translateY(-5px); } }
+  .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+  .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
 
-    .chat-suggestions { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 10px; }
-    .chat-sug-btn { background: rgba(192,69,90,0.08); border: 1px solid rgba(192,69,90,0.25); color: var(--rose-light); font-family: 'DM Sans', sans-serif; font-size: 12px; padding: 5px 11px; border-radius: 20px; cursor: pointer; -webkit-tap-highlight-color: transparent; transition: background 0.15s; }
-    .chat-sug-btn:active { background: rgba(192,69,90,0.2); }
+  @keyframes bounce {
+    0%, 60%, 100% { transform: translateY(0); }
+    30% { transform: translateY(-6px); }
+  }
 
-    /* ── Input ── */
-    .chat-input-area {
-      padding: 12px 14px calc(12px + env(safe-area-inset-bottom, 0px));
-      border-top: 1px solid rgba(255,255,255,0.06);
-      display: flex;
-      gap: 9px;
-      align-items: flex-end;
-      flex-shrink: 0;
-      background: #1a1115;
-    }
+  .suggestions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+  }
 
-    #chat-input {
-      flex: 1;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 14px;
-      font-weight: 300;
-      color: var(--cream);
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.09);
-      border-radius: 20px;
-      padding: 9px 14px;
-      resize: none;
-      min-height: 40px;
-      max-height: 100px;
-      line-height: 1.5;
-      outline: none;
-      -webkit-appearance: none;
-      transition: border-color 0.15s;
-    }
-    #chat-input:focus { border-color: rgba(192,69,90,0.4); }
-    #chat-input::placeholder { color: var(--cream-faint); }
+  .suggestion-btn {
+    background: #fff;
+    border: 1px solid var(--warm-border);
+    color: var(--text-secondary);
+    font-family: var(--font-body);
+    font-size: 13px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
 
-    #chat-send {
-      width: 40px; height: 40px;
-      border-radius: 50%;
-      background: var(--rose);
-      border: none;
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
-      transition: background 0.15s, transform 0.1s;
-      -webkit-tap-highlight-color: transparent;
-    }
-    #chat-send:active { transform: scale(0.9); }
-    #chat-send:disabled { background: rgba(255,255,255,0.1); cursor: not-allowed; }
-    #chat-send svg { width: 16px; height: 16px; }
+  .suggestion-btn:hover {
+    background: var(--rose-light);
+    border-color: var(--rose);
+    color: var(--rose-dark);
+  }
 
-    #pwa-hint { margin: 28px 0 0; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 14px 16px; font-size: 11.5px; font-weight: 300; color: var(--cream-faint); line-height: 1.7; display: none; }
-    #pwa-hint strong { color: var(--rose-light); font-weight: 500; }
+  .input-area {
+    padding: 16px 20px 20px;
+    border-top: 1px solid var(--warm-border);
+    background: #fff;
+    position: sticky;
+    bottom: 0;
+  }
 
-    footer { text-align: center; padding: 20px 0 8px; font-family: 'Playfair Display', Georgia, serif; font-style: italic; font-size: 11px; color: var(--cream-faint); opacity: 0.4; position: relative; z-index: 1; }
+  .input-row {
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+  }
 
-    @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
-    .cards { animation: fadeUp 0.6s 0.2s ease both; }
-    .section-head { animation: fadeUp 0.5s 0.18s ease both; }
-  </style>
+  textarea {
+    flex: 1;
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: var(--text-primary);
+    background: var(--warm-surface);
+    border: 1px solid var(--warm-border);
+    border-radius: 22px;
+    padding: 10px 16px;
+    resize: none;
+    min-height: 42px;
+    max-height: 120px;
+    line-height: 1.5;
+    outline: none;
+    transition: border-color 0.15s;
+    overflow-y: auto;
+  }
+
+  textarea:focus { border-color: var(--rose); }
+  textarea::placeholder { color: var(--text-muted); }
+
+  .send-btn {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: var(--rose);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.15s, transform 0.1s;
+  }
+
+  .send-btn:hover { background: var(--rose-dark); }
+  .send-btn:active { transform: scale(0.95); }
+  .send-btn:disabled { background: var(--warm-border); cursor: not-allowed; }
+
+  .send-btn svg { width: 18px; height: 18px; }
+
+  .powered-by {
+    text-align: center;
+    font-size: 11px;
+    color: var(--text-muted);
+    padding: 8px 0 4px;
+  }
+</style>
 </head>
 <body>
 
-<div class="bg-orb bg-orb-1"></div>
-<div class="bg-orb bg-orb-2"></div>
-<div id="toast">Link copied</div>
-
-<!-- ── Chat overlay ── -->
-<div id="chat-overlay">
-  <div id="chat-backdrop"></div>
-  <div id="chat-sheet">
-    <div class="chat-handle"></div>
-    <div class="chat-header">
-      <div class="chat-header-left">
-        <div class="chat-logo">♩</div>
-        <div>
-          <div class="chat-header-title">Heartstrings Studio</div>
-          <div class="chat-header-sub"><span class="dot"></span>Client assistant</div>
-        </div>
+<div class="chat-wrapper">
+  <div class="chat-header">
+    <div class="header-inner">
+      <div class="logo-mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 18V5l12-2v13"/>
+          <circle cx="6" cy="18" r="3"/>
+          <circle cx="18" cy="16" r="3"/>
+        </svg>
       </div>
-      <button class="chat-close" id="chatClose">✕</button>
+      <div class="header-text">
+        <h1>Heartstrings Studio</h1>
+        <p><span class="status-dot"></span>Custom Songs · Lumberport, WV</p>
+      </div>
     </div>
-    <div id="chat-messages"></div>
-    <div class="chat-input-area">
-      <textarea id="chat-input" placeholder="Ask about a custom song…" rows="1"></textarea>
-      <button id="chat-send" disabled>
-        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+  </div>
+
+  <div class="messages" id="messages"></div>
+
+  <div class="input-area">
+    <div class="input-row">
+      <textarea id="input" placeholder="Ask anything about a custom song…" rows="1"></textarea>
+      <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="22" y1="2" x2="11" y2="13"/>
+          <polygon points="22 2 15 22 11 13 2 9 22 2"/>
         </svg>
       </button>
     </div>
+    <div class="powered-by">Powered by Claude · Heartstrings Studio</div>
   </div>
 </div>
-
-<div class="wrapper">
-
-  <header>
-    <p class="header-eyebrow">Lumberport, West Virginia</p>
-    <h1>Heartstrings Studio</h1>
-    <p class="header-sub">Quick Share Dashboard</p>
-  </header>
-
-  <div class="cta-wrap">
-    <a class="cta-btn" href="https://heartstringsstudio.github.io/heartstringsstudio/#get-started" target="_blank" rel="noopener">
-      <span class="cta-icon">♪</span>
-      Start a Song
-    </a>
-  </div>
-
-  <div class="price-wrap">
-    <div class="price-card" id="priceCard">
-      <div class="price-toggle" id="priceToggle">
-        <div class="price-toggle-left">
-          <div class="price-emoji">💲</div>
-          <div>
-            <div class="price-toggle-title">Pricing</div>
-            <div class="price-toggle-sub">Tap to show client</div>
-          </div>
-        </div>
-        <div class="price-chevron">▾</div>
-      </div>
-      <div class="price-body" id="priceBody">
-        <div class="price-inner">
-          <div class="price-row">
-            <div>
-              <div class="price-row-label">Custom Song</div>
-              <div class="price-row-desc">MP3, MP4, album art, lyrics, YouTube link</div>
-            </div>
-            <div class="price-amount">$150</div>
-          </div>
-          <div class="price-row">
-            <div>
-              <div class="price-row-label">Commercial License</div>
-              <div class="price-row-desc">For business or public use</div>
-            </div>
-            <div class="price-amount">+$100</div>
-          </div>
-          <p class="price-note">Flat rate · No hidden fees · One round of revisions · Remake guarantee</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="section-head">
-    <span class="section-head-label">Studio</span>
-    <span class="section-head-line"></span>
-  </div>
-  <div class="cards">
-
-    <!-- ── NEW: Client Chat Bot ── -->
-    <div class="card chat-card" id="chatCardBtn">
-      <div class="card-emoji">💬</div>
-      <div class="card-text">
-        <div class="card-title">Client Chat Bot</div>
-        <div class="card-sub">Answer questions · qualify leads</div>
-      </div>
-      <div class="card-actions">
-        <button class="action-btn open" style="border-color:rgba(192,69,90,0.35);color:var(--rose-light);">↗</button>
-      </div>
-    </div>
-
-    <div class="card" data-url="https://heartstringsstudio.github.io/dashboard/chat" data-title="Heartstrings Studio — Client Chat">
-      <div class="card-emoji">🔗</div>
-      <div class="card-text">
-        <div class="card-title">Share Chat Link</div>
-        <div class="card-sub">Send to client · opens chat bot</div>
-      </div>
-      <div class="card-actions">
-        <button class="action-btn share" style="color:var(--rose-light);border-color:rgba(192,69,90,0.35);">⬆</button>
-        <button class="action-btn open">↗</button>
-      </div>
-    </div>
-
-    <div class="card" data-url="https://tinyurl.com/heartstringsstudiowv" data-title="Heartstrings Studio — Main Site">
-      <div class="card-emoji">🎵</div>
-      <div class="card-text">
-        <div class="card-title">Main Studio Site</div>
-        <div class="card-sub">tinyurl.com/heartstringsstudiowv</div>
-      </div>
-      <div class="card-actions">
-        <button class="action-btn share">⬆</button>
-        <button class="action-btn open">↗</button>
-      </div>
-    </div>
-
-    <div class="card" data-url="https://heartstringsstudio.github.io/heartstringsstudio/#get-started" data-title="Heartstrings Studio — Song Intake Form">
-      <div class="card-emoji">📝</div>
-      <div class="card-text">
-        <div class="card-title">Song Intake Form</div>
-        <div class="card-sub">Start a song on the main site</div>
-      </div>
-      <div class="card-actions">
-        <button class="action-btn share">⬆</button>
-        <button class="action-btn open">↗</button>
-      </div>
-    </div>
-
-    <div class="card" data-url="https://tinyurl.com/heartstringsstory" data-title="Heartstrings Studio — Story Intake">
-      <div class="card-emoji">✍️</div>
-      <div class="card-text">
-        <div class="card-title">Story Intake Form</div>
-        <div class="card-sub">tinyurl.com/heartstringsstory</div>
-      </div>
-      <div class="card-actions">
-        <button class="action-btn share">⬆</button>
-        <button class="action-btn open">↗</button>
-      </div>
-    </div>
-
-    <div class="card" data-url="https://tinyurl.com/heartstringsmemorial" data-title="Heartstrings Studio — Memorial Song Intake">
-      <div class="card-emoji">🕯️</div>
-      <div class="card-text">
-        <div class="card-title">Memorial Intake Form</div>
-        <div class="card-sub">tinyurl.com/heartstringsmemorial</div>
-      </div>
-      <div class="card-actions">
-        <button class="action-btn share">⬆</button>
-        <button class="action-btn open">↗</button>
-      </div>
-    </div>
-
-    <div class="card" data-url="https://tinyurl.com/heartstringsfh" data-title="Heartstrings Studio — Funeral Home Partnership">
-      <div class="card-emoji">🤝</div>
-      <div class="card-text">
-        <div class="card-title">Funeral Home Partnership</div>
-        <div class="card-sub">tinyurl.com/heartstringsfh</div>
-      </div>
-      <div class="card-actions">
-        <button class="action-btn share">⬆</button>
-        <button class="action-btn open">↗</button>
-      </div>
-    </div>
-
-  </div>
-
-  <div class="section-head">
-    <span class="section-head-label">Music Library</span>
-    <span class="section-head-line"></span>
-  </div>
-  <div class="cards">
-
-    <div class="card channel" data-url="https://www.youtube.com/@heartstringsstudiowv" data-title="Heartstrings Studio — Full YouTube Channel">
-      <div class="card-emoji">▶️</div>
-      <div class="card-text">
-        <div class="card-title">Full YouTube Channel</div>
-        <div class="card-sub">@heartstringsstudiowv — all songs</div>
-      </div>
-      <div class="card-actions">
-        <button class="action-btn share">⬆</button>
-        <button class="action-btn open">↗</button>
-      </div>
-    </div>
-
-    <div class="card" data-url="https://www.youtube.com/playlist?list=PLBaBQ7Vhr-5-UuSeneZViY8WAyxJujGXa" data-title="Memorial Songs Playlist — Heartstrings Studio">
-      <div class="card-emoji">🕊️</div>
-      <div class="card-text">
-        <div class="card-title">Memorial Songs</div>
-        <div class="card-sub">YouTube Playlist</div>
-      </div>
-      <div class="card-actions">
-        <button class="action-btn share">⬆</button>
-        <button class="action-btn open">↗</button>
-      </div>
-    </div>
-
-    <div class="card" data-url="https://www.youtube.com/playlist?list=PLBaBQ7Vhr-59e8e10Hs42Zwx6Knhp1NCL" data-title="Wedding Songs — Heartstrings Studio">
-      <div class="card-emoji">💍</div>
-      <div class="card-text">
-        <div class="card-title">Wedding Songs</div>
-        <div class="card-sub">YouTube Playlist</div>
-      </div>
-      <div class="card-actions">
-        <button class="action-btn share">⬆</button>
-        <button class="action-btn open">↗</button>
-      </div>
-    </div>
-
-    <div class="card" data-url="https://www.youtube.com/playlist?list=PLBaBQ7Vhr-58nEunbI_U_B-wfIgkCNyJv" data-title="Birthday Celebrations — Heartstrings Studio">
-      <div class="card-emoji">🎂</div>
-      <div class="card-text">
-        <div class="card-title">Birthday Celebrations</div>
-        <div class="card-sub">YouTube Playlist</div>
-      </div>
-      <div class="card-actions">
-        <button class="action-btn share">⬆</button>
-        <button class="action-btn open">↗</button>
-      </div>
-    </div>
-
-    <div class="card" data-url="https://www.youtube.com/playlist?list=PLBaBQ7Vhr-59VXKHMmfuH4O6m5BHsL_0x" data-title="Mother's Day Songs — Heartstrings Studio">
-      <div class="card-emoji">🌸</div>
-      <div class="card-text">
-        <div class="card-title">Mother's Day Songs</div>
-        <div class="card-sub">YouTube Playlist</div>
-      </div>
-      <div class="card-actions">
-        <button class="action-btn share">⬆</button>
-        <button class="action-btn open">↗</button>
-      </div>
-    </div>
-
-    <div class="card" data-url="https://www.youtube.com/playlist?list=PLBaBQ7Vhr-58N6PZOuIXyr7GmKvdUxqwJ" data-title="Unreleased Demos — Heartstrings Studio">
-      <div class="card-emoji">🎛️</div>
-      <div class="card-text">
-        <div class="card-title">Unreleased Demos</div>
-        <div class="card-sub">YouTube Playlist</div>
-      </div>
-      <div class="card-actions">
-        <button class="action-btn share">⬆</button>
-        <button class="action-btn open">↗</button>
-      </div>
-    </div>
-
-    <div class="card" data-url="https://youtu.be/uwsCiWGnDuc" data-title="Heartstrings Studio — WBOY 304 Today Interview">
-      <div class="card-emoji">📺</div>
-      <div class="card-text">
-        <div class="card-title">WBOY Interview</div>
-        <div class="card-sub">304 Today — As Seen On TV</div>
-      </div>
-      <div class="card-actions">
-        <button class="action-btn share">⬆</button>
-        <button class="action-btn open">↗</button>
-      </div>
-    </div>
-
-  </div>
-
-  <div id="pwa-hint">
-    <strong>Add to home screen —</strong>
-    iOS: tap <strong>Share ⬆</strong> in Safari → <strong>Add to Home Screen</strong> ·
-    Android: tap <strong>⋮</strong> in Chrome → <strong>Add to Home Screen</strong>
-  </div>
-
-</div>
-
-<footer>Heartstrings Studio · Lumberport, West Virginia</footer>
 
 <script>
-  if (!window.matchMedia('(display-mode: standalone)').matches) {
-    document.getElementById('pwa-hint').style.display = 'block';
+const SYSTEM_PROMPT = `You are the friendly booking assistant for Heartstrings Studio, a custom songwriting business based in Lumberport, West Virginia, run by Tim Harbert. Your job is to warmly welcome potential clients, answer their questions, pre-qualify them, and guide them toward booking.
+
+ABOUT HEARTSTRINGS STUDIO:
+- Custom personalized songs for life occasions: memorials, weddings, birthdays, military tributes, anniversaries, milestones, and more
+- Flat pricing: $150 per song. Commercial license (for businesses): +$100
+- 24-hour turnaround is available ONLY for memorial/funeral songs
+- The finished product includes: a fully produced song + lyrics sheet with album art
+- Delivery via Filemail download link
+- One keepsake: lyrics sheet with album art background
+- Not described as "AI-powered" — this is human-directed, emotionally resonant songwriting
+- Studio has Appalachian roots and a warm, personal creative philosophy
+
+HOW TO BOOK:
+- Story Collection Form (intake): https://formspree.io/f/xykbvdrb
+- Booking link: https://tinyurl.com/heartstringsstudiowv
+- Funeral/memorial home partners: https://tinyurl.com/heartstringsfh
+
+TONE:
+- Warm, unhurried, genuine — like a neighbor who really listens
+- Appalachian warmth: honest, direct, a little poetic
+- For memorial inquiries: tender and careful
+- Never pushy or salesy
+
+PRE-QUALIFYING QUESTIONS TO ASK NATURALLY (don't fire all at once):
+1. What occasion or person is the song for?
+2. What feeling do they want the listener to have?
+3. Is there a deadline?
+4. Any preferred style or mood? (country, gospel, soft rock, ballad, etc.)
+
+RULES:
+- Never mention guitar specifically
+- Never include a phone number
+- Always point to the Story Collection form as the next step once someone is interested
+- Keep responses concise — 2-4 short paragraphs max
+- Format nicely with line breaks. Use **bold** sparingly for key info like prices
+- If someone asks about funeral home partnerships, send them to: https://tinyurl.com/heartstringsfh`;
+
+const history = [];
+let isLoading = false;
+
+function formatMessage(text) {
+  return text
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+    .replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank">$1</a>')
+    .split('\n\n').map(p => `<p>${p.replace(/\n/g, '<br>')}</p>`).join('');
+}
+
+function addMessage(role, text, showSuggestions = false) {
+  const msgs = document.getElementById('messages');
+  const div = document.createElement('div');
+  div.className = `message ${role}`;
+
+  const avatar = document.createElement('div');
+  avatar.className = `avatar ${role === 'bot' ? 'bot' : 'user-av'}`;
+  avatar.textContent = role === 'bot' ? '♩' : 'You';
+
+  const bubble = document.createElement('div');
+  bubble.className = 'bubble';
+
+  const content = document.createElement('div');
+  content.innerHTML = formatMessage(text);
+  bubble.appendChild(content);
+
+  if (showSuggestions) {
+    const sugs = document.createElement('div');
+    sugs.className = 'suggestions';
+    const prompts = [
+      'How much does a song cost?',
+      'How does the process work?',
+      'I need a memorial song',
+      'Can I hear examples?'
+    ];
+    prompts.forEach(p => {
+      const btn = document.createElement('button');
+      btn.className = 'suggestion-btn';
+      btn.textContent = p;
+      btn.onclick = () => { document.getElementById('input').value = p; sendMessage(); };
+      sugs.appendChild(btn);
+    });
+    bubble.appendChild(sugs);
   }
 
-  document.getElementById('priceToggle').addEventListener('click', () => {
-    document.getElementById('priceCard').classList.toggle('open');
-  });
+  div.appendChild(avatar);
+  div.appendChild(bubble);
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
 
-  const toast = document.getElementById('toast');
-  let toastTimer;
-  function showToast(msg = 'Link copied') {
-    toast.textContent = msg;
-    toast.classList.add('show');
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => toast.classList.remove('show'), 2000);
+function showTyping() {
+  const msgs = document.getElementById('messages');
+  const div = document.createElement('div');
+  div.className = 'message bot';
+  div.id = 'typing';
+
+  const avatar = document.createElement('div');
+  avatar.className = 'avatar bot';
+  avatar.textContent = '♩';
+
+  const bubble = document.createElement('div');
+  bubble.className = 'bubble';
+  bubble.innerHTML = '<div class="typing-indicator"><span></span><span></span><span></span></div>';
+
+  div.appendChild(avatar);
+  div.appendChild(bubble);
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function removeTyping() {
+  const t = document.getElementById('typing');
+  if (t) t.remove();
+}
+
+async function sendMessage() {
+  if (isLoading) return;
+  const input = document.getElementById('input');
+  const text = input.value.trim();
+  if (!text) return;
+
+  input.value = '';
+  input.style.height = 'auto';
+  addMessage('user', text);
+  history.push({ role: 'user', content: text });
+
+  isLoading = true;
+  document.getElementById('sendBtn').disabled = true;
+  showTyping();
+
+  try {
+    const res = await fetch('https://heartstrings-chat.heartstringsstudiowv.workers.dev', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: SYSTEM_PROMPT,
+        messages: history
+      })
+    });
+
+    const data = await res.json();
+    const reply = data.content?.[0]?.text || "I'm having trouble connecting right now. Please try again in a moment.";
+
+    history.push({ role: 'assistant', content: reply });
+    removeTyping();
+    addMessage('bot', reply);
+  } catch (e) {
+    removeTyping();
+    addMessage('bot', "Something went wrong on my end. Please try again, or visit [tinyurl.com/heartstringsstudiowv](https://tinyurl.com/heartstringsstudiowv) to book directly.");
   }
 
-  async function shareLink(url, title) {
-    if (navigator.share) {
-      try { await navigator.share({ title, url }); } catch(e) {}
-    } else {
-      try { await navigator.clipboard.writeText(url); showToast('Link copied'); }
-      catch(e) { showToast('Copy failed'); }
-    }
-  }
+  isLoading = false;
+  document.getElementById('sendBtn').disabled = false;
+}
 
-  function openLink(url) { window.open(url, '_blank', 'noopener'); }
+document.getElementById('input').addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+});
 
-  document.querySelectorAll('.card[data-url]').forEach(card => {
-    const url = card.dataset.url, title = card.dataset.title;
-    card.querySelector('.action-btn.share').addEventListener('click', e => { e.stopPropagation(); shareLink(url, title); });
-    card.querySelector('.action-btn.open').addEventListener('click',  e => { e.stopPropagation(); openLink(url); });
-    card.addEventListener('click', () => shareLink(url, title));
-  });
+document.getElementById('input').addEventListener('input', function () {
+  this.style.height = 'auto';
+  this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+});
 
-  // ── Chat bot ──
-  const SYSTEM = `You are the friendly booking assistant for Heartstrings Studio, a custom songwriting business in Lumberport, West Virginia, run by Tim Harbert. Help clients, answer questions, and guide them to book.
-
-ABOUT: Custom personalized songs for memorials, weddings, birthdays, military tributes, anniversaries, milestones. $150/song flat. Commercial license +$100. 24-hour turnaround for memorial/funeral songs only. Delivered via download link. Includes produced song + lyrics sheet with album art. Human-directed, emotionally resonant — not described as AI-powered.
-
-BOOKING: Story Collection Form → https://formspree.io/f/xykbvdrb | Booking → https://tinyurl.com/heartstringsstudiowv | Funeral home partners → https://tinyurl.com/heartstringsfh
-
-TONE: Warm, genuine, unhurried. Appalachian warmth — honest, direct, a little poetic. Tender for memorials. Never pushy.
-
-QUALIFY NATURALLY (one at a time): What occasion? What feeling? Any deadline? Preferred style?
-
-RULES: Never mention guitar. No phone numbers. Point to Story Collection form when someone is ready. Keep replies to 2–3 short paragraphs max.`;
-
-  const history = [];
-  let chatBusy = false;
-
-  const overlay   = document.getElementById('chat-overlay');
-  const messages  = document.getElementById('chat-messages');
-  const input     = document.getElementById('chat-input');
-  const sendBtn   = document.getElementById('chat-send');
-
-  function openChat() {
-    overlay.classList.add('open');
-    document.body.style.overflow = 'hidden';
-    if (messages.children.length === 0) initGreeting();
-    setTimeout(() => input.focus(), 400);
-  }
-
-  function closeChat() {
-    overlay.classList.remove('open');
-    document.body.style.overflow = '';
-  }
-
-  document.getElementById('chatCardBtn').addEventListener('click', openChat);
-  document.getElementById('chatClose').addEventListener('click', closeChat);
-  document.getElementById('chat-backdrop').addEventListener('click', closeChat);
-
-  input.addEventListener('input', function() {
-    this.style.height = 'auto';
-    this.style.height = Math.min(this.scrollHeight, 100) + 'px';
-    sendBtn.disabled = !this.value.trim() || chatBusy;
-  });
-
-  input.addEventListener('keydown', e => {
-    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); }
-  });
-
-  sendBtn.addEventListener('click', send);
-
-  function fmt(text) {
-    return text
-      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-      .replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank">$1</a>')
-      .split('\n\n').map(p => `<p>${p.replace(/\n/g, '<br>')}</p>`).join('');
-  }
-
-  function addMsg(role, text, withSuggestions) {
-    const wrap = document.createElement('div');
-    wrap.className = `msg ${role}`;
-
-    const av = document.createElement('div');
-    av.className = `msg-avatar ${role === 'bot' ? 'bot' : 'you'}`;
-    av.textContent = role === 'bot' ? '♩' : 'You';
-
-    const bubble = document.createElement('div');
-    bubble.className = 'msg-bubble';
-    bubble.innerHTML = fmt(text);
-
-    if (withSuggestions) {
-      const sugs = document.createElement('div');
-      sugs.className = 'chat-suggestions';
-      ['How much does it cost?', 'How does the process work?', 'I need a memorial song', 'Can I hear examples?'].forEach(s => {
-        const btn = document.createElement('button');
-        btn.className = 'chat-sug-btn';
-        btn.textContent = s;
-        btn.onclick = () => { input.value = s; send(); };
-        sugs.appendChild(btn);
-      });
-      bubble.appendChild(sugs);
-    }
-
-    wrap.appendChild(av);
-    wrap.appendChild(bubble);
-    messages.appendChild(wrap);
-    messages.scrollTop = messages.scrollHeight;
-  }
-
-  function showTyping() {
-    const wrap = document.createElement('div');
-    wrap.className = 'msg bot'; wrap.id = 'typing';
-    const av = document.createElement('div');
-    av.className = 'msg-avatar bot'; av.textContent = '♩';
-    const bubble = document.createElement('div');
-    bubble.className = 'msg-bubble';
-    bubble.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
-    wrap.appendChild(av); wrap.appendChild(bubble);
-    messages.appendChild(wrap);
-    messages.scrollTop = messages.scrollHeight;
-  }
-
-  function removeTyping() { const t = document.getElementById('typing'); if (t) t.remove(); }
-
-  function initGreeting() {
-    addMsg('bot', `Hey there — welcome to Heartstrings Studio.\n\nI'm here to help you figure out if a custom song is right for what you have in mind, answer questions, and get you pointed in the right direction.\n\nWhat brings you by today?`, true);
-  }
-
-  async function send() {
-    if (chatBusy) return;
-    const text = input.value.trim();
-    if (!text) return;
-
-    input.value = ''; input.style.height = 'auto';
-    sendBtn.disabled = true;
-    addMsg('user', text);
-    history.push({ role: 'user', content: text });
-
-    chatBusy = true;
-    showTyping();
-
-    try {
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 1000, system: SYSTEM, messages: history })
-      });
-      const data = await res.json();
-      const reply = data.content?.[0]?.text || "I'm having a little trouble right now. You can book directly at tinyurl.com/heartstringsstudiowv";
-      history.push({ role: 'assistant', content: reply });
-      removeTyping();
-      addMsg('bot', reply);
-    } catch(e) {
-      removeTyping();
-      addMsg('bot', "Something went wrong on my end. Try again or visit https://tinyurl.com/heartstringsstudiowv to book directly.");
-    }
-
-    chatBusy = false;
-    sendBtn.disabled = input.value.trim() === '';
-  }
+window.addEventListener('load', () => {
+  const greeting = `Hey there — welcome to Heartstrings Studio. 🎵\n\nI'm here to help you figure out if a custom song is right for what you have in mind, answer your questions, and get you pointed in the right direction.\n\nWhat brings you by today?`;
+  addMessage('bot', greeting, true);
+});
 </script>
-
 </body>
 </html>
