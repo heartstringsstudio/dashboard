@@ -2,12 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>Heartstrings Studio — Chat</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { overflow-x: hidden; }
 
   :root {
     --rose: #C2566B;
@@ -29,30 +30,31 @@
     font-family: var(--font-body);
     background: var(--warm-bg);
     color: var(--text-primary);
-    min-height: 100vh;
+    min-height: 100dvh;
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 0;
+    width: 100%;
   }
 
   .chat-wrapper {
     width: 100%;
     max-width: 680px;
-    min-height: 100vh;
+    height: 100dvh;
     display: flex;
     flex-direction: column;
     background: #fff;
     border-left: 1px solid var(--warm-border);
     border-right: 1px solid var(--warm-border);
+    overflow: hidden;
   }
 
   .chat-header {
-    padding: 20px 24px 16px;
+    padding: calc(20px + env(safe-area-inset-top, 0px)) 24px 16px;
     border-bottom: 1px solid var(--warm-border);
     background: #fff;
-    position: sticky;
-    top: 0;
+    flex-shrink: 0;
     z-index: 10;
   }
 
@@ -102,6 +104,7 @@
   .messages {
     flex: 1;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     padding: 24px 20px;
     display: flex;
     flex-direction: column;
@@ -230,11 +233,10 @@
   }
 
   .input-area {
-    padding: 16px 20px 20px;
+    padding: 16px 20px calc(20px + env(safe-area-inset-bottom, 0px));
     border-top: 1px solid var(--warm-border);
     background: #fff;
-    position: sticky;
-    bottom: 0;
+    flex-shrink: 0;
   }
 
   .input-row {
