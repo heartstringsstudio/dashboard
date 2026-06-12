@@ -234,18 +234,6 @@
       </div>
     </div>
 
-    <div class="card channel" data-url="chat/" data-title="Heartstrings Studio — Chat Assistant" data-local="true">
-      <div class="card-emoji">💬</div>
-      <div class="card-text">
-        <div class="card-title">Chat with Us</div>
-        <div class="card-sub">Questions answered · Get started</div>
-      </div>
-      <div class="card-actions">
-        <button class="action-btn share">⬆</button>
-        <button class="action-btn open">↗</button>
-      </div>
-    </div>
-
   </div>
 
   <div class="section-head">
@@ -396,10 +384,9 @@
   document.querySelectorAll('.card').forEach(card => {
     const url   = card.dataset.url;
     const title = card.dataset.title;
-    const isLocal = card.dataset.local === 'true';
     card.querySelector('.action-btn.share').addEventListener('click', e => { e.stopPropagation(); shareLink(url, title); });
-    card.querySelector('.action-btn.open').addEventListener('click',  e => { e.stopPropagation(); isLocal ? window.location.href = url : openLink(url); });
-    card.addEventListener('click', () => isLocal ? window.location.href = url : shareLink(url, title));
+    card.querySelector('.action-btn.open').addEventListener('click',  e => { e.stopPropagation(); openLink(url); });
+    card.addEventListener('click', () => shareLink(url, title));
   });
 </script>
 
