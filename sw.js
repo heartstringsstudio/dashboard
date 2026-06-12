@@ -1,9 +1,8 @@
-const CACHE = 'heartstrings-v1';
+const CACHE = 'heartstrings-v2';
 
 const PRECACHE = [
   './',
   'index.html',
-  'chat/',
   'manifest.json',
   'logo.png',
   'icon-192.png',
