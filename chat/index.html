@@ -3,15 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#ffffff" />
+<meta name="description" content="Chat with Heartstrings Studio — questions answered about custom songs for weddings, memorials, birthdays & more." />
 <title>Heartstrings Studio — Chat</title>
+<link rel="icon" href="../logo.png" type="image/png" />
+<link rel="apple-touch-icon" href="../logo.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { overflow-x: hidden; }
 
   :root {
-    --rose: #C2566B;
+    --rose: #c0455a;
     --rose-light: #f0d4da;
     --rose-dark: #8e3a4d;
     --charcoal: #2C2926;
@@ -21,10 +26,14 @@
     --warm-border: #DDD3C8;
     --text-primary: #2C2926;
     --text-secondary: #6B5F57;
-    --text-muted: #9A8E87;
+    --text-muted: #7d7068;
     --font-display: 'Playfair Display', Georgia, serif;
-    --font-body: 'Lato', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
   }
+
+  :focus-visible { outline: 2px solid var(--rose); outline-offset: 2px; }
+
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
 
   body {
     font-family: var(--font-body);
@@ -51,7 +60,7 @@
   }
 
   .chat-header {
-    padding: calc(20px + env(safe-area-inset-top, 0px)) 24px 16px;
+    padding: calc(16px + env(safe-area-inset-top, 0px)) 16px 14px;
     border-bottom: 1px solid var(--warm-border);
     background: #fff;
     flex-shrink: 0;
@@ -61,8 +70,26 @@
   .header-inner {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
   }
+
+  .back-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--warm-border);
+    background: #fff;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    text-decoration: none;
+    transition: background 0.15s, color 0.15s;
+  }
+
+  .back-btn:hover { background: var(--warm-surface); color: var(--rose-dark); }
+  .back-btn svg { width: 18px; height: 18px; }
 
   .logo-mark {
     width: 38px;
@@ -94,7 +121,7 @@
   .status-dot {
     width: 7px;
     height: 7px;
-    background: #4CAF50;
+    background: #2e7d32;
     border-radius: 50%;
     display: inline-block;
     margin-right: 5px;
@@ -220,7 +247,7 @@
     color: var(--text-secondary);
     font-family: var(--font-body);
     font-size: 13px;
-    padding: 6px 12px;
+    padding: 8px 14px;
     border-radius: 20px;
     cursor: pointer;
     transition: all 0.15s;
@@ -292,6 +319,10 @@
     color: var(--text-muted);
     padding: 8px 0 4px;
   }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; animation-delay: 0ms !important; transition-duration: 0.01ms !important; }
+  }
 </style>
 </head>
 <body>
@@ -299,7 +330,12 @@
 <div class="chat-wrapper">
   <div class="chat-header">
     <div class="header-inner">
-      <div class="logo-mark">
+      <a class="back-btn" href="../" aria-label="Back to dashboard">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+      </a>
+      <div class="logo-mark" aria-hidden="true">
         <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <path d="M9 18V5l12-2v13"/>
           <circle cx="6" cy="18" r="3"/>
@@ -308,18 +344,18 @@
       </div>
       <div class="header-text">
         <h1>Heartstrings Studio</h1>
-        <p><span class="status-dot"></span>Custom Songs · Lumberport, WV</p>
+        <p><span class="status-dot" aria-hidden="true"></span><span class="sr-only">Online — </span>Custom Songs · Lumberport, WV</p>
       </div>
     </div>
   </div>
 
-  <div class="messages" id="messages"></div>
+  <div class="messages" id="messages" role="log" aria-live="polite" aria-label="Chat messages"></div>
 
   <div class="input-area">
     <div class="input-row">
-      <textarea id="input" placeholder="Ask anything about a custom song…" rows="1"></textarea>
-      <button class="send-btn" id="sendBtn" onclick="sendMessage()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <textarea id="input" placeholder="Ask anything about a custom song…" rows="1" aria-label="Your message"></textarea>
+      <button class="send-btn" id="sendBtn" aria-label="Send message">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <line x1="22" y1="2" x2="11" y2="13"/>
           <polygon points="22 2 15 22 11 13 2 9 22 2"/>
         </svg>
@@ -369,14 +405,30 @@ RULES:
 - If someone asks about funeral home partnerships, send them to: https://tinyurl.com/heartstringsfh
 - Whenever turnaround time, deadlines, or pricing come up, always proactively mention that a **24-hour rush service** is available for an additional **$50** fee — do not wait to be asked`;
 
-const history = [];
+const HISTORY_KEY = 'hs-chat-history';
+const FRIENDLY_ERROR = "Looks like we lost the connection for a moment — give it another try in a minute. If it keeps happening, you can always reach us through the Story Collection form: https://tinyurl.com/heartstringsstory";
+
+let history = [];
+try { history = JSON.parse(sessionStorage.getItem(HISTORY_KEY)) || []; } catch (e) { history = []; }
 let isLoading = false;
 
-function formatMessage(text) {
+function saveHistory() {
+  try { sessionStorage.setItem(HISTORY_KEY, JSON.stringify(history)); } catch (e) {}
+}
+
+function escapeHTML(text) {
   return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function formatMessage(text) {
+  return escapeHTML(text)
     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
     .replace(/\*(.*?)\*/g, '<em>$1</em>')
-    .replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank">$1</a>')
+    .replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>')
     .split('\n\n').map(p => `<p>${p.replace(/\n/g, '<br>')}</p>`).join('');
 }
 
@@ -388,6 +440,7 @@ function addMessage(role, text, showSuggestions = false) {
   const avatar = document.createElement('div');
   avatar.className = `avatar ${role === 'bot' ? 'bot' : 'user-av'}`;
   avatar.textContent = role === 'bot' ? '♩' : 'You';
+  avatar.setAttribute('aria-hidden', 'true');
 
   const bubble = document.createElement('div');
   bubble.className = 'bubble';
@@ -430,10 +483,11 @@ function showTyping() {
   const avatar = document.createElement('div');
   avatar.className = 'avatar bot';
   avatar.textContent = '♩';
+  avatar.setAttribute('aria-hidden', 'true');
 
   const bubble = document.createElement('div');
   bubble.className = 'bubble';
-  bubble.innerHTML = '<div class="typing-indicator"><span></span><span></span><span></span></div>';
+  bubble.innerHTML = '<div class="typing-indicator" aria-label="Heartstrings is typing"><span></span><span></span><span></span></div>';
 
   div.appendChild(avatar);
   div.appendChild(bubble);
@@ -456,6 +510,7 @@ async function sendMessage() {
   input.style.height = 'auto';
   addMessage('user', text);
   history.push({ role: 'user', content: text });
+  saveHistory();
 
   isLoading = true;
   document.getElementById('sendBtn').disabled = true;
@@ -474,19 +529,24 @@ async function sendMessage() {
     });
 
     const data = await res.json();
-    const reply = data.content?.[0]?.text || "API error: " + JSON.stringify(data);
+    const reply = data.content?.[0]?.text;
+    if (!reply) throw new Error('Empty response');
 
     history.push({ role: 'assistant', content: reply });
+    saveHistory();
     removeTyping();
     addMessage('bot', reply);
   } catch (e) {
+    console.error('Chat request failed:', e);
     removeTyping();
-    addMessage('bot', "Fetch error: " + e.message);
+    addMessage('bot', FRIENDLY_ERROR);
   }
 
   isLoading = false;
   document.getElementById('sendBtn').disabled = false;
 }
+
+document.getElementById('sendBtn').addEventListener('click', sendMessage);
 
 document.getElementById('input').addEventListener('keydown', e => {
   if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
@@ -499,8 +559,14 @@ document.getElementById('input').addEventListener('input', function () {
 
 window.addEventListener('load', () => {
   const greeting = `Hey there — welcome to Heartstrings Studio. 🎵\n\nI'm here to help you figure out if a custom song is right for what you have in mind, answer your questions, and get you pointed in the right direction.\n\nWhat brings you by today?`;
-  addMessage('bot', greeting, true);
+  addMessage('bot', greeting, history.length === 0);
+  // restore the conversation if the page reloaded mid-chat
+  history.forEach(m => addMessage(m.role === 'user' ? 'user' : 'bot', m.content));
 });
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('../sw.js');
+}
 </script>
 </body>
 </html>

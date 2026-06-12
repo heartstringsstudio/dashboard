@@ -10,17 +10,19 @@
   <link rel="manifest" href="manifest.json" />
   <link rel="icon" href="logo.png" type="image/png" />
   <link rel="apple-touch-icon" href="logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <title>Heartstrings Studio</title>
   <meta name="description" content="Heartstrings Studio — Custom songs for weddings, memorials, birthdays & more. Based in Lumberport, West Virginia." />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Heartstrings Studio" />
   <meta property="og:description" content="Custom songs for weddings, memorials, birthdays & more. Starting at $150." />
-  <meta property="og:image" content="logo.png" />
+  <meta property="og:image" content="https://heartstringsstudio.github.io/dashboard/logo.png" />
   <meta property="og:url" content="https://heartstringsstudio.github.io/dashboard/" />
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="Heartstrings Studio" />
   <meta name="twitter:description" content="Custom songs for weddings, memorials, birthdays & more. Starting at $150." />
-  <meta name="twitter:image" content="logo.png" />
+  <meta name="twitter:image" content="https://heartstringsstudio.github.io/dashboard/logo.png" />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
     :root {
@@ -34,8 +36,8 @@
       --rose-dim:   #7a2d3e;
       --rose-glow:  rgba(192,69,90,0.12);
       --cream:      #faf6f2;
-      --cream-dim:  rgba(250,246,242,0.55);
-      --cream-faint:rgba(250,246,242,0.28);
+      --cream-dim:  rgba(250,246,242,0.62);
+      --cream-faint:rgba(250,246,242,0.48);
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -51,6 +53,8 @@
       -webkit-font-smoothing: antialiased;
     }
 
+    :focus-visible { outline: 2px solid var(--rose-light); outline-offset: 2px; border-radius: 6px; }
+
     .bg-orb { position: fixed; border-radius: 50%; pointer-events: none; z-index: 0; filter: blur(80px); }
     .bg-orb-1 { width: 400px; height: 300px; top: -80px; left: 50%; transform: translateX(-50%); background: radial-gradient(ellipse, rgba(192,69,90,0.18) 0%, transparent 70%); }
     .bg-orb-2 { width: 250px; height: 250px; bottom: 20%; right: -60px; background: radial-gradient(ellipse, rgba(192,69,90,0.07) 0%, transparent 70%); }
@@ -62,13 +66,14 @@
 
     .wrapper { position: relative; z-index: 1; max-width: 430px; margin: 0 auto; padding: 0 18px 48px; }
 
-    header { padding: 56px 0 32px; text-align: center; animation: fadeUp 0.6s ease both; }
-    .header-eyebrow { font-size: 9px; font-weight: 500; letter-spacing: 0.3em; text-transform: uppercase; color: var(--rose-light); opacity: 0.7; margin-bottom: 12px; }
+    header { padding: 48px 0 32px; text-align: center; animation: fadeUp 0.6s ease both; }
+    .header-logo { width: 52px; height: 52px; border-radius: 13px; margin-bottom: 14px; box-shadow: 0 4px 24px rgba(192,69,90,0.25), 0 0 0 1px var(--border-hot); }
+    .header-eyebrow { font-size: 10px; font-weight: 500; letter-spacing: 0.3em; text-transform: uppercase; color: var(--rose-light); opacity: 0.8; margin-bottom: 12px; }
     h1 { font-family: 'Playfair Display', Georgia, serif; font-size: clamp(28px, 7vw, 38px); font-weight: 700; color: var(--cream); line-height: 1; letter-spacing: -0.01em; }
     .header-sub { font-size: 11px; font-weight: 300; letter-spacing: 0.2em; text-transform: uppercase; color: var(--cream-faint); margin-top: 8px; }
 
     .cta-wrap { margin-bottom: 10px; animation: fadeUp 0.6s 0.1s ease both; }
-    .cta-btn { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 17px 20px; background: linear-gradient(135deg, #7a2d3e 0%, #5c1e2b 100%); border: 1px solid rgba(192,69,90,0.4); border-radius: 14px; color: var(--cream); font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; cursor: pointer; position: relative; overflow: hidden; transition: transform 0.15s, box-shadow 0.15s; box-shadow: 0 4px 24px rgba(192,69,90,0.18), inset 0 1px 0 rgba(255,255,255,0.06); -webkit-tap-highlight-color: transparent; }
+    .cta-btn { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 17px 20px; background: linear-gradient(135deg, var(--rose-dim) 0%, #5c1e2b 100%); border: 1px solid rgba(192,69,90,0.4); border-radius: 14px; color: var(--cream); font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; cursor: pointer; position: relative; overflow: hidden; transition: transform 0.15s, box-shadow 0.15s; box-shadow: 0 4px 24px rgba(192,69,90,0.18), inset 0 1px 0 rgba(255,255,255,0.06); -webkit-tap-highlight-color: transparent; }
     .cta-btn::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, transparent 60%); }
     .cta-btn:active { transform: scale(0.975); box-shadow: 0 2px 12px rgba(192,69,90,0.12); }
     .cta-icon { font-size: 16px; opacity: 0.85; }
@@ -76,63 +81,73 @@
     .price-wrap { animation: fadeUp 0.6s 0.15s ease both; }
     .price-card { background: var(--surface); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; transition: border-color 0.2s; }
     .price-card.open { border-color: var(--border-hot); }
-    .price-toggle { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; cursor: pointer; -webkit-tap-highlight-color: transparent; user-select: none; gap: 12px; }
+    .price-toggle { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 14px 16px; cursor: pointer; -webkit-tap-highlight-color: transparent; user-select: none; gap: 12px; background: none; border: none; color: inherit; font-family: inherit; text-align: left; }
     .price-toggle-left { display: flex; align-items: center; gap: 12px; }
-    .price-emoji { font-size: 18px; width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; background: var(--rose-glow); border-radius: 10px; border: 1px solid var(--border-hot); flex-shrink: 0; }
+    .price-icon { width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; background: var(--rose-glow); border-radius: 10px; border: 1px solid var(--border-hot); flex-shrink: 0; color: var(--rose-light); }
+    .price-icon svg { width: 18px; height: 18px; }
     .price-toggle-title { font-size: 14px; font-weight: 500; color: var(--cream); }
     .price-toggle-sub { font-size: 11px; font-weight: 300; color: var(--cream-faint); margin-top: 1px; }
     .price-chevron { width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--cream-faint); font-size: 11px; transition: transform 0.25s, border-color 0.2s; flex-shrink: 0; }
     .price-card.open .price-chevron { transform: rotate(180deg); border-color: var(--border-hot); color: var(--rose-light); }
     .price-body { max-height: 0; overflow: hidden; transition: max-height 0.35s cubic-bezier(0.4,0,0.2,1); }
-    .price-card.open .price-body { max-height: 300px; }
+    .price-card.open .price-body { max-height: 460px; }
     .price-inner { padding: 0 16px 16px; border-top: 1px solid var(--border); }
     .price-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
     .price-row:last-of-type { border-bottom: none; }
     .price-row-label { font-size: 13px; font-weight: 500; color: var(--cream); }
-    .price-row-desc { font-size: 10.5px; font-weight: 300; color: var(--cream-faint); margin-top: 1px; }
+    .price-row-desc { font-size: 11px; font-weight: 300; color: var(--cream-faint); margin-top: 1px; }
     .price-amount { font-family: 'Playfair Display', Georgia, serif; font-size: 17px; font-weight: 700; color: var(--rose-light); white-space: nowrap; margin-left: 10px; }
-    .price-note { font-size: 10px; font-weight: 300; color: var(--cream-faint); margin-top: 10px; line-height: 1.65; opacity: 0.7; }
+    .price-note { font-size: 11px; font-weight: 300; color: var(--cream-faint); margin-top: 10px; line-height: 1.65; }
+
+    .share-hint { text-align: center; font-size: 11px; font-weight: 300; color: var(--cream-faint); margin-top: 14px; animation: fadeUp 0.6s 0.17s ease both; }
 
     .section-head { display: flex; align-items: center; gap: 10px; margin: 28px 0 12px; }
-    .section-head-label { font-size: 9px; font-weight: 500; letter-spacing: 0.26em; text-transform: uppercase; color: var(--rose-light); opacity: 0.65; white-space: nowrap; }
+    .section-head-label { font-family: 'DM Sans', sans-serif; font-size: 10px; font-weight: 500; letter-spacing: 0.26em; text-transform: uppercase; color: var(--rose-light); opacity: 0.8; white-space: nowrap; }
     .section-head-line { flex: 1; height: 1px; background: linear-gradient(90deg, rgba(192,69,90,0.25), transparent); }
 
-    .cards { display: flex; flex-direction: column; gap: 8px; }
+    .cards { display: flex; flex-direction: column; gap: 8px; list-style: none; }
     .card { display: flex; align-items: center; gap: 12px; background: var(--surface); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid var(--border); border-radius: 14px; padding: 13px 13px 13px 14px; cursor: pointer; position: relative; overflow: hidden; transition: border-color 0.2s, background 0.2s, transform 0.13s, box-shadow 0.2s; -webkit-tap-highlight-color: transparent; }
     .card::before { content: ''; position: absolute; left: 0; top: 18%; bottom: 18%; width: 2px; background: var(--rose); border-radius: 0 2px 2px 0; opacity: 0; transition: opacity 0.2s; }
     .card:active { transform: scale(0.975); border-color: var(--border-hot); background: var(--surface-2); box-shadow: 0 0 0 1px rgba(192,69,90,0.1); }
     .card:active::before { opacity: 1; }
     .card.channel { background: linear-gradient(135deg, rgba(192,69,90,0.08) 0%, rgba(255,255,255,0.03) 100%); border-color: rgba(192,69,90,0.2); box-shadow: 0 2px 16px rgba(192,69,90,0.08); }
     .card.channel::before { opacity: 0.5; }
-    .card-emoji { font-size: 20px; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: var(--surface-2); border-radius: 10px; border: 1px solid var(--border); flex-shrink: 0; }
-    .card.channel .card-emoji { background: var(--rose-glow); border-color: var(--border-hot); }
+    .card-icon { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: var(--surface-2); border-radius: 10px; border: 1px solid var(--border); flex-shrink: 0; color: var(--rose-light); }
+    .card-icon svg { width: 19px; height: 19px; }
+    .card.channel .card-icon { background: var(--rose-glow); border-color: var(--border-hot); }
     .card-text { flex: 1; min-width: 0; }
     .card-title { font-size: 14px; font-weight: 500; color: var(--cream); line-height: 1.2; }
     .card-sub { font-size: 11px; font-weight: 300; color: var(--cream-faint); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .card-actions { display: flex; gap: 6px; flex-shrink: 0; }
-    .action-btn { width: 34px; height: 34px; border-radius: 9px; border: 1px solid var(--border); background: var(--surface); color: var(--cream-dim); font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.15s, border-color 0.15s, transform 0.12s, color 0.15s; -webkit-tap-highlight-color: transparent; flex-shrink: 0; }
+    .card-actions { display: flex; gap: 8px; flex-shrink: 0; }
+    .action-btn { width: 40px; height: 40px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface); color: var(--cream-dim); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.15s, border-color 0.15s, transform 0.12s, color 0.15s; -webkit-tap-highlight-color: transparent; flex-shrink: 0; }
+    .action-btn svg { width: 16px; height: 16px; }
     .action-btn.share { color: var(--rose-light); border-color: var(--border-hot); }
-    .action-btn:active { transform: scale(0.85); background: var(--rose-glow); }
+    .action-btn:active { transform: scale(0.88); background: var(--rose-glow); }
 
     #pwa-hint { margin: 28px 0 0; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 14px 16px; font-size: 11.5px; font-weight: 300; color: var(--cream-faint); line-height: 1.7; display: none; }
     #pwa-hint strong { color: var(--rose-light); font-weight: 500; }
 
-    footer { text-align: center; padding: 20px 0 8px; font-family: 'Playfair Display', Georgia, serif; font-style: italic; font-size: 11px; color: var(--cream-faint); opacity: 0.4; position: relative; z-index: 1; }
+    footer { text-align: center; padding: 20px 0 8px; font-family: 'Playfair Display', Georgia, serif; font-style: italic; font-size: 11px; color: var(--cream-faint); opacity: 0.55; position: relative; z-index: 1; }
 
     @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
     .cards { animation: fadeUp 0.6s 0.2s ease both; }
     .section-head { animation: fadeUp 0.5s 0.18s ease both; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; animation-delay: 0ms !important; transition-duration: 0.01ms !important; }
+    }
   </style>
 </head>
 <body>
 
 <div class="bg-orb bg-orb-1"></div>
 <div class="bg-orb bg-orb-2"></div>
-<div id="toast">Link copied</div>
+<div id="toast" role="status">Link copied</div>
 
 <div class="wrapper">
 
   <header>
+    <img class="header-logo" src="logo.png" alt="" width="52" height="52" />
     <p class="header-eyebrow">Lumberport, West Virginia</p>
     <h1>Heartstrings Studio</h1>
     <p class="header-sub">Quick Share Dashboard</p>
@@ -140,23 +155,25 @@
 
   <div class="cta-wrap">
     <a class="cta-btn" href="https://heartstringsstudio.github.io/heartstringsstudio/#get-started" target="_blank" rel="noopener">
-      <span class="cta-icon">♪</span>
+      <span class="cta-icon" aria-hidden="true">♪</span>
       Start a Song
     </a>
   </div>
 
   <div class="price-wrap">
     <div class="price-card" id="priceCard">
-      <div class="price-toggle" id="priceToggle">
-        <div class="price-toggle-left">
-          <div class="price-emoji">💲</div>
-          <div>
-            <div class="price-toggle-title">Pricing</div>
-            <div class="price-toggle-sub">Tap to show client</div>
-          </div>
-        </div>
-        <div class="price-chevron">▾</div>
-      </div>
+      <button class="price-toggle" id="priceToggle" aria-expanded="false" aria-controls="priceBody">
+        <span class="price-toggle-left">
+          <span class="price-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="2" x2="12" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </span>
+          <span>
+            <span class="price-toggle-title">Pricing</span><br />
+            <span class="price-toggle-sub">Tap to show client</span>
+          </span>
+        </span>
+        <span class="price-chevron" aria-hidden="true">▾</span>
+      </button>
       <div class="price-body" id="priceBody">
         <div class="price-inner">
           <div class="price-row">
@@ -168,189 +185,221 @@
           </div>
           <div class="price-row">
             <div>
+              <div class="price-row-label">24-Hour Rush</div>
+              <div class="price-row-desc">Any song type, delivered next day</div>
+            </div>
+            <div class="price-amount">+$50</div>
+          </div>
+          <div class="price-row">
+            <div>
               <div class="price-row-label">Commercial License</div>
               <div class="price-row-desc">For business or public use</div>
             </div>
             <div class="price-amount">+$100</div>
           </div>
-          <p class="price-note">Flat rate · No hidden fees · One round of revisions · Remake guarantee</p>
+          <p class="price-note">Flat rate · No hidden fees · One round of revisions · Remake guarantee · Standard turnaround 48–72 hours</p>
         </div>
       </div>
     </div>
   </div>
 
+  <p class="share-hint">Tap any card to share its link — the arrow button opens it</p>
+
   <div class="section-head">
-    <span class="section-head-label">Studio</span>
+    <h2 class="section-head-label">Studio</h2>
     <span class="section-head-line"></span>
   </div>
-  <div class="cards">
+  <ul class="cards">
 
-    <div class="card" data-url="https://tinyurl.com/heartstringswv" data-title="Heartstrings Studio — Main Site">
-      <div class="card-emoji">🎵</div>
+    <li class="card" data-url="https://tinyurl.com/heartstringswv" data-title="Heartstrings Studio — Main Site">
+      <div class="card-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+      </div>
       <div class="card-text">
         <div class="card-title">Main Studio Site</div>
         <div class="card-sub">tinyurl.com/heartstringswv</div>
       </div>
       <div class="card-actions">
-        <button class="action-btn share">⬆</button>
-        <button class="action-btn open">↗</button>
+        <button class="action-btn share" aria-label="Share Main Studio Site link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg></button>
+        <button class="action-btn open" aria-label="Open Main Studio Site"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></button>
       </div>
-    </div>
+    </li>
 
-
-    <div class="card" data-url="https://tinyurl.com/heartstringsstory" data-title="Heartstrings Studio — Story Intake">
-      <div class="card-emoji">✍️</div>
+    <li class="card" data-url="https://tinyurl.com/heartstringsstory" data-title="Heartstrings Studio — Story Intake">
+      <div class="card-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+      </div>
       <div class="card-text">
         <div class="card-title">Story Intake Form</div>
         <div class="card-sub">tinyurl.com/heartstringsstory</div>
       </div>
       <div class="card-actions">
-        <button class="action-btn share">⬆</button>
-        <button class="action-btn open">↗</button>
+        <button class="action-btn share" aria-label="Share Story Intake Form link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg></button>
+        <button class="action-btn open" aria-label="Open Story Intake Form"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></button>
       </div>
-    </div>
+    </li>
 
-    <div class="card" data-url="https://tinyurl.com/heartstringsmemorial" data-title="Heartstrings Studio — Memorial Song Intake">
-      <div class="card-emoji">🕯️</div>
+    <li class="card" data-url="https://tinyurl.com/heartstringsmemorial" data-title="Heartstrings Studio — Memorial Song Intake">
+      <div class="card-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
+      </div>
       <div class="card-text">
         <div class="card-title">Memorial Intake Form</div>
         <div class="card-sub">tinyurl.com/heartstringsmemorial</div>
       </div>
       <div class="card-actions">
-        <button class="action-btn share">⬆</button>
-        <button class="action-btn open">↗</button>
+        <button class="action-btn share" aria-label="Share Memorial Intake Form link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg></button>
+        <button class="action-btn open" aria-label="Open Memorial Intake Form"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></button>
       </div>
-    </div>
+    </li>
 
-    <div class="card" data-url="https://tinyurl.com/heartstringsfh" data-title="Heartstrings Studio — Funeral Home Partners">
-      <div class="card-emoji">🏛️</div>
+    <li class="card" data-url="https://tinyurl.com/heartstringsfh" data-title="Heartstrings Studio — Funeral Home Partners">
+      <div class="card-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="22" x2="21" y2="22"/><line x1="6" y1="18" x2="6" y2="11"/><line x1="10" y1="18" x2="10" y2="11"/><line x1="14" y1="18" x2="14" y2="11"/><line x1="18" y1="18" x2="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg>
+      </div>
       <div class="card-text">
         <div class="card-title">Funeral Home Partners</div>
         <div class="card-sub">tinyurl.com/heartstringsfh</div>
       </div>
       <div class="card-actions">
-        <button class="action-btn share">⬆</button>
-        <button class="action-btn open">↗</button>
+        <button class="action-btn share" aria-label="Share Funeral Home Partners link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg></button>
+        <button class="action-btn open" aria-label="Open Funeral Home Partners"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></button>
       </div>
-    </div>
+    </li>
 
-    <div class="card channel" data-url="chat/" data-title="Heartstrings Studio — Chat Assistant" data-local="true">
-      <div class="card-emoji">💬</div>
+    <li class="card channel" data-url="chat/" data-title="Heartstrings Studio — Chat Assistant" data-local="true">
+      <div class="card-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+      </div>
       <div class="card-text">
         <div class="card-title">Chat with Us</div>
         <div class="card-sub">Questions answered · Get started</div>
       </div>
       <div class="card-actions">
-        <button class="action-btn share">⬆</button>
-        <button class="action-btn open">↗</button>
+        <button class="action-btn share" aria-label="Share Chat Assistant link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg></button>
+        <button class="action-btn open" aria-label="Open Chat Assistant"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></button>
       </div>
-    </div>
+    </li>
 
-  </div>
+  </ul>
 
   <div class="section-head">
-    <span class="section-head-label">Interactive</span>
+    <h2 class="section-head-label">Interactive</h2>
     <span class="section-head-line"></span>
   </div>
-  <div class="cards">
+  <ul class="cards">
 
-    <div class="card channel" data-url="https://heartstringsstudio.github.io/song-quiz/" data-title="Heartstrings Song Quiz — Can You Guess the Song?">
-      <div class="card-emoji">🎯</div>
+    <li class="card channel" data-url="https://heartstringsstudio.github.io/song-quiz/" data-title="Heartstrings Song Quiz — Can You Guess the Song?">
+      <div class="card-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+      </div>
       <div class="card-text">
         <div class="card-title">Song Quiz</div>
         <div class="card-sub">Can you guess the song?</div>
       </div>
       <div class="card-actions">
-        <button class="action-btn share">⬆</button>
-        <button class="action-btn open">↗</button>
+        <button class="action-btn share" aria-label="Share Song Quiz link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg></button>
+        <button class="action-btn open" aria-label="Open Song Quiz"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></button>
       </div>
-    </div>
+    </li>
 
-  </div>
+  </ul>
 
   <div class="section-head">
-    <span class="section-head-label">Music Library</span>
+    <h2 class="section-head-label">Music Library</h2>
     <span class="section-head-line"></span>
   </div>
-  <div class="cards">
+  <ul class="cards">
 
-    <div class="card channel" data-url="https://www.youtube.com/@heartstringsstudiowv" data-title="Heartstrings Studio — Full YouTube Channel">
-      <div class="card-emoji">▶️</div>
+    <li class="card channel" data-url="https://www.youtube.com/@heartstringsstudiowv" data-title="Heartstrings Studio — Full YouTube Channel">
+      <div class="card-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      </div>
       <div class="card-text">
         <div class="card-title">Full YouTube Channel</div>
         <div class="card-sub">@heartstringsstudiowv — all songs</div>
       </div>
       <div class="card-actions">
-        <button class="action-btn share">⬆</button>
-        <button class="action-btn open">↗</button>
+        <button class="action-btn share" aria-label="Share YouTube Channel link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg></button>
+        <button class="action-btn open" aria-label="Open YouTube Channel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></button>
       </div>
-    </div>
+    </li>
 
-    <div class="card" data-url="https://www.youtube.com/playlist?list=PLBaBQ7Vhr-5-UuSeneZViY8WAyxJujGXa" data-title="Memorial Songs Playlist — Heartstrings Studio">
-      <div class="card-emoji">🕊️</div>
+    <li class="card" data-url="https://www.youtube.com/playlist?list=PLBaBQ7Vhr-5-UuSeneZViY8WAyxJujGXa" data-title="Memorial Songs Playlist — Heartstrings Studio">
+      <div class="card-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"/><line x1="16" y1="8" x2="2" y2="22"/><line x1="17.5" y1="15" x2="9" y2="15"/></svg>
+      </div>
       <div class="card-text">
         <div class="card-title">Memorial Songs</div>
         <div class="card-sub">YouTube Playlist</div>
       </div>
       <div class="card-actions">
-        <button class="action-btn share">⬆</button>
-        <button class="action-btn open">↗</button>
+        <button class="action-btn share" aria-label="Share Memorial Songs playlist link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg></button>
+        <button class="action-btn open" aria-label="Open Memorial Songs playlist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></button>
       </div>
-    </div>
+    </li>
 
-    <div class="card" data-url="https://www.youtube.com/playlist?list=PLBaBQ7Vhr-59e8e10Hs42Zwx6Knhp1NCL" data-title="Wedding Songs — Heartstrings Studio">
-      <div class="card-emoji">💍</div>
+    <li class="card" data-url="https://www.youtube.com/playlist?list=PLBaBQ7Vhr-59e8e10Hs42Zwx6Knhp1NCL" data-title="Wedding Songs — Heartstrings Studio">
+      <div class="card-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 3 18 3 22 9 12 22 2 9"/><path d="M11 3 8 9l4 13 4-13-3-6"/><path d="M2 9h20"/></svg>
+      </div>
       <div class="card-text">
         <div class="card-title">Wedding Songs</div>
         <div class="card-sub">YouTube Playlist</div>
       </div>
       <div class="card-actions">
-        <button class="action-btn share">⬆</button>
-        <button class="action-btn open">↗</button>
+        <button class="action-btn share" aria-label="Share Wedding Songs playlist link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg></button>
+        <button class="action-btn open" aria-label="Open Wedding Songs playlist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></button>
       </div>
-    </div>
+    </li>
 
-    <div class="card" data-url="https://www.youtube.com/playlist?list=PLBaBQ7Vhr-58nEunbI_U_B-wfIgkCNyJv" data-title="Birthday Celebrations — Heartstrings Studio">
-      <div class="card-emoji">🎂</div>
+    <li class="card" data-url="https://www.youtube.com/playlist?list=PLBaBQ7Vhr-58nEunbI_U_B-wfIgkCNyJv" data-title="Birthday Celebrations — Heartstrings Studio">
+      <div class="card-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8"/><path d="M4 16s.5-1 2-1 2.5 2 4 2 2.5-2 4-2 2.5 2 4 2 2-1 2-1"/><line x1="2" y1="21" x2="22" y2="21"/><line x1="7" y1="8" x2="7" y2="11"/><line x1="12" y1="8" x2="12" y2="11"/><line x1="17" y1="8" x2="17" y2="11"/></svg>
+      </div>
       <div class="card-text">
         <div class="card-title">Birthday Celebrations</div>
         <div class="card-sub">YouTube Playlist</div>
       </div>
       <div class="card-actions">
-        <button class="action-btn share">⬆</button>
-        <button class="action-btn open">↗</button>
+        <button class="action-btn share" aria-label="Share Birthday Celebrations playlist link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg></button>
+        <button class="action-btn open" aria-label="Open Birthday Celebrations playlist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></button>
       </div>
-    </div>
+    </li>
 
-    <div class="card" data-url="https://www.youtube.com/playlist?list=PLBaBQ7Vhr-58N6PZOuIXyr7GmKvdUxqwJ" data-title="Unreleased Demos — Heartstrings Studio">
-      <div class="card-emoji">🎛️</div>
+    <li class="card" data-url="https://www.youtube.com/playlist?list=PLBaBQ7Vhr-58N6PZOuIXyr7GmKvdUxqwJ" data-title="Unreleased Demos — Heartstrings Studio">
+      <div class="card-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="21" y1="4" x2="14" y2="4"/><line x1="10" y1="4" x2="3" y2="4"/><line x1="21" y1="12" x2="12" y2="12"/><line x1="8" y1="12" x2="3" y2="12"/><line x1="21" y1="20" x2="16" y2="20"/><line x1="12" y1="20" x2="3" y2="20"/><line x1="14" y1="2" x2="14" y2="6"/><line x1="8" y1="10" x2="8" y2="14"/><line x1="16" y1="18" x2="16" y2="22"/></svg>
+      </div>
       <div class="card-text">
         <div class="card-title">Unreleased Demos</div>
         <div class="card-sub">YouTube Playlist</div>
       </div>
       <div class="card-actions">
-        <button class="action-btn share">⬆</button>
-        <button class="action-btn open">↗</button>
+        <button class="action-btn share" aria-label="Share Unreleased Demos playlist link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg></button>
+        <button class="action-btn open" aria-label="Open Unreleased Demos playlist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></button>
       </div>
-    </div>
+    </li>
 
-    <div class="card" data-url="https://youtu.be/uwsCiWGnDuc" data-title="Heartstrings Studio — WBOY 304 Today Interview">
-      <div class="card-emoji">📺</div>
+    <li class="card" data-url="https://youtu.be/uwsCiWGnDuc" data-title="Heartstrings Studio — WBOY 304 Today Interview">
+      <div class="card-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="15" rx="2" ry="2"/><polyline points="17 2 12 7 7 2"/></svg>
+      </div>
       <div class="card-text">
         <div class="card-title">WBOY Interview</div>
         <div class="card-sub">304 Today — As Seen On TV</div>
       </div>
       <div class="card-actions">
-        <button class="action-btn share">⬆</button>
-        <button class="action-btn open">↗</button>
+        <button class="action-btn share" aria-label="Share WBOY Interview link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg></button>
+        <button class="action-btn open" aria-label="Open WBOY Interview"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></button>
       </div>
-    </div>
+    </li>
 
-  </div>
+  </ul>
 
   <div id="pwa-hint">
     <strong>Add to home screen —</strong>
-    iOS: tap <strong>Share ⬆</strong> in Safari → <strong>Add to Home Screen</strong> ·
+    iOS: tap <strong>Share</strong> in Safari → <strong>Add to Home Screen</strong> ·
     Android: tap <strong>⋮</strong> in Chrome → <strong>Add to Home Screen</strong>
   </div>
 
@@ -359,12 +408,20 @@
 <footer>Heartstrings Studio · Lumberport, West Virginia</footer>
 
 <script>
-  if (!window.matchMedia('(display-mode: standalone)').matches) {
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js');
+  }
+
+  // Home-screen hint: only outside the installed app, and only on touch devices
+  if (!window.matchMedia('(display-mode: standalone)').matches && window.matchMedia('(pointer: coarse)').matches) {
     document.getElementById('pwa-hint').style.display = 'block';
   }
 
-  document.getElementById('priceToggle').addEventListener('click', () => {
-    document.getElementById('priceCard').classList.toggle('open');
+  const priceCard = document.getElementById('priceCard');
+  const priceToggle = document.getElementById('priceToggle');
+  priceToggle.addEventListener('click', () => {
+    const open = priceCard.classList.toggle('open');
+    priceToggle.setAttribute('aria-expanded', open);
   });
 
   const toast = document.getElementById('toast');
@@ -377,13 +434,18 @@
   }
 
   async function shareLink(url, title) {
+    // relative URLs (e.g. the chat page) must be absolute when shared or copied
+    const absolute = new URL(url, window.location.href).href;
     if (navigator.share) {
-      try { await navigator.share({ title, url }); } catch(e) {}
+      try {
+        await navigator.share({ title, url: absolute });
+        showToast('Shared');
+      } catch (e) { /* user cancelled the share sheet */ }
     } else {
       try {
-        await navigator.clipboard.writeText(url);
+        await navigator.clipboard.writeText(absolute);
         showToast('Link copied');
-      } catch(e) {
+      } catch (e) {
         showToast('Copy failed');
       }
     }
@@ -399,7 +461,7 @@
     const isLocal = card.dataset.local === 'true';
     card.querySelector('.action-btn.share').addEventListener('click', e => { e.stopPropagation(); shareLink(url, title); });
     card.querySelector('.action-btn.open').addEventListener('click',  e => { e.stopPropagation(); isLocal ? window.location.href = url : openLink(url); });
-    card.addEventListener('click', () => isLocal ? window.location.href = url : shareLink(url, title));
+    card.addEventListener('click', () => shareLink(url, title));
   });
 </script>
 
