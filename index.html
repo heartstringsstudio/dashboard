@@ -111,8 +111,19 @@
     .card-sub { font-size: 11px; font-weight: 300; color: var(--cream-faint); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .card-actions { display: flex; gap: 6px; flex-shrink: 0; }
     .action-btn { width: 34px; height: 34px; border-radius: 9px; border: 1px solid var(--border); background: var(--surface); color: var(--cream-dim); font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.15s, border-color 0.15s, transform 0.12s, color 0.15s; -webkit-tap-highlight-color: transparent; flex-shrink: 0; }
+    .action-btn svg { width: 15px; height: 15px; display: block; }
     .action-btn.share { color: var(--rose-light); border-color: var(--border-hot); }
     .action-btn:active { transform: scale(0.85); background: var(--rose-glow); }
+
+    #qr-overlay { position: fixed; inset: 0; z-index: 1000; background: rgba(17,13,15,0.88); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); display: flex; align-items: center; justify-content: center; padding: 24px; opacity: 0; pointer-events: none; transition: opacity 0.25s; cursor: pointer; }
+    #qr-overlay.show { opacity: 1; pointer-events: auto; }
+    .qr-panel { text-align: center; transform: scale(0.92) translateY(10px); transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1); }
+    #qr-overlay.show .qr-panel { transform: scale(1) translateY(0); }
+    .qr-code { background: #fff; padding: 16px; border-radius: 18px; display: inline-block; box-shadow: 0 8px 48px rgba(192,69,90,0.28); }
+    .qr-code img, .qr-code canvas { display: block; width: 232px; height: 232px; }
+    .qr-title { font-size: 15px; font-weight: 500; color: var(--cream); margin-top: 18px; }
+    .qr-url { font-size: 11px; font-weight: 300; color: var(--rose-light); margin-top: 4px; word-break: break-all; }
+    .qr-hint { font-size: 9px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--cream-faint); margin-top: 16px; }
 
     #pwa-hint { margin: 28px 0 0; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 14px 16px; font-size: 11.5px; font-weight: 300; color: var(--cream-faint); line-height: 1.7; display: none; }
     #pwa-hint strong { color: var(--rose-light); font-weight: 500; }
@@ -180,51 +191,6 @@
   </div>
 
   <div class="section-head">
-    <span class="section-head-label">Studio</span>
-    <span class="section-head-line"></span>
-  </div>
-  <div class="cards">
-
-    <div class="card" data-url="https://tinyurl.com/heartstringswv" data-title="Heartstrings Studio — Main Site">
-      <div class="card-emoji">🎵</div>
-      <div class="card-text">
-        <div class="card-title">Main Studio Site</div>
-        <div class="card-sub">tinyurl.com/heartstringswv</div>
-      </div>
-      <div class="card-actions">
-        <button class="action-btn share">⬆</button>
-        <button class="action-btn open">↗</button>
-      </div>
-    </div>
-
-
-    <div class="card" data-url="https://heartstringsstudio.github.io/intake/" data-title="Heartstrings Studio — Story Intake">
-      <div class="card-emoji">✍️</div>
-      <div class="card-text">
-        <div class="card-title">Story Intake Form</div>
-        <div class="card-sub">heartstringsstudio.github.io/intake</div>
-      </div>
-      <div class="card-actions">
-        <button class="action-btn share">⬆</button>
-        <button class="action-btn open">↗</button>
-      </div>
-    </div>
-
-    <div class="card" data-url="https://tinyurl.com/heartstringsfh" data-title="Heartstrings Studio — Funeral Home Partners">
-      <div class="card-emoji">🏛️</div>
-      <div class="card-text">
-        <div class="card-title">Funeral Home Partners</div>
-        <div class="card-sub">tinyurl.com/heartstringsfh</div>
-      </div>
-      <div class="card-actions">
-        <button class="action-btn share">⬆</button>
-        <button class="action-btn open">↗</button>
-      </div>
-    </div>
-
-  </div>
-
-  <div class="section-head">
     <span class="section-head-label">Hear the Songs</span>
     <span class="section-head-line"></span>
   </div>
@@ -236,49 +202,21 @@
         <div class="card-title">Song Jukebox</div>
         <div class="card-sub">tinyurl.com/hsjukebox</div>
       </div>
-      <div class="card-actions">
-        <button class="action-btn share">⬆</button>
-        <button class="action-btn open">↗</button>
-      </div>
     </div>
 
-  </div>
-
-  <div class="section-head">
-    <span class="section-head-label">Interactive</span>
-    <span class="section-head-line"></span>
-  </div>
-  <div class="cards">
-
-    <div class="card channel" data-url="https://heartstringsstudio.github.io/song-quiz/" data-title="Heartstrings Song Quiz — Can You Guess the Song?">
-      <div class="card-emoji">🎯</div>
+    <div class="card" data-url="https://youtu.be/uwsCiWGnDuc" data-title="Heartstrings Studio — WBOY 304 Today Interview">
+      <div class="card-emoji">📺</div>
       <div class="card-text">
-        <div class="card-title">Song Quiz</div>
-        <div class="card-sub">Can you guess the song?</div>
-      </div>
-      <div class="card-actions">
-        <button class="action-btn share">⬆</button>
-        <button class="action-btn open">↗</button>
+        <div class="card-title">WBOY Interview</div>
+        <div class="card-sub">304 Today — As Seen On TV</div>
       </div>
     </div>
 
-  </div>
-
-  <div class="section-head">
-    <span class="section-head-label">Music Library</span>
-    <span class="section-head-line"></span>
-  </div>
-  <div class="cards">
-
-    <div class="card channel" data-url="https://www.youtube.com/@heartstringsstudiowv" data-title="Heartstrings Studio — Full YouTube Channel">
+    <div class="card" data-url="https://www.youtube.com/@heartstringsstudiowv" data-title="Heartstrings Studio — Full YouTube Channel">
       <div class="card-emoji">▶️</div>
       <div class="card-text">
         <div class="card-title">Full YouTube Channel</div>
         <div class="card-sub">@heartstringsstudiowv — all songs</div>
-      </div>
-      <div class="card-actions">
-        <button class="action-btn share">⬆</button>
-        <button class="action-btn open">↗</button>
       </div>
     </div>
 
@@ -288,10 +226,6 @@
         <div class="card-title">Memorial Songs</div>
         <div class="card-sub">YouTube Playlist</div>
       </div>
-      <div class="card-actions">
-        <button class="action-btn share">⬆</button>
-        <button class="action-btn open">↗</button>
-      </div>
     </div>
 
     <div class="card" data-url="https://www.youtube.com/playlist?list=PLBaBQ7Vhr-59e8e10Hs42Zwx6Knhp1NCL" data-title="Wedding Songs — Heartstrings Studio">
@@ -299,10 +233,6 @@
       <div class="card-text">
         <div class="card-title">Wedding Songs</div>
         <div class="card-sub">YouTube Playlist</div>
-      </div>
-      <div class="card-actions">
-        <button class="action-btn share">⬆</button>
-        <button class="action-btn open">↗</button>
       </div>
     </div>
 
@@ -312,10 +242,6 @@
         <div class="card-title">Birthday Celebrations</div>
         <div class="card-sub">YouTube Playlist</div>
       </div>
-      <div class="card-actions">
-        <button class="action-btn share">⬆</button>
-        <button class="action-btn open">↗</button>
-      </div>
     </div>
 
     <div class="card" data-url="https://www.youtube.com/playlist?list=PLBaBQ7Vhr-58N6PZOuIXyr7GmKvdUxqwJ" data-title="Unreleased Demos — Heartstrings Studio">
@@ -324,41 +250,61 @@
         <div class="card-title">Unreleased Demos</div>
         <div class="card-sub">YouTube Playlist</div>
       </div>
-      <div class="card-actions">
-        <button class="action-btn share">⬆</button>
-        <button class="action-btn open">↗</button>
+    </div>
+
+  </div>
+
+  <div class="section-head">
+    <span class="section-head-label">Studio</span>
+    <span class="section-head-line"></span>
+  </div>
+  <div class="cards">
+
+    <div class="card" data-url="https://tinyurl.com/heartstringswv" data-title="Heartstrings Studio — Main Site">
+      <div class="card-emoji">🎵</div>
+      <div class="card-text">
+        <div class="card-title">Main Studio Site</div>
+        <div class="card-sub">tinyurl.com/heartstringswv</div>
       </div>
     </div>
 
-    <div class="card" data-url="https://youtu.be/uwsCiWGnDuc" data-title="Heartstrings Studio — WBOY 304 Today Interview">
-      <div class="card-emoji">📺</div>
+    <div class="card" data-url="https://heartstringsstudio.github.io/intake/" data-title="Heartstrings Studio — Story Intake">
+      <div class="card-emoji">✍️</div>
       <div class="card-text">
-        <div class="card-title">WBOY Interview</div>
-        <div class="card-sub">304 Today — As Seen On TV</div>
+        <div class="card-title">Story Intake Form</div>
+        <div class="card-sub">heartstringsstudio.github.io/intake</div>
       </div>
-      <div class="card-actions">
-        <button class="action-btn share">⬆</button>
-        <button class="action-btn open">↗</button>
+    </div>
+
+    <div class="card" data-url="https://tinyurl.com/heartstringsfh" data-title="Heartstrings Studio — Funeral Home Partners">
+      <div class="card-emoji">🏛️</div>
+      <div class="card-text">
+        <div class="card-title">Funeral Home Partners</div>
+        <div class="card-sub">tinyurl.com/heartstringsfh</div>
       </div>
     </div>
 
   </div>
 
   <div class="section-head">
-    <span class="section-head-label">Library</span>
+    <span class="section-head-label">Extras</span>
     <span class="section-head-line"></span>
   </div>
   <div class="cards">
 
-    <div class="card channel" data-url="https://heartstringsstudio.github.io/wired-differently/" data-title="Wired Differently — Heartstrings Studio">
+    <div class="card" data-url="https://heartstringsstudio.github.io/song-quiz/" data-title="Heartstrings Song Quiz — Can You Guess the Song?">
+      <div class="card-emoji">🎯</div>
+      <div class="card-text">
+        <div class="card-title">Song Quiz</div>
+        <div class="card-sub">Can you guess the song?</div>
+      </div>
+    </div>
+
+    <div class="card" data-url="https://heartstringsstudio.github.io/wired-differently/" data-title="Wired Differently — Heartstrings Studio">
       <div class="card-emoji">🧠</div>
       <div class="card-text">
         <div class="card-title">Wired Differently</div>
         <div class="card-sub">Our interactive app</div>
-      </div>
-      <div class="card-actions">
-        <button class="action-btn share">⬆</button>
-        <button class="action-btn open">↗</button>
       </div>
     </div>
 
@@ -372,8 +318,18 @@
 
 </div>
 
+<div id="qr-overlay" role="dialog" aria-modal="true" aria-label="QR code">
+  <div class="qr-panel">
+    <div class="qr-code" id="qrCode"></div>
+    <div class="qr-title" id="qrTitle"></div>
+    <div class="qr-url" id="qrUrl"></div>
+    <p class="qr-hint">Point their camera here · Tap to close</p>
+  </div>
+</div>
+
 <footer>Heartstrings Studio · Lumberport, West Virginia</footer>
 
+<script src="qrcode.min.js"></script>
 <script>
   if (!window.matchMedia('(display-mode: standalone)').matches) {
     document.getElementById('pwa-hint').style.display = 'block';
@@ -409,12 +365,38 @@
     window.open(url, '_blank', 'noopener');
   }
 
+  const qrOverlay = document.getElementById('qr-overlay');
+  const qrCodeBox = document.getElementById('qrCode');
+  function showQR(url, title) {
+    qrCodeBox.innerHTML = '';
+    new QRCode(qrCodeBox, {
+      text: url,
+      width: 464,
+      height: 464,
+      colorDark: '#110d0f',
+      colorLight: '#ffffff',
+      correctLevel: QRCode.CorrectLevel.M
+    });
+    document.getElementById('qrTitle').textContent = title;
+    document.getElementById('qrUrl').textContent = url.replace(/^https?:\/\//, '');
+    qrOverlay.classList.add('show');
+  }
+  qrOverlay.addEventListener('click', () => qrOverlay.classList.remove('show'));
+
+  const QR_ICON = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 3h8v8H3V3zm2 2v4h4V5H5zm1 1h2v2H6V6zm7-3h8v8h-8V3zm2 2v4h4V5h-4zm1 1h2v2h-2V6zM3 13h8v8H3v-8zm2 2v4h4v-4H5zm1 1h2v2H6v-2zm7-3h3v3h-3v-3zm5 0h3v3h-3v-3zm-5 5h3v3h-3v-3zm5 0h3v3h-3v-3z"/></svg>';
+
   document.querySelectorAll('.card').forEach(card => {
     const url   = card.dataset.url;
     const title = card.dataset.title;
-    card.querySelector('.action-btn.share').addEventListener('click', e => { e.stopPropagation(); shareLink(url, title); });
-    card.querySelector('.action-btn.open').addEventListener('click',  e => { e.stopPropagation(); openLink(url); });
-    card.addEventListener('click', () => shareLink(url, title));
+    const actions = document.createElement('div');
+    actions.className = 'card-actions';
+    actions.innerHTML =
+      '<button class="action-btn share" aria-label="Share link">⬆</button>' +
+      '<button class="action-btn qr" aria-label="Show QR code">' + QR_ICON + '</button>';
+    card.appendChild(actions);
+    actions.querySelector('.share').addEventListener('click', e => { e.stopPropagation(); shareLink(url, title); });
+    actions.querySelector('.qr').addEventListener('click',    e => { e.stopPropagation(); showQR(url, title); });
+    card.addEventListener('click', () => openLink(url));
   });
 </script>
 
