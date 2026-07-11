@@ -21,8 +21,21 @@
   <meta name="twitter:title" content="Heartstrings Studio" />
   <meta name="twitter:description" content="Custom songs for weddings, memorials, birthdays & more. Starting at $150." />
   <meta name="twitter:image" content="https://heartstringsstudio.github.io/dashboard/logo.png" />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
+    @font-face {
+      font-family: 'DM Sans';
+      src: url('fonts/dm-sans-latin.woff2') format('woff2');
+      font-style: normal;
+      font-weight: 400 600;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Playfair Display';
+      src: url('fonts/playfair-display-700-latin.woff2') format('woff2');
+      font-style: normal;
+      font-weight: 700;
+      font-display: swap;
+    }
     :root {
       /* ── Color: base ─────────────────────────────── */
       --bg:             #141011;
@@ -100,10 +113,11 @@
 
     .wrapper { position: relative; z-index: 1; max-width: 430px; margin: 0 auto; padding: 0 var(--space-4) var(--space-10); }
 
-    header { padding: var(--space-14) 0 var(--space-8); text-align: center; animation: fadeUp 0.6s ease both; }
-    .header-eyebrow { font-size: 10px; font-weight: 600; letter-spacing: 0.28em; text-transform: uppercase; color: var(--accent-bright); opacity: 0.8; margin-bottom: var(--space-3); }
+    header { padding: var(--space-10) 0 var(--space-5); text-align: center; animation: fadeUp 0.6s ease both; }
+    .header-logo { width: 56px; height: 56px; display: block; margin: 0 auto var(--space-3); object-fit: contain; filter: drop-shadow(0 6px 18px rgba(198,86,107,0.22)); }
+    .header-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.24em; text-transform: uppercase; color: var(--accent-bright); opacity: 0.88; margin-bottom: var(--space-2); }
     h1 { font-family: var(--font-display); font-size: clamp(28px, 7vw, 34px); font-weight: 700; color: var(--text-hi); line-height: 1.1; letter-spacing: -0.01em; }
-    .header-sub { font-size: 10px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-low); margin-top: var(--space-2); }
+    .header-sub { font-size: 11px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-low); margin-top: var(--space-2); }
 
     .cta-wrap { margin-bottom: var(--space-3); animation: fadeUp 0.6s 0.1s ease both; }
     .cta-btn { display: flex; align-items: center; justify-content: center; gap: var(--space-3); width: 100%; height: 100%; min-height: 56px; padding: var(--space-4) var(--space-5); background: linear-gradient(135deg, var(--accent-deep) 0%, var(--accent-wine) 100%); border: 1px solid rgba(198,86,107,0.4); border-radius: var(--r-md); color: var(--text-hi); font-family: var(--font-ui); font-size: 14px; font-weight: 600; line-height: 1; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; cursor: pointer; position: relative; overflow: hidden; transition: transform var(--t-fast), box-shadow var(--t-fast); box-shadow: var(--shadow-glow), inset 0 1px 0 rgba(255,255,255,0.06); -webkit-tap-highlight-color: transparent; }
@@ -134,18 +148,22 @@
     .price-note { font-size: 12px; font-weight: 400; color: var(--text-low); margin-top: var(--space-3); line-height: 1.5; }
 
     .section-head { display: flex; align-items: center; gap: var(--space-3); margin: var(--space-8) 0 var(--space-3); }
-    .section-head-label { font-size: 10px; font-weight: 600; line-height: 1; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent-bright); opacity: 0.8; white-space: nowrap; }
-    .section-head-line { flex: 1; height: 1px; background: linear-gradient(90deg, rgba(198,86,107,0.25), transparent); }
+    .section-head-label { font-size: 11px; font-weight: 600; line-height: 1; letter-spacing: 0.2em; text-transform: uppercase; color: var(--section-accent, var(--accent-bright)); opacity: 0.92; white-space: nowrap; }
+    .section-head-line { flex: 1; height: 1px; background: linear-gradient(90deg, var(--section-border, rgba(198,86,107,0.25)), transparent); }
+    .sec-hear { --section-accent: #e07d90; --section-border: rgba(224,125,144,0.35); }
+    .sec-studio { --section-accent: #cfa678; --section-border: rgba(207,166,120,0.35); }
+    .sec-extras { --section-accent: #8fb4c4; --section-border: rgba(143,180,196,0.35); }
+    .sec-recent { --section-accent: #8fa98b; --section-border: rgba(143,169,139,0.35); }
 
     .cards { display: flex; flex-direction: column; gap: var(--space-3); }
     .card { display: flex; align-items: center; gap: var(--space-2); background: var(--surface); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid var(--border); border-radius: var(--r-md); padding: var(--space-2) var(--space-2) var(--space-2) var(--space-4); position: relative; overflow: hidden; box-shadow: var(--shadow-card); transition: border-color var(--t-med), background var(--t-med), transform var(--t-fast), box-shadow var(--t-med); -webkit-tap-highlight-color: transparent; }
-    .card::before { content: ''; position: absolute; left: 0; top: 18%; bottom: 18%; width: 2px; background: var(--accent); border-radius: 0 2px 2px 0; opacity: 0; transition: opacity var(--t-med); }
+    .card::before { content: ''; position: absolute; left: 0; top: 18%; bottom: 18%; width: 2px; background: var(--section-accent, var(--accent)); border-radius: 0 2px 2px 0; opacity: 0; transition: opacity var(--t-med); }
     .card:active { transform: scale(0.975); border-color: var(--border-accent); background: var(--surface-2); }
     .card:active::before { opacity: 1; }
     .card.channel { background: linear-gradient(135deg, rgba(198,86,107,0.08) 0%, rgba(255,255,255,0.03) 100%); border-color: rgba(198,86,107,0.2); box-shadow: 0 2px 16px rgba(198,86,107,0.08); }
     .card.channel::before { opacity: 0.5; }
     .card-main { display: flex; align-items: center; gap: var(--space-3); flex: 1; min-width: 0; padding: var(--space-2) 0 var(--space-2) var(--space-2); margin: calc(var(--space-2) * -1) 0 calc(var(--space-2) * -1) calc(var(--space-2) * -1); text-decoration: none; color: inherit; border-radius: var(--r-md); -webkit-tap-highlight-color: transparent; }
-    .card-icon { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: var(--surface-2); border-radius: var(--r-sm); border: 1px solid var(--border); color: var(--accent-bright); flex-shrink: 0; }
+    .card-icon { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: var(--surface-2); border-radius: var(--r-sm); border: 1px solid var(--section-border, var(--border)); color: var(--section-accent, var(--accent-bright)); flex-shrink: 0; }
     .card-icon svg { width: 20px; height: 20px; }
     .card.channel .card-icon { background: var(--accent-glow); border-color: var(--border-accent); }
     .card-text { display: block; flex: 1; min-width: 0; }
@@ -159,25 +177,32 @@
 
     /* Compact tiles for the situational playlists */
     .cards-compact { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); }
-    .cards-compact .card { padding: var(--space-3); }
-    .cards-compact .card-main { padding: var(--space-3); margin: calc(var(--space-3) * -1); flex: 1; }
+    .cards-compact .card { padding: var(--space-3); flex-wrap: wrap; }
+    .cards-compact .card-main { padding: var(--space-3); margin: calc(var(--space-3) * -1); flex: 1 1 100%; }
     .cards-compact .card-sub { display: none; }
     .cards-compact .card-icon { width: 32px; height: 32px; }
     .cards-compact .card-icon svg { width: 16px; height: 16px; }
     .cards-compact .card-title { font-size: 13px; }
+    .cards-compact .card-actions { width: 100%; justify-content: flex-end; padding-top: var(--space-2); border-top: 1px solid var(--border); }
 
     #qr-overlay { position: fixed; inset: 0; z-index: 1000; background: rgba(20,16,17,0.88); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); display: flex; align-items: center; justify-content: center; padding: var(--space-6); opacity: 0; pointer-events: none; transition: opacity var(--t-med); cursor: pointer; }
     #qr-overlay.show { opacity: 1; pointer-events: auto; }
-    .qr-panel { text-align: center; transform: scale(0.92) translateY(10px); transition: transform 0.3s var(--ease-spring); }
+    .qr-panel { width: min(100%, 340px); text-align: center; position: relative; transform: scale(0.92) translateY(10px); transition: transform 0.3s var(--ease-spring); cursor: default; }
     #qr-overlay.show .qr-panel { transform: scale(1) translateY(0); }
     .qr-code { background: #fff; padding: var(--space-4); border-radius: var(--r-lg); display: inline-block; box-shadow: 0 8px 48px rgba(198,86,107,0.28); }
     .qr-code img, .qr-code canvas { display: block; width: 232px; height: 232px; }
     .qr-title { font-size: 15px; font-weight: 500; line-height: 1.3; color: var(--text-hi); margin-top: var(--space-5); }
     .qr-url { font-size: 12px; font-weight: 400; color: var(--accent-bright); margin-top: var(--space-1); word-break: break-all; }
-    .qr-hint { font-size: 10px; font-weight: 600; line-height: 1; letter-spacing: 0.22em; text-transform: uppercase; color: var(--text-low); margin-top: var(--space-4); }
+    .qr-hint { font-size: 11px; font-weight: 600; line-height: 1.4; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-low); margin-top: var(--space-4); }
+    .qr-close { min-width: 96px; min-height: 44px; margin-top: var(--space-4); padding: var(--space-2) var(--space-4); border: 1px solid var(--border-accent); border-radius: var(--r-pill); background: var(--surface-2); color: var(--text-hi); font: 600 12px/1 var(--font-ui); letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; }
 
-    #pwa-hint { margin: var(--space-8) 0 0; background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-md); padding: var(--space-4); font-size: 12px; font-weight: 400; color: var(--text-low); line-height: 1.7; display: none; }
+    #pwa-hint { margin: var(--space-8) 0 0; background: linear-gradient(135deg, rgba(198,86,107,0.08), var(--surface)); border: 1px solid var(--border-accent); border-radius: var(--r-md); padding: var(--space-4); font-size: 12px; font-weight: 400; color: var(--text-low); line-height: 1.6; display: none; position: relative; }
     #pwa-hint strong { color: var(--accent-bright); font-weight: 500; }
+    .pwa-title { display: block; padding-right: 36px; margin-bottom: var(--space-1); font-size: 14px; color: var(--text-hi); }
+    .pwa-actions { display: flex; gap: var(--space-2); margin-top: var(--space-3); }
+    .install-btn, .pwa-dismiss { min-height: 44px; border-radius: var(--r-sm); font: 600 12px/1 var(--font-ui); cursor: pointer; }
+    .install-btn { padding: 0 var(--space-4); border: 1px solid var(--border-accent); background: var(--accent-wine); color: var(--text-hi); }
+    .pwa-dismiss { position: absolute; top: var(--space-2); right: var(--space-2); width: 44px; border: 0; background: transparent; color: var(--text-mid); font-size: 20px; }
 
     footer { text-align: center; padding: var(--space-5) 0 var(--space-2); font-size: 12px; font-weight: 400; color: var(--text-low); opacity: 0.6; position: relative; z-index: 1; }
 
@@ -192,7 +217,8 @@
 
     /* Keyboard focus */
     .card-main:focus-visible, .action-btn:focus-visible,
-    .cta-btn:focus-visible, .price-toggle:focus-visible {
+    .cta-btn:focus-visible, .price-toggle:focus-visible, .qr-close:focus-visible,
+    .install-btn:focus-visible, .pwa-dismiss:focus-visible {
       outline: 2px solid var(--focus); outline-offset: 2px;
     }
 
@@ -202,9 +228,10 @@
       header { grid-column: 1 / -1; }
       .cta-wrap { grid-column: 1; margin-bottom: 0; align-self: stretch; }
       .price-wrap { grid-column: 2; }
-      .sec-hear { grid-column: 1; grid-row: 3 / span 2; }
-      .sec-studio { grid-column: 2; grid-row: 3; }
-      .sec-extras { grid-column: 2; grid-row: 4; }
+      .sec-recent { grid-column: 1 / -1; }
+      .sec-hear { grid-column: 1; }
+      .sec-studio { grid-column: 2; }
+      .sec-extras { grid-column: 2; }
       #pwa-hint { grid-column: 1 / -1; }
     }
 
@@ -236,6 +263,7 @@
     <symbol id="i-share" viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></symbol>
     <symbol id="i-qr" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><path d="M14 14h3v3h-3z"/><path d="M21 14v4h-1"/><path d="M14 21h4"/><path d="M21 21h.01"/></symbol>
     <symbol id="i-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
   </defs>
 </svg>
 
@@ -246,6 +274,7 @@
 <div class="wrapper">
 
   <header>
+    <img class="header-logo" src="logo.png" alt="" width="56" height="56" />
     <p class="header-eyebrow">Lumberport, West Virginia</p>
     <h1>Heartstrings Studio</h1>
     <p class="header-sub">Quick Share Dashboard</p>
@@ -292,9 +321,17 @@
     </div>
   </div>
 
-  <section class="sec sec-hear">
+  <section class="sec sec-recent" id="recentSection" aria-labelledby="recentHeading" hidden>
     <div class="section-head">
-      <span class="section-head-label">Hear the Songs</span>
+      <h2 class="section-head-label" id="recentHeading">Recently Used</h2>
+      <span class="section-head-line"></span>
+    </div>
+    <div class="cards" id="recentCards"></div>
+  </section>
+
+  <section class="sec sec-hear" aria-labelledby="hearHeading">
+    <div class="section-head">
+      <h2 class="section-head-label" id="hearHeading">Hear the Songs</h2>
       <span class="section-head-line"></span>
     </div>
     <div class="cards">
@@ -304,7 +341,7 @@
           <span class="card-icon"><svg aria-hidden="true"><use href="#i-headphones"/></svg></span>
           <span class="card-text">
             <span class="card-title">Song Jukebox</span>
-            <span class="card-sub">tinyurl.com/hsjukebox</span>
+            <span class="card-sub">Listen to the full collection</span>
           </span>
         </a>
       </div>
@@ -314,7 +351,7 @@
           <span class="card-icon"><svg aria-hidden="true"><use href="#i-tv"/></svg></span>
           <span class="card-text">
             <span class="card-title">WBOY Interview</span>
-            <span class="card-sub">304 Today — As Seen On TV</span>
+            <span class="card-sub">304 Today · As Seen on TV</span>
           </span>
         </a>
       </div>
@@ -324,7 +361,7 @@
           <span class="card-icon"><svg aria-hidden="true"><use href="#i-play"/></svg></span>
           <span class="card-text">
             <span class="card-title">Full YouTube Channel</span>
-            <span class="card-sub">@heartstringsstudiowv — all songs</span>
+            <span class="card-sub">All songs and videos</span>
           </span>
         </a>
       </div>
@@ -376,9 +413,9 @@
     </div>
   </section>
 
-  <section class="sec sec-studio">
+  <section class="sec sec-studio" aria-labelledby="studioHeading">
     <div class="section-head">
-      <span class="section-head-label">Studio</span>
+      <h2 class="section-head-label" id="studioHeading">Studio</h2>
       <span class="section-head-line"></span>
     </div>
     <div class="cards">
@@ -388,7 +425,7 @@
           <span class="card-icon"><svg aria-hidden="true"><use href="#i-music"/></svg></span>
           <span class="card-text">
             <span class="card-title">Main Studio Site</span>
-            <span class="card-sub">tinyurl.com/heartstringswv</span>
+            <span class="card-sub">Heartstrings Studio home</span>
           </span>
         </a>
       </div>
@@ -398,7 +435,7 @@
           <span class="card-icon"><svg aria-hidden="true"><use href="#i-pen"/></svg></span>
           <span class="card-text">
             <span class="card-title">The Story Room</span>
-            <span class="card-sub">heartstringsstudio.github.io/storyroom</span>
+            <span class="card-sub">Stories, reflections, and writing</span>
           </span>
         </a>
       </div>
@@ -408,7 +445,7 @@
           <span class="card-icon"><svg aria-hidden="true"><use href="#i-columns"/></svg></span>
           <span class="card-text">
             <span class="card-title">Funeral Home Partners</span>
-            <span class="card-sub">tinyurl.com/heartstringsfh</span>
+            <span class="card-sub">Partner information and resources</span>
           </span>
         </a>
       </div>
@@ -416,9 +453,9 @@
     </div>
   </section>
 
-  <section class="sec sec-extras">
+  <section class="sec sec-extras" aria-labelledby="extrasHeading">
     <div class="section-head">
-      <span class="section-head-label">Extras</span>
+      <h2 class="section-head-label" id="extrasHeading">Extras</h2>
       <span class="section-head-line"></span>
     </div>
     <div class="cards">
@@ -438,7 +475,7 @@
           <span class="card-icon"><svg aria-hidden="true"><use href="#i-zap"/></svg></span>
           <span class="card-text">
             <span class="card-title">Wired Differently</span>
-            <span class="card-sub">Our interactive app</span>
+            <span class="card-sub">Interactive ADHD guide</span>
           </span>
         </a>
       </div>
@@ -446,20 +483,24 @@
     </div>
   </section>
 
-  <div id="pwa-hint">
-    <strong>Add to home screen —</strong>
-    iOS: tap <strong>Share ⬆</strong> in Safari → <strong>Add to Home Screen</strong> ·
-    Android: tap <strong>⋮</strong> in Chrome → <strong>Add to Home Screen</strong>
+  <div id="pwa-hint" role="region" aria-label="Install this dashboard">
+    <button class="pwa-dismiss" id="pwaDismiss" type="button" aria-label="Dismiss install suggestion">×</button>
+    <strong class="pwa-title">Keep Heartstrings one tap away</strong>
+    <span id="pwaCopy">On iPhone, tap <strong>Share</strong>, then <strong>Add to Home Screen</strong>. On Android, use the browser menu and choose <strong>Add to Home Screen</strong>.</span>
+    <div class="pwa-actions">
+      <button class="install-btn" id="installBtn" type="button" hidden>Install dashboard</button>
+    </div>
   </div>
 
 </div>
 
-<div id="qr-overlay" role="dialog" aria-modal="true" aria-label="QR code">
+<div id="qr-overlay" role="dialog" aria-modal="true" aria-labelledby="qrTitle" aria-describedby="qrHint" aria-hidden="true" inert>
   <div class="qr-panel">
     <div class="qr-code" id="qrCode"></div>
     <div class="qr-title" id="qrTitle"></div>
     <div class="qr-url" id="qrUrl"></div>
-    <p class="qr-hint">Point their camera here · Tap to close</p>
+    <p class="qr-hint" id="qrHint">Point their camera here to open the link</p>
+    <button class="qr-close" id="qrClose" type="button" tabindex="-1">Close</button>
   </div>
 </div>
 
@@ -471,9 +512,50 @@
     window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js'));
   }
 
-  if (!window.matchMedia('(display-mode: standalone)').matches) {
-    document.getElementById('pwa-hint').style.display = 'block';
+  function storageGet(key, fallback = null) {
+    try { return localStorage.getItem(key) ?? fallback; }
+    catch (e) { return fallback; }
   }
+
+  function storageSet(key, value) {
+    try { localStorage.setItem(key, value); return true; }
+    catch (e) { return false; }
+  }
+
+  const pwaHint = document.getElementById('pwa-hint');
+  const pwaCopy = document.getElementById('pwaCopy');
+  const installBtn = document.getElementById('installBtn');
+  const pwaDismiss = document.getElementById('pwaDismiss');
+  const INSTALL_DISMISSED_KEY = 'heartstrings_dashboard_install_dismissed';
+  let deferredInstallPrompt = null;
+
+  function hideInstallHint(remember = false) {
+    pwaHint.style.display = 'none';
+    if (remember) storageSet(INSTALL_DISMISSED_KEY, '1');
+  }
+
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+  if (!isStandalone && !storageGet(INSTALL_DISMISSED_KEY)) {
+    pwaHint.style.display = 'block';
+  }
+
+  window.addEventListener('beforeinstallprompt', (event) => {
+    event.preventDefault();
+    deferredInstallPrompt = event;
+    installBtn.hidden = false;
+    pwaCopy.textContent = 'Install the dashboard for faster access and reliable offline use.';
+  });
+
+  installBtn.addEventListener('click', async () => {
+    if (!deferredInstallPrompt) return;
+    deferredInstallPrompt.prompt();
+    const { outcome } = await deferredInstallPrompt.userChoice;
+    deferredInstallPrompt = null;
+    installBtn.hidden = true;
+    if (outcome === 'accepted') hideInstallHint(true);
+  });
+  pwaDismiss.addEventListener('click', () => hideInstallHint(true));
+  window.addEventListener('appinstalled', () => hideInstallHint(true));
 
   const priceToggle = document.getElementById('priceToggle');
   priceToggle.addEventListener('click', () => {
@@ -492,10 +574,22 @@
 
   async function copyLink(url) {
     try {
+      if (!navigator.clipboard?.writeText) throw new Error('Clipboard API unavailable');
       await navigator.clipboard.writeText(url);
       showToast('Link copied');
     } catch (e) {
-      showToast('Copy failed');
+      const field = document.createElement('textarea');
+      field.value = url;
+      field.setAttribute('readonly', '');
+      field.style.position = 'fixed';
+      field.style.opacity = '0';
+      document.body.appendChild(field);
+      field.select();
+      let copied = false;
+      try { copied = document.execCommand('copy'); }
+      catch (copyError) { copied = false; }
+      field.remove();
+      showToast(copied ? 'Link copied' : 'Copy failed');
     }
   }
 
@@ -513,7 +607,11 @@
 
   const qrOverlay = document.getElementById('qr-overlay');
   const qrCodeBox = document.getElementById('qrCode');
-  function showQR(url, title) {
+  const qrClose = document.getElementById('qrClose');
+  let lastQRTrigger = null;
+
+  function showQR(url, title, trigger) {
+    lastQRTrigger = trigger || document.activeElement;
     qrCodeBox.innerHTML = '';
     new QRCode(qrCodeBox, {
       text: url,
@@ -526,32 +624,115 @@
     document.getElementById('qrTitle').textContent = title;
     document.getElementById('qrUrl').textContent = url.replace(/^https?:\/\//, '');
     qrOverlay.classList.add('show');
+    qrOverlay.setAttribute('aria-hidden', 'false');
+    qrOverlay.removeAttribute('inert');
+    qrClose.tabIndex = 0;
     history.pushState({ qr: 1 }, '');
+    qrClose.focus();
+  }
+  function hideQR() {
+    qrOverlay.classList.remove('show');
+    qrOverlay.setAttribute('aria-hidden', 'true');
+    qrOverlay.setAttribute('inert', '');
+    qrClose.tabIndex = -1;
+    if (lastQRTrigger && document.contains(lastQRTrigger)) lastQRTrigger.focus();
+    lastQRTrigger = null;
   }
   function closeQR() {
     if (!qrOverlay.classList.contains('show')) return;
     if (history.state && history.state.qr) history.back();
-    else qrOverlay.classList.remove('show');
+    else hideQR();
   }
-  window.addEventListener('popstate', () => qrOverlay.classList.remove('show'));
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeQR(); });
-  qrOverlay.addEventListener('click', closeQR);
+  window.addEventListener('popstate', hideQR);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeQR();
+    if (e.key === 'Tab' && qrOverlay.classList.contains('show')) {
+      e.preventDefault();
+      qrClose.focus();
+    }
+  });
+  qrOverlay.addEventListener('click', (e) => { if (e.target === qrOverlay) closeQR(); });
+  qrClose.addEventListener('click', closeQR);
 
   const SHARE_ICON = '<svg aria-hidden="true"><use href="#i-share"/></svg>';
   const QR_ICON = '<svg aria-hidden="true"><use href="#i-qr"/></svg>';
 
-  document.querySelectorAll('.cards:not(.cards-compact) .card').forEach(card => {
+  const RECENT_KEY = 'heartstrings_dashboard_recent_links';
+  const recentSection = document.getElementById('recentSection');
+  const recentCards = document.getElementById('recentCards');
+
+  function getRecentLinks() {
+    try { return JSON.parse(storageGet(RECENT_KEY, '[]')); }
+    catch (e) { return []; }
+  }
+
+  function rememberLink(url, title, label) {
+    const updated = [{ url, title, label }, ...getRecentLinks().filter(item => item.url !== url)].slice(0, 3);
+    storageSet(RECENT_KEY, JSON.stringify(updated));
+    renderRecentLinks();
+  }
+
+  function enhanceCard(card) {
+    if (card.dataset.enhanced === 'true') return;
     const url   = card.dataset.url;
     const title = card.dataset.title;
+    const label = card.querySelector('.card-title')?.textContent.trim() || title;
     const actions = document.createElement('div');
     actions.className = 'card-actions';
-    actions.innerHTML =
-      '<button class="action-btn share" aria-label="Share link">' + SHARE_ICON + '</button>' +
-      '<button class="action-btn qr" aria-label="Show QR code">' + QR_ICON + '</button>';
+    const shareButton = document.createElement('button');
+    shareButton.className = 'action-btn share';
+    shareButton.type = 'button';
+    shareButton.setAttribute('aria-label', `Share ${label}`);
+    shareButton.innerHTML = SHARE_ICON;
+    const qrButton = document.createElement('button');
+    qrButton.className = 'action-btn qr';
+    qrButton.type = 'button';
+    qrButton.setAttribute('aria-label', `Show QR code for ${label}`);
+    qrButton.innerHTML = QR_ICON;
+    actions.append(shareButton, qrButton);
     card.appendChild(actions);
-    actions.querySelector('.share').addEventListener('click', e => { e.stopPropagation(); shareLink(url, title); });
-    actions.querySelector('.qr').addEventListener('click',    e => { e.stopPropagation(); showQR(url, title); });
-  });
+    card.dataset.enhanced = 'true';
+    card.querySelector('.card-main')?.addEventListener('click', () => rememberLink(url, title, label));
+    shareButton.addEventListener('click', e => {
+      e.stopPropagation();
+      rememberLink(url, title, label);
+      shareLink(url, title);
+    });
+    qrButton.addEventListener('click', e => {
+      e.stopPropagation();
+      rememberLink(url, title, label);
+      const staticCard = [...document.querySelectorAll('.card[data-url]')]
+        .find(candidate => !recentSection.contains(candidate) && candidate.dataset.url === url);
+      const returnTarget = document.contains(e.currentTarget) ? e.currentTarget : staticCard?.querySelector('.qr');
+      showQR(url, title, returnTarget);
+    });
+  }
+
+  function renderRecentLinks() {
+    const items = getRecentLinks();
+    recentCards.innerHTML = '';
+    recentSection.hidden = items.length === 0;
+    items.forEach(item => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.dataset.url = item.url;
+      card.dataset.title = item.title;
+      const main = document.createElement('a');
+      main.className = 'card-main';
+      main.href = item.url;
+      main.target = '_blank';
+      main.rel = 'noopener';
+      main.innerHTML = '<span class="card-icon"><svg aria-hidden="true"><use href="#i-clock"/></svg></span>' +
+        '<span class="card-text"><span class="card-title"></span><span class="card-sub">Recently opened</span></span>';
+      main.querySelector('.card-title').textContent = item.label;
+      card.appendChild(main);
+      recentCards.appendChild(card);
+      enhanceCard(card);
+    });
+  }
+
+  document.querySelectorAll('.card[data-url]').forEach(enhanceCard);
+  renderRecentLinks();
 </script>
 
 </body>
