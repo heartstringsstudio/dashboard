@@ -6,45 +6,77 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Heartstrings" />
-  <meta name="theme-color" content="#110d0f" />
+  <meta name="theme-color" content="#141011" />
   <link rel="manifest" href="manifest.json" />
   <link rel="icon" href="logo.png" type="image/png" />
-  <link rel="apple-touch-icon" href="logo.png" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
   <title>Heartstrings Studio</title>
   <meta name="description" content="Heartstrings Studio — Custom songs for weddings, memorials, birthdays & more. Based in Lumberport, West Virginia." />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Heartstrings Studio" />
   <meta property="og:description" content="Custom songs for weddings, memorials, birthdays & more. Starting at $150." />
-  <meta property="og:image" content="logo.png" />
+  <meta property="og:image" content="https://heartstringsstudio.github.io/dashboard/logo.png" />
   <meta property="og:url" content="https://heartstringsstudio.github.io/dashboard/" />
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="Heartstrings Studio" />
   <meta name="twitter:description" content="Custom songs for weddings, memorials, birthdays & more. Starting at $150." />
-  <meta name="twitter:image" content="logo.png" />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <meta name="twitter:image" content="https://heartstringsstudio.github.io/dashboard/logo.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg:         #110d0f;
-      --surface:    rgba(255,255,255,0.04);
-      --surface-2:  rgba(255,255,255,0.07);
-      --border:     rgba(255,255,255,0.07);
-      --border-hot: rgba(192,69,90,0.35);
-      --rose:       #c0455a;
-      --rose-light: #d4637a;
-      --rose-dim:   #7a2d3e;
-      --rose-glow:  rgba(192,69,90,0.12);
-      --cream:      #faf6f2;
-      --cream-dim:  rgba(250,246,242,0.55);
-      --cream-faint:rgba(250,246,242,0.28);
+      /* ── Color: base ─────────────────────────────── */
+      --bg:             #141011;
+      --surface:        rgba(255,255,255,0.045);
+      --surface-2:      rgba(255,255,255,0.08);
+      --border:         rgba(250,246,242,0.08);
+      --border-accent:  rgba(198,86,107,0.35);
+
+      /* ── Color: text ─────────────────────────────── */
+      --text-hi:        #faf6f2;
+      --text-mid:       rgba(250,246,242,0.74);
+      --text-low:       rgba(250,246,242,0.52);
+
+      /* ── Color: accent ───────────────────────────── */
+      --accent:         #c6566b;
+      --accent-bright:  #e07d90;
+      --accent-deep:    #7c2f40;
+      --accent-wine:    #58202c;
+      --accent-glow:    rgba(198,86,107,0.12);
+      --champagne:      #cfa678;
+
+      /* ── Color: semantic ─────────────────────────── */
+      --success:        #8fa98b;
+      --warning:        #d9a05b;
+      --focus:          rgba(224,125,144,0.7);
+
+      /* ── Type ────────────────────────────────────── */
+      --font-display:   'Playfair Display', Georgia, serif;
+      --font-ui:        'DM Sans', system-ui, sans-serif;
+
+      /* ── Space (4px grid) ────────────────────────── */
+      --space-1: 4px;  --space-2: 8px;  --space-3: 12px; --space-4: 16px;
+      --space-5: 20px; --space-6: 24px; --space-8: 32px; --space-10: 40px; --space-14: 56px;
+
+      /* ── Radius ──────────────────────────────────── */
+      --r-sm: 10px; --r-md: 14px; --r-lg: 20px; --r-pill: 999px;
+
+      /* ── Elevation ───────────────────────────────── */
+      --shadow-card: 0 2px 12px rgba(0,0,0,0.25);
+      --shadow-lift: 0 8px 28px rgba(0,0,0,0.40);
+      --shadow-glow: 0 4px 24px rgba(198,86,107,0.18);
+
+      /* ── Motion ──────────────────────────────────── */
+      --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+      --t-fast: 0.15s; --t-med: 0.25s; --t-slow: 0.35s;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { overflow-x: hidden; }
     body {
       background: var(--bg);
-      color: var(--cream);
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 300;
+      color: var(--text-hi);
+      font-family: var(--font-ui);
+      font-weight: 400;
       min-height: 100dvh;
       width: 100%;
       padding-bottom: env(safe-area-inset-bottom, 32px);
@@ -52,94 +84,164 @@
     }
 
     .bg-orb { position: fixed; border-radius: 50%; pointer-events: none; z-index: 0; filter: blur(80px); }
-    .bg-orb-1 { width: 400px; height: 300px; top: -80px; left: 50%; transform: translateX(-50%); background: radial-gradient(ellipse, rgba(192,69,90,0.18) 0%, transparent 70%); }
-    .bg-orb-2 { width: 250px; height: 250px; bottom: 20%; right: -60px; background: radial-gradient(ellipse, rgba(192,69,90,0.07) 0%, transparent 70%); }
+    .bg-orb-1 { width: 400px; height: 300px; top: -80px; left: 50%; transform: translateX(-50%); background: radial-gradient(ellipse, rgba(198,86,107,0.18) 0%, transparent 70%); }
+    .bg-orb-2 { width: 250px; height: 250px; bottom: 20%; right: -60px; background: radial-gradient(ellipse, rgba(198,86,107,0.07) 0%, transparent 70%); }
 
     body::after { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E"); opacity: 0.4; pointer-events: none; z-index: 0; }
 
-    #toast { position: fixed; bottom: calc(env(safe-area-inset-bottom, 20px) + 20px); left: 50%; transform: translateX(-50%) translateY(60px); background: rgba(30,20,24,0.92); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--border-hot); color: var(--rose-light); padding: 10px 20px; border-radius: 100px; font-size: 12px; font-weight: 500; letter-spacing: 0.08em; white-space: nowrap; z-index: 999; transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1), opacity 0.35s; pointer-events: none; opacity: 0; }
+    /* Shared icon plumbing */
+    .card-icon svg, .price-icon svg, .action-btn svg, .cta-icon svg, .price-chevron svg {
+      fill: none; stroke: currentColor; stroke-width: 1.75;
+      stroke-linecap: round; stroke-linejoin: round; display: block;
+    }
+
+    #toast { position: fixed; bottom: calc(env(safe-area-inset-bottom, 20px) + 20px); left: 50%; transform: translateX(-50%) translateY(60px); background: rgba(30,20,24,0.92); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(143,169,139,0.45); color: var(--success); padding: var(--space-3) var(--space-5); border-radius: var(--r-pill); font-size: 12px; font-weight: 500; letter-spacing: 0.08em; white-space: nowrap; z-index: 999; transition: transform var(--t-slow) var(--ease-spring), opacity var(--t-slow); pointer-events: none; opacity: 0; }
     #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
-    .wrapper { position: relative; z-index: 1; max-width: 430px; margin: 0 auto; padding: 0 18px 48px; }
+    .wrapper { position: relative; z-index: 1; max-width: 430px; margin: 0 auto; padding: 0 var(--space-4) var(--space-10); }
 
-    header { padding: 56px 0 32px; text-align: center; animation: fadeUp 0.6s ease both; }
-    .header-eyebrow { font-size: 9px; font-weight: 500; letter-spacing: 0.3em; text-transform: uppercase; color: var(--rose-light); opacity: 0.7; margin-bottom: 12px; }
-    h1 { font-family: 'Playfair Display', Georgia, serif; font-size: clamp(28px, 7vw, 38px); font-weight: 700; color: var(--cream); line-height: 1; letter-spacing: -0.01em; }
-    .header-sub { font-size: 11px; font-weight: 300; letter-spacing: 0.2em; text-transform: uppercase; color: var(--cream-faint); margin-top: 8px; }
+    header { padding: var(--space-14) 0 var(--space-8); text-align: center; animation: fadeUp 0.6s ease both; }
+    .header-eyebrow { font-size: 10px; font-weight: 600; letter-spacing: 0.28em; text-transform: uppercase; color: var(--accent-bright); opacity: 0.8; margin-bottom: var(--space-3); }
+    h1 { font-family: var(--font-display); font-size: clamp(28px, 7vw, 34px); font-weight: 700; color: var(--text-hi); line-height: 1.1; letter-spacing: -0.01em; }
+    .header-sub { font-size: 10px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-low); margin-top: var(--space-2); }
 
-    .cta-wrap { margin-bottom: 10px; animation: fadeUp 0.6s 0.1s ease both; }
-    .cta-btn { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 17px 20px; background: linear-gradient(135deg, #7a2d3e 0%, #5c1e2b 100%); border: 1px solid rgba(192,69,90,0.4); border-radius: 14px; color: var(--cream); font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; cursor: pointer; position: relative; overflow: hidden; transition: transform 0.15s, box-shadow 0.15s; box-shadow: 0 4px 24px rgba(192,69,90,0.18), inset 0 1px 0 rgba(255,255,255,0.06); -webkit-tap-highlight-color: transparent; }
+    .cta-wrap { margin-bottom: var(--space-3); animation: fadeUp 0.6s 0.1s ease both; }
+    .cta-btn { display: flex; align-items: center; justify-content: center; gap: var(--space-3); width: 100%; height: 100%; min-height: 56px; padding: var(--space-4) var(--space-5); background: linear-gradient(135deg, var(--accent-deep) 0%, var(--accent-wine) 100%); border: 1px solid rgba(198,86,107,0.4); border-radius: var(--r-md); color: var(--text-hi); font-family: var(--font-ui); font-size: 14px; font-weight: 600; line-height: 1; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; cursor: pointer; position: relative; overflow: hidden; transition: transform var(--t-fast), box-shadow var(--t-fast); box-shadow: var(--shadow-glow), inset 0 1px 0 rgba(255,255,255,0.06); -webkit-tap-highlight-color: transparent; }
     .cta-btn::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, transparent 60%); }
-    .cta-btn:active { transform: scale(0.975); box-shadow: 0 2px 12px rgba(192,69,90,0.12); }
-    .cta-icon { font-size: 16px; opacity: 0.85; }
+    .cta-btn:active { transform: scale(0.975); box-shadow: 0 2px 12px rgba(198,86,107,0.12); }
+    .cta-icon svg { width: 18px; height: 18px; opacity: 0.85; }
 
     .price-wrap { animation: fadeUp 0.6s 0.15s ease both; }
-    .price-card { background: var(--surface); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; transition: border-color 0.2s; }
-    .price-card.open { border-color: var(--border-hot); }
-    .price-toggle { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; cursor: pointer; -webkit-tap-highlight-color: transparent; user-select: none; gap: 12px; }
-    .price-toggle-left { display: flex; align-items: center; gap: 12px; }
-    .price-emoji { font-size: 18px; width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; background: var(--rose-glow); border-radius: 10px; border: 1px solid var(--border-hot); flex-shrink: 0; }
-    .price-toggle-title { font-size: 14px; font-weight: 500; color: var(--cream); }
-    .price-toggle-sub { font-size: 11px; font-weight: 300; color: var(--cream-faint); margin-top: 1px; }
-    .price-chevron { width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--cream-faint); font-size: 11px; transition: transform 0.25s, border-color 0.2s; flex-shrink: 0; }
-    .price-card.open .price-chevron { transform: rotate(180deg); border-color: var(--border-hot); color: var(--rose-light); }
-    .price-body { max-height: 0; overflow: hidden; transition: max-height 0.35s cubic-bezier(0.4,0,0.2,1); }
+    .price-card { background: var(--surface); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid var(--border); border-radius: var(--r-md); overflow: hidden; box-shadow: var(--shadow-card); transition: border-color var(--t-med); }
+    .price-card.open { border-color: var(--border-accent); }
+    .price-toggle { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: var(--space-3) var(--space-4); gap: var(--space-3); background: none; border: none; color: inherit; font-family: inherit; text-align: left; cursor: pointer; -webkit-tap-highlight-color: transparent; user-select: none; border-radius: var(--r-md); }
+    .price-toggle-left { display: flex; align-items: center; gap: var(--space-3); }
+    .price-icon { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: var(--accent-glow); border-radius: var(--r-sm); border: 1px solid var(--border-accent); color: var(--accent-bright); flex-shrink: 0; }
+    .price-icon svg { width: 20px; height: 20px; }
+    .price-toggle-title { font-size: 15px; font-weight: 500; line-height: 1.3; color: var(--text-hi); }
+    .price-toggle-sub { font-size: 12px; font-weight: 400; line-height: 1.4; color: var(--text-low); margin-top: 2px; }
+    .price-chevron { width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--text-low); transition: transform var(--t-med), border-color var(--t-med), color var(--t-med); flex-shrink: 0; }
+    .price-chevron svg { width: 14px; height: 14px; }
+    .price-card.open .price-chevron { transform: rotate(180deg); border-color: var(--border-accent); color: var(--accent-bright); }
+    .price-body { max-height: 0; overflow: hidden; transition: max-height var(--t-slow) cubic-bezier(0.4,0,0.2,1); }
     .price-card.open .price-body { max-height: 300px; }
-    .price-inner { padding: 0 16px 16px; border-top: 1px solid var(--border); }
-    .price-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+    .price-inner { padding: 0 var(--space-4) var(--space-4); border-top: 1px solid var(--border); }
+    .price-row { display: flex; justify-content: space-between; align-items: center; padding: var(--space-3) 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
     .price-row:last-of-type { border-bottom: none; }
-    .price-row-label { font-size: 13px; font-weight: 500; color: var(--cream); }
-    .price-row-desc { font-size: 10.5px; font-weight: 300; color: var(--cream-faint); margin-top: 1px; }
-    .price-amount { font-family: 'Playfair Display', Georgia, serif; font-size: 17px; font-weight: 700; color: var(--rose-light); white-space: nowrap; margin-left: 10px; }
-    .price-note { font-size: 10px; font-weight: 300; color: var(--cream-faint); margin-top: 10px; line-height: 1.65; opacity: 0.7; }
+    .price-row-label { font-size: 13px; font-weight: 500; line-height: 1.5; color: var(--text-hi); }
+    .price-row-desc { font-size: 12px; font-weight: 400; line-height: 1.4; color: var(--text-low); margin-top: 2px; }
+    .price-amount { font-family: var(--font-display); font-size: 18px; font-weight: 700; line-height: 1; color: var(--champagne); white-space: nowrap; margin-left: var(--space-3); }
+    .price-note { font-size: 12px; font-weight: 400; color: var(--text-low); margin-top: var(--space-3); line-height: 1.5; }
 
-    .section-head { display: flex; align-items: center; gap: 10px; margin: 28px 0 12px; }
-    .section-head-label { font-size: 9px; font-weight: 500; letter-spacing: 0.26em; text-transform: uppercase; color: var(--rose-light); opacity: 0.65; white-space: nowrap; }
-    .section-head-line { flex: 1; height: 1px; background: linear-gradient(90deg, rgba(192,69,90,0.25), transparent); }
+    .section-head { display: flex; align-items: center; gap: var(--space-3); margin: var(--space-8) 0 var(--space-3); }
+    .section-head-label { font-size: 10px; font-weight: 600; line-height: 1; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent-bright); opacity: 0.8; white-space: nowrap; }
+    .section-head-line { flex: 1; height: 1px; background: linear-gradient(90deg, rgba(198,86,107,0.25), transparent); }
 
-    .cards { display: flex; flex-direction: column; gap: 8px; }
-    .card { display: flex; align-items: center; gap: 12px; background: var(--surface); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid var(--border); border-radius: 14px; padding: 13px 13px 13px 14px; cursor: pointer; position: relative; overflow: hidden; transition: border-color 0.2s, background 0.2s, transform 0.13s, box-shadow 0.2s; -webkit-tap-highlight-color: transparent; }
-    .card::before { content: ''; position: absolute; left: 0; top: 18%; bottom: 18%; width: 2px; background: var(--rose); border-radius: 0 2px 2px 0; opacity: 0; transition: opacity 0.2s; }
-    .card:active { transform: scale(0.975); border-color: var(--border-hot); background: var(--surface-2); box-shadow: 0 0 0 1px rgba(192,69,90,0.1); }
+    .cards { display: flex; flex-direction: column; gap: var(--space-3); }
+    .card { display: flex; align-items: center; gap: var(--space-2); background: var(--surface); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid var(--border); border-radius: var(--r-md); padding: var(--space-2) var(--space-2) var(--space-2) var(--space-4); position: relative; overflow: hidden; box-shadow: var(--shadow-card); transition: border-color var(--t-med), background var(--t-med), transform var(--t-fast), box-shadow var(--t-med); -webkit-tap-highlight-color: transparent; }
+    .card::before { content: ''; position: absolute; left: 0; top: 18%; bottom: 18%; width: 2px; background: var(--accent); border-radius: 0 2px 2px 0; opacity: 0; transition: opacity var(--t-med); }
+    .card:active { transform: scale(0.975); border-color: var(--border-accent); background: var(--surface-2); }
     .card:active::before { opacity: 1; }
-    .card.channel { background: linear-gradient(135deg, rgba(192,69,90,0.08) 0%, rgba(255,255,255,0.03) 100%); border-color: rgba(192,69,90,0.2); box-shadow: 0 2px 16px rgba(192,69,90,0.08); }
+    .card.channel { background: linear-gradient(135deg, rgba(198,86,107,0.08) 0%, rgba(255,255,255,0.03) 100%); border-color: rgba(198,86,107,0.2); box-shadow: 0 2px 16px rgba(198,86,107,0.08); }
     .card.channel::before { opacity: 0.5; }
-    .card-emoji { font-size: 20px; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: var(--surface-2); border-radius: 10px; border: 1px solid var(--border); flex-shrink: 0; }
-    .card.channel .card-emoji { background: var(--rose-glow); border-color: var(--border-hot); }
-    .card-text { flex: 1; min-width: 0; }
-    .card-title { font-size: 14px; font-weight: 500; color: var(--cream); line-height: 1.2; }
-    .card-sub { font-size: 11px; font-weight: 300; color: var(--cream-faint); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .card-actions { display: flex; gap: 6px; flex-shrink: 0; }
-    .action-btn { width: 34px; height: 34px; border-radius: 9px; border: 1px solid var(--border); background: var(--surface); color: var(--cream-dim); font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.15s, border-color 0.15s, transform 0.12s, color 0.15s; -webkit-tap-highlight-color: transparent; flex-shrink: 0; }
-    .action-btn svg { width: 15px; height: 15px; display: block; }
-    .action-btn.share { color: var(--rose-light); border-color: var(--border-hot); }
-    .action-btn:active { transform: scale(0.85); background: var(--rose-glow); }
+    .card-main { display: flex; align-items: center; gap: var(--space-3); flex: 1; min-width: 0; padding: var(--space-2) 0 var(--space-2) var(--space-2); margin: calc(var(--space-2) * -1) 0 calc(var(--space-2) * -1) calc(var(--space-2) * -1); text-decoration: none; color: inherit; border-radius: var(--r-md); -webkit-tap-highlight-color: transparent; }
+    .card-icon { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: var(--surface-2); border-radius: var(--r-sm); border: 1px solid var(--border); color: var(--accent-bright); flex-shrink: 0; }
+    .card-icon svg { width: 20px; height: 20px; }
+    .card.channel .card-icon { background: var(--accent-glow); border-color: var(--border-accent); }
+    .card-text { display: block; flex: 1; min-width: 0; }
+    .card-title { display: block; font-size: 15px; font-weight: 500; color: var(--text-hi); line-height: 1.3; }
+    .card-sub { display: block; font-size: 12px; font-weight: 400; color: var(--text-low); line-height: 1.4; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .card-actions { display: flex; gap: var(--space-1); flex-shrink: 0; }
+    .action-btn { width: 44px; height: 44px; border-radius: var(--r-sm); border: 1px solid var(--border); background: var(--surface); color: var(--text-mid); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background var(--t-fast), border-color var(--t-fast), transform var(--t-fast), color var(--t-fast); -webkit-tap-highlight-color: transparent; flex-shrink: 0; }
+    .action-btn svg { width: 18px; height: 18px; }
+    .action-btn.share { color: var(--accent-bright); border-color: var(--border-accent); }
+    .action-btn:active { transform: scale(0.9); background: var(--accent-glow); }
 
-    #qr-overlay { position: fixed; inset: 0; z-index: 1000; background: rgba(17,13,15,0.88); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); display: flex; align-items: center; justify-content: center; padding: 24px; opacity: 0; pointer-events: none; transition: opacity 0.25s; cursor: pointer; }
+    /* Compact tiles for the situational playlists */
+    .cards-compact { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); }
+    .cards-compact .card { padding: var(--space-3); }
+    .cards-compact .card-main { padding: var(--space-3); margin: calc(var(--space-3) * -1); flex: 1; }
+    .cards-compact .card-sub { display: none; }
+    .cards-compact .card-icon { width: 32px; height: 32px; }
+    .cards-compact .card-icon svg { width: 16px; height: 16px; }
+    .cards-compact .card-title { font-size: 13px; }
+
+    #qr-overlay { position: fixed; inset: 0; z-index: 1000; background: rgba(20,16,17,0.88); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); display: flex; align-items: center; justify-content: center; padding: var(--space-6); opacity: 0; pointer-events: none; transition: opacity var(--t-med); cursor: pointer; }
     #qr-overlay.show { opacity: 1; pointer-events: auto; }
-    .qr-panel { text-align: center; transform: scale(0.92) translateY(10px); transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1); }
+    .qr-panel { text-align: center; transform: scale(0.92) translateY(10px); transition: transform 0.3s var(--ease-spring); }
     #qr-overlay.show .qr-panel { transform: scale(1) translateY(0); }
-    .qr-code { background: #fff; padding: 16px; border-radius: 18px; display: inline-block; box-shadow: 0 8px 48px rgba(192,69,90,0.28); }
+    .qr-code { background: #fff; padding: var(--space-4); border-radius: var(--r-lg); display: inline-block; box-shadow: 0 8px 48px rgba(198,86,107,0.28); }
     .qr-code img, .qr-code canvas { display: block; width: 232px; height: 232px; }
-    .qr-title { font-size: 15px; font-weight: 500; color: var(--cream); margin-top: 18px; }
-    .qr-url { font-size: 11px; font-weight: 300; color: var(--rose-light); margin-top: 4px; word-break: break-all; }
-    .qr-hint { font-size: 9px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--cream-faint); margin-top: 16px; }
+    .qr-title { font-size: 15px; font-weight: 500; line-height: 1.3; color: var(--text-hi); margin-top: var(--space-5); }
+    .qr-url { font-size: 12px; font-weight: 400; color: var(--accent-bright); margin-top: var(--space-1); word-break: break-all; }
+    .qr-hint { font-size: 10px; font-weight: 600; line-height: 1; letter-spacing: 0.22em; text-transform: uppercase; color: var(--text-low); margin-top: var(--space-4); }
 
-    #pwa-hint { margin: 28px 0 0; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 14px 16px; font-size: 11.5px; font-weight: 300; color: var(--cream-faint); line-height: 1.7; display: none; }
-    #pwa-hint strong { color: var(--rose-light); font-weight: 500; }
+    #pwa-hint { margin: var(--space-8) 0 0; background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-md); padding: var(--space-4); font-size: 12px; font-weight: 400; color: var(--text-low); line-height: 1.7; display: none; }
+    #pwa-hint strong { color: var(--accent-bright); font-weight: 500; }
 
-    footer { text-align: center; padding: 20px 0 8px; font-family: 'Playfair Display', Georgia, serif; font-style: italic; font-size: 11px; color: var(--cream-faint); opacity: 0.4; position: relative; z-index: 1; }
+    footer { text-align: center; padding: var(--space-5) 0 var(--space-2); font-size: 12px; font-weight: 400; color: var(--text-low); opacity: 0.6; position: relative; z-index: 1; }
+
+    /* Desktop/tablet pointer feedback */
+    @media (hover: hover) {
+      .card:hover { border-color: var(--border-accent); background: var(--surface-2); transform: translateY(-1px); box-shadow: var(--shadow-lift); }
+      .card:hover::before { opacity: 1; }
+      .action-btn:hover { color: var(--accent-bright); border-color: var(--border-accent); background: var(--accent-glow); }
+      .cta-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 32px rgba(198,86,107,0.30), inset 0 1px 0 rgba(255,255,255,0.06); }
+      .price-toggle:hover .price-chevron { border-color: var(--border-accent); color: var(--accent-bright); }
+    }
+
+    /* Keyboard focus */
+    .card-main:focus-visible, .action-btn:focus-visible,
+    .cta-btn:focus-visible, .price-toggle:focus-visible {
+      outline: 2px solid var(--focus); outline-offset: 2px;
+    }
+
+    /* Tablet/desktop: two-column dashboard */
+    @media (min-width: 900px) {
+      .wrapper { max-width: 920px; display: grid; grid-template-columns: 1fr 1fr; column-gap: var(--space-8); align-items: start; }
+      header { grid-column: 1 / -1; }
+      .cta-wrap { grid-column: 1; margin-bottom: 0; align-self: stretch; }
+      .price-wrap { grid-column: 2; }
+      .sec-hear { grid-column: 1; grid-row: 3 / span 2; }
+      .sec-studio { grid-column: 2; grid-row: 3; }
+      .sec-extras { grid-column: 2; grid-row: 4; }
+      #pwa-hint { grid-column: 1 / -1; }
+    }
 
     @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
-    .cards { animation: fadeUp 0.6s 0.2s ease both; }
-    .section-head { animation: fadeUp 0.5s 0.18s ease both; }
+    .sec { animation: fadeUp 0.6s 0.2s ease both; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
   </style>
 </head>
 <body>
 
+<svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">
+  <defs>
+    <symbol id="i-headphones" viewBox="0 0 24 24"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></symbol>
+    <symbol id="i-tv" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><polyline points="17 2 12 7 7 2"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></symbol>
+    <symbol id="i-feather" viewBox="0 0 24 24"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"/><line x1="16" y1="8" x2="2" y2="22"/><line x1="17.5" y1="15" x2="9" y2="15"/></symbol>
+    <symbol id="i-rings" viewBox="0 0 24 24"><circle cx="9" cy="12" r="5.5"/><circle cx="15" cy="12" r="5.5"/></symbol>
+    <symbol id="i-cake" viewBox="0 0 24 24"><path d="M4 21h16"/><path d="M5 21v-5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v5"/><path d="M12 14v-3"/><path d="M12 8.5A1.5 1.5 0 0 0 13.5 7c0-1-1.5-2.5-1.5-2.5S10.5 6 10.5 7A1.5 1.5 0 0 0 12 8.5z"/></symbol>
+    <symbol id="i-sliders" viewBox="0 0 24 24"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></symbol>
+    <symbol id="i-music" viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></symbol>
+    <symbol id="i-pen" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></symbol>
+    <symbol id="i-columns" viewBox="0 0 24 24"><path d="M3 21h18"/><path d="M4 21V10M20 21V10M8 21v-8M12 21v-8M16 21v-8"/><path d="M2 10l10-6 10 6"/></symbol>
+    <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></symbol>
+    <symbol id="i-zap" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></symbol>
+    <symbol id="i-dollar" viewBox="0 0 24 24"><line x1="12" y1="2" x2="12" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></symbol>
+    <symbol id="i-share" viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></symbol>
+    <symbol id="i-qr" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><path d="M14 14h3v3h-3z"/><path d="M21 14v4h-1"/><path d="M14 21h4"/><path d="M21 21h.01"/></symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></symbol>
+  </defs>
+</svg>
+
 <div class="bg-orb bg-orb-1"></div>
 <div class="bg-orb bg-orb-2"></div>
-<div id="toast">Link copied</div>
+<div id="toast" role="status" aria-live="polite">Link copied</div>
 
 <div class="wrapper">
 
@@ -151,23 +253,23 @@
 
   <div class="cta-wrap">
     <a class="cta-btn" href="https://heartstringsstudio.github.io/heartstringsstudio/#get-started" target="_blank" rel="noopener">
-      <span class="cta-icon">♪</span>
+      <span class="cta-icon"><svg aria-hidden="true"><use href="#i-music"/></svg></span>
       Start a Song
     </a>
   </div>
 
   <div class="price-wrap">
     <div class="price-card" id="priceCard">
-      <div class="price-toggle" id="priceToggle">
-        <div class="price-toggle-left">
-          <div class="price-emoji">💲</div>
-          <div>
-            <div class="price-toggle-title">Pricing</div>
-            <div class="price-toggle-sub">Tap to show client</div>
-          </div>
-        </div>
-        <div class="price-chevron">▾</div>
-      </div>
+      <button class="price-toggle" id="priceToggle" aria-expanded="false" aria-controls="priceBody">
+        <span class="price-toggle-left">
+          <span class="price-icon"><svg aria-hidden="true"><use href="#i-dollar"/></svg></span>
+          <span>
+            <span class="price-toggle-title">Pricing</span>
+            <span class="price-toggle-sub" style="display:block">Tap to show client</span>
+          </span>
+        </span>
+        <span class="price-chevron"><svg aria-hidden="true"><use href="#i-chevron"/></svg></span>
+      </button>
       <div class="price-body" id="priceBody">
         <div class="price-inner">
           <div class="price-row">
@@ -190,125 +292,159 @@
     </div>
   </div>
 
-  <div class="section-head">
-    <span class="section-head-label">Hear the Songs</span>
-    <span class="section-head-line"></span>
-  </div>
-  <div class="cards">
+  <section class="sec sec-hear">
+    <div class="section-head">
+      <span class="section-head-label">Hear the Songs</span>
+      <span class="section-head-line"></span>
+    </div>
+    <div class="cards">
 
-    <div class="card channel" data-url="https://tinyurl.com/hsjukebox" data-title="Heartstrings Studio — Hear the Songs">
-      <div class="card-emoji">🎧</div>
-      <div class="card-text">
-        <div class="card-title">Song Jukebox</div>
-        <div class="card-sub">tinyurl.com/hsjukebox</div>
+      <div class="card channel" data-url="https://tinyurl.com/hsjukebox" data-title="Heartstrings Studio — Hear the Songs">
+        <a class="card-main" href="https://tinyurl.com/hsjukebox" target="_blank" rel="noopener">
+          <span class="card-icon"><svg aria-hidden="true"><use href="#i-headphones"/></svg></span>
+          <span class="card-text">
+            <span class="card-title">Song Jukebox</span>
+            <span class="card-sub">tinyurl.com/hsjukebox</span>
+          </span>
+        </a>
       </div>
+
+      <div class="card" data-url="https://youtu.be/uwsCiWGnDuc" data-title="Heartstrings Studio — WBOY 304 Today Interview">
+        <a class="card-main" href="https://youtu.be/uwsCiWGnDuc" target="_blank" rel="noopener">
+          <span class="card-icon"><svg aria-hidden="true"><use href="#i-tv"/></svg></span>
+          <span class="card-text">
+            <span class="card-title">WBOY Interview</span>
+            <span class="card-sub">304 Today — As Seen On TV</span>
+          </span>
+        </a>
+      </div>
+
+      <div class="card" data-url="https://www.youtube.com/@heartstringsstudiowv" data-title="Heartstrings Studio — Full YouTube Channel">
+        <a class="card-main" href="https://www.youtube.com/@heartstringsstudiowv" target="_blank" rel="noopener">
+          <span class="card-icon"><svg aria-hidden="true"><use href="#i-play"/></svg></span>
+          <span class="card-text">
+            <span class="card-title">Full YouTube Channel</span>
+            <span class="card-sub">@heartstringsstudiowv — all songs</span>
+          </span>
+        </a>
+      </div>
+
     </div>
 
-    <div class="card" data-url="https://youtu.be/uwsCiWGnDuc" data-title="Heartstrings Studio — WBOY 304 Today Interview">
-      <div class="card-emoji">📺</div>
-      <div class="card-text">
-        <div class="card-title">WBOY Interview</div>
-        <div class="card-sub">304 Today — As Seen On TV</div>
+    <div class="cards cards-compact" style="margin-top: var(--space-3)">
+
+      <div class="card" data-url="https://www.youtube.com/playlist?list=PLBaBQ7Vhr-5-UuSeneZViY8WAyxJujGXa" data-title="Memorial Songs Playlist — Heartstrings Studio">
+        <a class="card-main" href="https://www.youtube.com/playlist?list=PLBaBQ7Vhr-5-UuSeneZViY8WAyxJujGXa" target="_blank" rel="noopener">
+          <span class="card-icon"><svg aria-hidden="true"><use href="#i-feather"/></svg></span>
+          <span class="card-text">
+            <span class="card-title">Memorial Songs</span>
+            <span class="card-sub">YouTube Playlist</span>
+          </span>
+        </a>
       </div>
-    </div>
 
-    <div class="card" data-url="https://www.youtube.com/@heartstringsstudiowv" data-title="Heartstrings Studio — Full YouTube Channel">
-      <div class="card-emoji">▶️</div>
-      <div class="card-text">
-        <div class="card-title">Full YouTube Channel</div>
-        <div class="card-sub">@heartstringsstudiowv — all songs</div>
+      <div class="card" data-url="https://www.youtube.com/playlist?list=PLBaBQ7Vhr-59e8e10Hs42Zwx6Knhp1NCL" data-title="Wedding Songs — Heartstrings Studio">
+        <a class="card-main" href="https://www.youtube.com/playlist?list=PLBaBQ7Vhr-59e8e10Hs42Zwx6Knhp1NCL" target="_blank" rel="noopener">
+          <span class="card-icon"><svg aria-hidden="true"><use href="#i-rings"/></svg></span>
+          <span class="card-text">
+            <span class="card-title">Wedding Songs</span>
+            <span class="card-sub">YouTube Playlist</span>
+          </span>
+        </a>
       </div>
-    </div>
 
-    <div class="card" data-url="https://www.youtube.com/playlist?list=PLBaBQ7Vhr-5-UuSeneZViY8WAyxJujGXa" data-title="Memorial Songs Playlist — Heartstrings Studio">
-      <div class="card-emoji">🕊️</div>
-      <div class="card-text">
-        <div class="card-title">Memorial Songs</div>
-        <div class="card-sub">YouTube Playlist</div>
+      <div class="card" data-url="https://www.youtube.com/playlist?list=PLBaBQ7Vhr-58nEunbI_U_B-wfIgkCNyJv" data-title="Birthday Celebrations — Heartstrings Studio">
+        <a class="card-main" href="https://www.youtube.com/playlist?list=PLBaBQ7Vhr-58nEunbI_U_B-wfIgkCNyJv" target="_blank" rel="noopener">
+          <span class="card-icon"><svg aria-hidden="true"><use href="#i-cake"/></svg></span>
+          <span class="card-text">
+            <span class="card-title">Birthdays</span>
+            <span class="card-sub">YouTube Playlist</span>
+          </span>
+        </a>
       </div>
-    </div>
 
-    <div class="card" data-url="https://www.youtube.com/playlist?list=PLBaBQ7Vhr-59e8e10Hs42Zwx6Knhp1NCL" data-title="Wedding Songs — Heartstrings Studio">
-      <div class="card-emoji">💍</div>
-      <div class="card-text">
-        <div class="card-title">Wedding Songs</div>
-        <div class="card-sub">YouTube Playlist</div>
+      <div class="card" data-url="https://www.youtube.com/playlist?list=PLBaBQ7Vhr-58N6PZOuIXyr7GmKvdUxqwJ" data-title="Unreleased Demos — Heartstrings Studio">
+        <a class="card-main" href="https://www.youtube.com/playlist?list=PLBaBQ7Vhr-58N6PZOuIXyr7GmKvdUxqwJ" target="_blank" rel="noopener">
+          <span class="card-icon"><svg aria-hidden="true"><use href="#i-sliders"/></svg></span>
+          <span class="card-text">
+            <span class="card-title">Demos</span>
+            <span class="card-sub">YouTube Playlist</span>
+          </span>
+        </a>
       </div>
-    </div>
 
-    <div class="card" data-url="https://www.youtube.com/playlist?list=PLBaBQ7Vhr-58nEunbI_U_B-wfIgkCNyJv" data-title="Birthday Celebrations — Heartstrings Studio">
-      <div class="card-emoji">🎂</div>
-      <div class="card-text">
-        <div class="card-title">Birthday Celebrations</div>
-        <div class="card-sub">YouTube Playlist</div>
+    </div>
+  </section>
+
+  <section class="sec sec-studio">
+    <div class="section-head">
+      <span class="section-head-label">Studio</span>
+      <span class="section-head-line"></span>
+    </div>
+    <div class="cards">
+
+      <div class="card" data-url="https://tinyurl.com/heartstringswv" data-title="Heartstrings Studio — Main Site">
+        <a class="card-main" href="https://tinyurl.com/heartstringswv" target="_blank" rel="noopener">
+          <span class="card-icon"><svg aria-hidden="true"><use href="#i-music"/></svg></span>
+          <span class="card-text">
+            <span class="card-title">Main Studio Site</span>
+            <span class="card-sub">tinyurl.com/heartstringswv</span>
+          </span>
+        </a>
       </div>
-    </div>
 
-    <div class="card" data-url="https://www.youtube.com/playlist?list=PLBaBQ7Vhr-58N6PZOuIXyr7GmKvdUxqwJ" data-title="Unreleased Demos — Heartstrings Studio">
-      <div class="card-emoji">🎛️</div>
-      <div class="card-text">
-        <div class="card-title">Unreleased Demos</div>
-        <div class="card-sub">YouTube Playlist</div>
+      <div class="card" data-url="https://heartstringsstudio.github.io/intake/" data-title="Heartstrings Studio — Story Intake">
+        <a class="card-main" href="https://heartstringsstudio.github.io/intake/" target="_blank" rel="noopener">
+          <span class="card-icon"><svg aria-hidden="true"><use href="#i-pen"/></svg></span>
+          <span class="card-text">
+            <span class="card-title">Story Intake Form</span>
+            <span class="card-sub">heartstringsstudio.github.io/intake</span>
+          </span>
+        </a>
       </div>
-    </div>
 
-  </div>
-
-  <div class="section-head">
-    <span class="section-head-label">Studio</span>
-    <span class="section-head-line"></span>
-  </div>
-  <div class="cards">
-
-    <div class="card" data-url="https://tinyurl.com/heartstringswv" data-title="Heartstrings Studio — Main Site">
-      <div class="card-emoji">🎵</div>
-      <div class="card-text">
-        <div class="card-title">Main Studio Site</div>
-        <div class="card-sub">tinyurl.com/heartstringswv</div>
+      <div class="card" data-url="https://tinyurl.com/heartstringsfh" data-title="Heartstrings Studio — Funeral Home Partners">
+        <a class="card-main" href="https://tinyurl.com/heartstringsfh" target="_blank" rel="noopener">
+          <span class="card-icon"><svg aria-hidden="true"><use href="#i-columns"/></svg></span>
+          <span class="card-text">
+            <span class="card-title">Funeral Home Partners</span>
+            <span class="card-sub">tinyurl.com/heartstringsfh</span>
+          </span>
+        </a>
       </div>
-    </div>
 
-    <div class="card" data-url="https://heartstringsstudio.github.io/intake/" data-title="Heartstrings Studio — Story Intake">
-      <div class="card-emoji">✍️</div>
-      <div class="card-text">
-        <div class="card-title">Story Intake Form</div>
-        <div class="card-sub">heartstringsstudio.github.io/intake</div>
+    </div>
+  </section>
+
+  <section class="sec sec-extras">
+    <div class="section-head">
+      <span class="section-head-label">Extras</span>
+      <span class="section-head-line"></span>
+    </div>
+    <div class="cards">
+
+      <div class="card" data-url="https://heartstringsstudio.github.io/song-quiz/" data-title="Heartstrings Song Quiz — Can You Guess the Song?">
+        <a class="card-main" href="https://heartstringsstudio.github.io/song-quiz/" target="_blank" rel="noopener">
+          <span class="card-icon"><svg aria-hidden="true"><use href="#i-target"/></svg></span>
+          <span class="card-text">
+            <span class="card-title">Song Quiz</span>
+            <span class="card-sub">Can you guess the song?</span>
+          </span>
+        </a>
       </div>
-    </div>
 
-    <div class="card" data-url="https://tinyurl.com/heartstringsfh" data-title="Heartstrings Studio — Funeral Home Partners">
-      <div class="card-emoji">🏛️</div>
-      <div class="card-text">
-        <div class="card-title">Funeral Home Partners</div>
-        <div class="card-sub">tinyurl.com/heartstringsfh</div>
+      <div class="card" data-url="https://heartstringsstudio.github.io/wired-differently/" data-title="Wired Differently — Heartstrings Studio">
+        <a class="card-main" href="https://heartstringsstudio.github.io/wired-differently/" target="_blank" rel="noopener">
+          <span class="card-icon"><svg aria-hidden="true"><use href="#i-zap"/></svg></span>
+          <span class="card-text">
+            <span class="card-title">Wired Differently</span>
+            <span class="card-sub">Our interactive app</span>
+          </span>
+        </a>
       </div>
+
     </div>
-
-  </div>
-
-  <div class="section-head">
-    <span class="section-head-label">Extras</span>
-    <span class="section-head-line"></span>
-  </div>
-  <div class="cards">
-
-    <div class="card" data-url="https://heartstringsstudio.github.io/song-quiz/" data-title="Heartstrings Song Quiz — Can You Guess the Song?">
-      <div class="card-emoji">🎯</div>
-      <div class="card-text">
-        <div class="card-title">Song Quiz</div>
-        <div class="card-sub">Can you guess the song?</div>
-      </div>
-    </div>
-
-    <div class="card" data-url="https://heartstringsstudio.github.io/wired-differently/" data-title="Wired Differently — Heartstrings Studio">
-      <div class="card-emoji">🧠</div>
-      <div class="card-text">
-        <div class="card-title">Wired Differently</div>
-        <div class="card-sub">Our interactive app</div>
-      </div>
-    </div>
-
-  </div>
+  </section>
 
   <div id="pwa-hint">
     <strong>Add to home screen —</strong>
@@ -331,12 +467,18 @@
 
 <script src="qrcode.min.js"></script>
 <script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js'));
+  }
+
   if (!window.matchMedia('(display-mode: standalone)').matches) {
     document.getElementById('pwa-hint').style.display = 'block';
   }
 
-  document.getElementById('priceToggle').addEventListener('click', () => {
-    document.getElementById('priceCard').classList.toggle('open');
+  const priceToggle = document.getElementById('priceToggle');
+  priceToggle.addEventListener('click', () => {
+    const open = document.getElementById('priceCard').classList.toggle('open');
+    priceToggle.setAttribute('aria-expanded', open);
   });
 
   const toast = document.getElementById('toast');
@@ -348,21 +490,25 @@
     toastTimer = setTimeout(() => toast.classList.remove('show'), 2000);
   }
 
-  async function shareLink(url, title) {
-    if (navigator.share) {
-      try { await navigator.share({ title, url }); } catch(e) {}
-    } else {
-      try {
-        await navigator.clipboard.writeText(url);
-        showToast('Link copied');
-      } catch(e) {
-        showToast('Copy failed');
-      }
+  async function copyLink(url) {
+    try {
+      await navigator.clipboard.writeText(url);
+      showToast('Link copied');
+    } catch (e) {
+      showToast('Copy failed');
     }
   }
 
-  function openLink(url) {
-    window.open(url, '_blank', 'noopener');
+  async function shareLink(url, title) {
+    if (navigator.share) {
+      try {
+        await navigator.share({ title, url });
+      } catch (e) {
+        if (e.name !== 'AbortError') copyLink(url);
+      }
+    } else {
+      copyLink(url);
+    }
   }
 
   const qrOverlay = document.getElementById('qr-overlay');
@@ -373,30 +519,38 @@
       text: url,
       width: 464,
       height: 464,
-      colorDark: '#110d0f',
+      colorDark: '#141011',
       colorLight: '#ffffff',
       correctLevel: QRCode.CorrectLevel.M
     });
     document.getElementById('qrTitle').textContent = title;
     document.getElementById('qrUrl').textContent = url.replace(/^https?:\/\//, '');
     qrOverlay.classList.add('show');
+    history.pushState({ qr: 1 }, '');
   }
-  qrOverlay.addEventListener('click', () => qrOverlay.classList.remove('show'));
+  function closeQR() {
+    if (!qrOverlay.classList.contains('show')) return;
+    if (history.state && history.state.qr) history.back();
+    else qrOverlay.classList.remove('show');
+  }
+  window.addEventListener('popstate', () => qrOverlay.classList.remove('show'));
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeQR(); });
+  qrOverlay.addEventListener('click', closeQR);
 
-  const QR_ICON = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 3h8v8H3V3zm2 2v4h4V5H5zm1 1h2v2H6V6zm7-3h8v8h-8V3zm2 2v4h4V5h-4zm1 1h2v2h-2V6zM3 13h8v8H3v-8zm2 2v4h4v-4H5zm1 1h2v2H6v-2zm7-3h3v3h-3v-3zm5 0h3v3h-3v-3zm-5 5h3v3h-3v-3zm5 0h3v3h-3v-3z"/></svg>';
+  const SHARE_ICON = '<svg aria-hidden="true"><use href="#i-share"/></svg>';
+  const QR_ICON = '<svg aria-hidden="true"><use href="#i-qr"/></svg>';
 
-  document.querySelectorAll('.card').forEach(card => {
+  document.querySelectorAll('.cards:not(.cards-compact) .card').forEach(card => {
     const url   = card.dataset.url;
     const title = card.dataset.title;
     const actions = document.createElement('div');
     actions.className = 'card-actions';
     actions.innerHTML =
-      '<button class="action-btn share" aria-label="Share link">⬆</button>' +
+      '<button class="action-btn share" aria-label="Share link">' + SHARE_ICON + '</button>' +
       '<button class="action-btn qr" aria-label="Show QR code">' + QR_ICON + '</button>';
     card.appendChild(actions);
     actions.querySelector('.share').addEventListener('click', e => { e.stopPropagation(); shareLink(url, title); });
     actions.querySelector('.qr').addEventListener('click',    e => { e.stopPropagation(); showQR(url, title); });
-    card.addEventListener('click', () => openLink(url));
   });
 </script>
 

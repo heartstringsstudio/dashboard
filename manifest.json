@@ -1,25 +1,17 @@
 {
   "name": "Heartstrings Studio",
   "short_name": "Heartstrings",
+  "id": "/dashboard/",
   "description": "Quick access to all Heartstrings Studio links",
   "start_url": "/dashboard/",
   "scope": "/dashboard/",
   "display": "standalone",
-  "background_color": "#1a1214",
-  "theme_color": "#1a1214",
+  "background_color": "#141011",
+  "theme_color": "#141011",
   "orientation": "portrait",
   "icons": [
-    {
-      "src": "logo.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "logo.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    }
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "logo.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ]
 }
