@@ -1,4 +1,4 @@
-const CACHE = 'heartstrings-v1';
+const CACHE = 'heartstrings-v2';
 const SHELL = [
   './',
   './index.html',
@@ -29,16 +29,30 @@ self.addEventListener('fetch', (e) => {
   const url = new URL(e.request.url);
 
   if (url.origin === location.origin) {
-    // App shell: cache-first, then network (and cache what we fetch)
-    e.respondWith(
-      caches.match(e.request, { ignoreSearch: true }).then((hit) =>
-        hit || fetch(e.request).then((res) => {
+    if (e.request.mode === 'navigate') {
+      // Always check for the latest page, falling back to the offline shell.
+      e.respondWith(
+        fetch(e.request).then((res) => {
+          if (!res.ok) return res;
           const copy = res.clone();
-          caches.open(CACHE).then((c) => c.put(e.request, copy));
-          return res;
-        })
-      )
-    );
+          return caches.open(CACHE)
+            .then((c) => c.put('./index.html', copy))
+            .then(() => res);
+        }).catch(() => caches.match('./index.html'))
+      );
+    } else {
+      // Show cached assets immediately, then refresh them for the next request.
+      const cached = caches.match(e.request);
+      const refreshed = fetch(e.request).then((res) => {
+        if (!res.ok) return res;
+        const copy = res.clone();
+        return caches.open(CACHE)
+          .then((c) => c.put(e.request, copy))
+          .then(() => res);
+      });
+      e.waitUntil(refreshed.catch(() => undefined));
+      e.respondWith(cached.then((hit) => hit || refreshed));
+    }
   } else if (url.hostname.endsWith('gstatic.com') || url.hostname.endsWith('googleapis.com')) {
     // Fonts: stale-while-revalidate so offline keeps the brand typefaces
     e.respondWith(
