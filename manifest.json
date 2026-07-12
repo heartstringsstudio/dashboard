@@ -2,7 +2,7 @@
   "name": "Heartstrings Studio",
   "short_name": "Heartstrings",
   "id": "/dashboard/",
-  "description": "Quick access to all Heartstrings Studio links",
+  "description": "Heartstrings Studio concierge for songs, client resources, and guided story intake",
   "start_url": "/dashboard/",
   "scope": "/dashboard/",
   "display": "standalone",
@@ -15,3 +15,4 @@
     { "src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ]
 }
+
