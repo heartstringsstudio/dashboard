@@ -14,12 +14,12 @@
   <meta name="description" content="Heartstrings Studio — Custom songs for weddings, memorials, birthdays & more. Based in Lumberport, West Virginia." />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Heartstrings Studio" />
-  <meta property="og:description" content="Custom songs for weddings, memorials, birthdays & more. Starting at $150." />
+  <meta property="og:description" content="One-of-a-kind custom songs written from your memories. $150 flat, delivered in 48–72 hours." />
   <meta property="og:image" content="https://heartstringsstudio.github.io/dashboard/logo.png" />
   <meta property="og:url" content="https://heartstringsstudio.github.io/dashboard/" />
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="Heartstrings Studio" />
-  <meta name="twitter:description" content="Custom songs for weddings, memorials, birthdays & more. Starting at $150." />
+  <meta name="twitter:description" content="One-of-a-kind custom songs written from your memories. $150 flat, delivered in 48–72 hours." />
   <meta name="twitter:image" content="https://heartstringsstudio.github.io/dashboard/logo.png" />
   <style>
     @font-face {
@@ -38,11 +38,11 @@
     }
     :root {
       /* ── Color: base ─────────────────────────────── */
-      --bg:             #141011;
+      --bg:             #1a1416;
       --surface:        rgba(255,255,255,0.045);
       --surface-2:      rgba(255,255,255,0.08);
       --border:         rgba(250,246,242,0.08);
-      --border-accent:  rgba(198,86,107,0.35);
+      --border-accent:  rgba(192,69,90,0.35);
 
       /* ── Color: text ─────────────────────────────── */
       --text-hi:        #faf6f2;
@@ -50,12 +50,12 @@
       --text-low:       rgba(250,246,242,0.52);
 
       /* ── Color: accent ───────────────────────────── */
-      --accent:         #c6566b;
-      --accent-bright:  #e07d90;
-      --accent-deep:    #7c2f40;
-      --accent-wine:    #58202c;
-      --accent-glow:    rgba(198,86,107,0.12);
-      --champagne:      #cfa678;
+      --accent:         #c0455a;
+      --accent-bright:  #d4637a;
+      --accent-deep:    #8b2a3a;
+      --accent-wine:    #5d1d29;
+      --accent-glow:    rgba(192,69,90,0.12);
+      --champagne:      #b8956a;
 
       /* ── Color: semantic ─────────────────────────── */
       --success:        #8fa98b;
@@ -76,7 +76,7 @@
       /* ── Elevation ───────────────────────────────── */
       --shadow-card: 0 2px 12px rgba(0,0,0,0.25);
       --shadow-lift: 0 8px 28px rgba(0,0,0,0.40);
-      --shadow-glow: 0 4px 24px rgba(198,86,107,0.18);
+      --shadow-glow: 0 4px 24px rgba(192,69,90,0.18);
 
       /* ── Motion ──────────────────────────────────── */
       --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -138,7 +138,7 @@
     .price-chevron svg { width: 14px; height: 14px; }
     .price-card.open .price-chevron { transform: rotate(180deg); border-color: var(--border-accent); color: var(--accent-bright); }
     .price-body { max-height: 0; overflow: hidden; transition: max-height var(--t-slow) cubic-bezier(0.4,0,0.2,1); }
-    .price-card.open .price-body { max-height: 300px; }
+    .price-card.open .price-body { max-height: 420px; }
     .price-inner { padding: 0 var(--space-4) var(--space-4); border-top: 1px solid var(--border); }
     .price-row { display: flex; justify-content: space-between; align-items: center; padding: var(--space-3) 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
     .price-row:last-of-type { border-bottom: none; }
@@ -277,13 +277,13 @@
     <img class="header-logo" src="logo.png" alt="" width="56" height="56" />
     <p class="header-eyebrow">Lumberport, West Virginia</p>
     <h1>Heartstrings Studio</h1>
-    <p class="header-sub">Quick Share Dashboard</p>
+    <p class="header-sub">Studio Concierge</p>
   </header>
 
   <div class="cta-wrap">
-    <a class="cta-btn" href="https://heartstringsstudio.github.io/heartstringsstudio/#get-started" target="_blank" rel="noopener">
+    <a class="cta-btn" href="https://heartstringsstudio.github.io/storyroom/" target="_blank" rel="noopener">
       <span class="cta-icon"><svg aria-hidden="true"><use href="#i-music"/></svg></span>
-      Start a Song
+      Commission a Song
     </a>
   </div>
 
@@ -293,8 +293,8 @@
         <span class="price-toggle-left">
           <span class="price-icon"><svg aria-hidden="true"><use href="#i-dollar"/></svg></span>
           <span>
-            <span class="price-toggle-title">Pricing</span>
-            <span class="price-toggle-sub" style="display:block">Tap to show client</span>
+            <span class="price-toggle-title">Investment</span>
+            <span class="price-toggle-sub" style="display:block">One song · one price</span>
           </span>
         </span>
         <span class="price-chevron"><svg aria-hidden="true"><use href="#i-chevron"/></svg></span>
@@ -304,7 +304,7 @@
           <div class="price-row">
             <div>
               <div class="price-row-label">Custom Song</div>
-              <div class="price-row-desc">MP3, MP4, album art, lyrics, YouTube link</div>
+              <div class="price-row-desc">Keepsake page, MP3, album art, lyrics, unlisted video</div>
             </div>
             <div class="price-amount">$150</div>
           </div>
@@ -315,7 +315,14 @@
             </div>
             <div class="price-amount">+$100</div>
           </div>
-          <p class="price-note">Flat rate · No hidden fees · One round of revisions · Remake guarantee</p>
+          <div class="price-row">
+            <div>
+              <div class="price-row-label">Rush Delivery</div>
+              <div class="price-row-desc">For timelines shorter than 48–72 hours</div>
+            </div>
+            <div class="price-amount">+$50</div>
+          </div>
+          <p class="price-note">$150 flat · One lyric revision · Remake guarantee · Written personally by Tim</p>
         </div>
       </div>
     </div>
@@ -336,8 +343,8 @@
     </div>
     <div class="cards">
 
-      <div class="card" data-url="https://tinyurl.com/heartstringswv" data-title="Heartstrings Studio — Main Site">
-        <a class="card-main" href="https://tinyurl.com/heartstringswv" target="_blank" rel="noopener">
+      <div class="card" data-url="https://heartstringsstudio.github.io/heartstringsstudio/" data-title="Heartstrings Studio — Main Site">
+        <a class="card-main" href="https://heartstringsstudio.github.io/heartstringsstudio/" target="_blank" rel="noopener">
           <span class="card-icon"><svg aria-hidden="true"><use href="#i-music"/></svg></span>
           <span class="card-text">
             <span class="card-title">Main Studio Site</span>
@@ -351,7 +358,7 @@
           <span class="card-icon"><svg aria-hidden="true"><use href="#i-pen"/></svg></span>
           <span class="card-text">
             <span class="card-title">The Story Room</span>
-            <span class="card-sub">Stories, reflections, and writing</span>
+            <span class="card-sub">Guided custom-song story intake</span>
           </span>
         </a>
       </div>
