@@ -1,5 +1,5 @@
 const CACHE_PREFIX = 'heartstrings-dashboard-';
-const CACHE = `${CACHE_PREFIX}v4`;
+const CACHE = `${CACHE_PREFIX}v5`;
 const SHELL = [
   './',
   './index.html',
@@ -10,7 +10,7 @@ const SHELL = [
   './apple-touch-icon.png',
   './qrcode.min.js',
   './fonts/dm-sans-latin.woff2',
-  './fonts/playfair-display-700-latin.woff2'
+  './fonts/libre-caslon-display-400-latin.woff2'
 ];
 
 self.addEventListener('install', (e) => {
