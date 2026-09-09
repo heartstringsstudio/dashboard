@@ -6,11 +6,11 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Heartstrings" />
-  <meta name="theme-color" content="#101116" />
+  <meta name="theme-color" content="#0b0e12" />
   <link rel="manifest" href="manifest.json" />
   <link rel="icon" href="logo.png" type="image/png" />
   <link rel="apple-touch-icon" href="apple-touch-icon.png" />
-  <title>Heartstrings Studio</title>
+  <title>Studio Dashboard · Heartstrings Studio</title>
   <meta name="description" content="Heartstrings Studio — Custom songs for weddings, memorials, birthdays & more. Based in Lumberport, West Virginia." />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Heartstrings Studio" />
@@ -21,167 +21,15 @@
   <meta name="twitter:title" content="Heartstrings Studio" />
   <meta name="twitter:description" content="One-of-a-kind custom songs written from your memories. $150 flat, delivered in 48–72 hours." />
   <meta name="twitter:image" content="https://heartstringsstudio.github.io/dashboard/logo.png" />
-  <style>
-    @font-face {
-      font-family: 'DM Sans';
-      src: url('fonts/dm-sans-latin.woff2') format('woff2');
-      font-style: normal;
-      font-weight: 400 600;
-      font-display: swap;
-    }
-    @font-face {
-      font-family: 'Libre Caslon Display';
-      src: url('fonts/libre-caslon-display-400-latin.woff2') format('woff2');
-      font-style: normal;
-      font-weight: 400;
-      font-display: swap;
-    }
-    :root {
-      color-scheme: dark;
-      --bg:#101116; --text-hi:#faf4e8; --text-mid:#d0cbd2; --text-low:#afaab8;
-      --accent:#f2cf96; --gold:#f9dba9; --border:rgba(224,211,239,.15);
-      --border-accent:rgba(242,207,150,.5); --focus:#ffe1ac; --success:#b9e6d4;
-      --font-ui:'DM Sans',system-ui,sans-serif;
-      --font-display:'Libre Caslon Display',Georgia,serif;
-      --space-3:16px;
-    }
-    *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
-    [hidden] { display:none !important; }
-    body { min-height:100dvh; background:var(--bg); color:var(--text-hi); font:400 1rem/1.5 var(--font-ui); -webkit-font-smoothing:antialiased; padding-bottom:env(safe-area-inset-bottom); }
-    body::before { content:''; position:fixed; inset:0; pointer-events:none; background:radial-gradient(ellipse at 8% 0%,#75563430,transparent 48%),radial-gradient(ellipse at 95% 50%,#53448526,transparent 50%); }
-    .bg-orb { display:none; }
-    .wrapper { position:relative; max-width:1280px; margin:auto; padding:0 48px 32px; display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.12fr); gap:28px; align-items:start; }
-    header { grid-column:1/-1; display:flex; align-items:center; gap:20px; padding:32px 0 28px; border-bottom:1px solid var(--border); }
-    .header-logo { width:72px; height:72px; object-fit:contain; filter:drop-shadow(0 4px 16px #eab97430); }
-    .header-eyebrow { color:var(--accent); text-transform:uppercase; letter-spacing:.18em; font-size:.75rem; margin-bottom:6px; }
-    h1 { font:400 clamp(2rem,4vw,3rem)/1.12 var(--font-display); letter-spacing:-.025em; }
-    .header-sub { margin-left:auto; color:var(--text-mid); border:1px solid var(--border); border-radius:100px; padding:10px 18px; font-size:.875rem; white-space:nowrap; background:linear-gradient(140deg,#ffffff0a,#ffffff02); }
-    .cta-wrap { align-self:stretch; }
-    .cta-btn { display:flex; align-items:center; justify-content:center; gap:14px; min-height:96px; height:100%; padding:22px; color:#302217; border:1px solid #ffe6b5; border-radius:20px; background:linear-gradient(115deg,#b98643 0%,#efd09a 24%,#fff0c9 48%,#dcb273 76%,#b7803c 100%); box-shadow:inset 0 2px 0 #fff8df,0 6px 0 #6b4829,0 16px 32px #0006,0 0 30px #deb27616; text-decoration:none; font-weight:600; position:relative; isolation:isolate; overflow:hidden; transition:transform .22s,box-shadow .22s; }
-    .cta-btn::after { content:''; position:absolute; inset:-50% -100%; background:linear-gradient(110deg,transparent 40%,#fff9 49%,transparent 58%); transform:translateX(-60%); animation:glint 6s ease-in-out 1s 3; pointer-events:none; z-index:-1; }
-    .cta-copy { display:flex; flex-direction:column; }
-    .cta-label { font-size:1.125rem; }
-    .cta-detail { font-size:.875rem; font-weight:400; color:#4f3924; margin-top:3px; }
-    .cta-icon { width:42px; height:42px; display:grid; place-items:center; border:1px solid #78532950; border-radius:13px; background:#fff3; box-shadow:inset 0 1px 1px #fff9; }
-    svg { width:22px; height:22px; fill:none; stroke:currentColor; stroke-width:1.65; stroke-linecap:round; stroke-linejoin:round; display:block; }
-    .price-card { border:1px solid var(--border); border-radius:20px; background:linear-gradient(135deg,#29252b,#19191f); box-shadow:inset 0 1px 0 #ffffff0c,0 12px 28px #0003; overflow:hidden; }
-    .price-toggle { display:flex; align-items:center; justify-content:space-between; width:100%; min-height:100px; gap:14px; padding:20px 24px; background:none; border:0; color:inherit; font:inherit; text-align:left; cursor:pointer; }
-    .price-toggle-left { display:flex; align-items:center; gap:14px; min-width:0; }
-    .price-icon { display:grid; place-items:center; width:42px; height:42px; border:1px solid #e8be7950; border-radius:13px; color:var(--gold); background:linear-gradient(145deg,#735236,#30241e); box-shadow:inset 0 1px 0 #ffdfa940,0 4px 0 #0f0e12; flex-shrink:0; }
-    .price-toggle-title { font-size:1rem; font-weight:600; }
-    .price-toggle-sub { font-size:.875rem; color:var(--text-low); }
-    .price-preview { font:400 2rem/1 var(--font-display); color:var(--gold); margin-left:auto; white-space:nowrap; }
-    .price-chevron { border:1px solid var(--border); border-radius:50%; padding:6px; transition:transform .25s; }
-    .price-chevron svg { width:16px; height:16px; }
-    .price-card.open .price-chevron { transform:rotate(180deg); }
-    .price-body { display:none; }
-    .price-card.open .price-body { display:block; }
-    .price-inner { margin:0 24px; padding-bottom:24px; border-top:1px solid var(--border); }
-    .price-row { display:flex; align-items:center; justify-content:space-between; gap:18px; padding:16px 0; border-bottom:1px solid var(--border); }
-    .price-row-label { font-size:1rem; }
-    .price-row-desc,.price-note { font-size:.875rem; color:var(--text-low); }
-    .price-note { margin-top:16px; }
-    .price-amount { font:400 1.65rem/1 var(--font-display); color:var(--gold); white-space:nowrap; }
-    .sec { min-width:0; border:1px solid var(--border); border-radius:26px; padding:24px; background:linear-gradient(145deg,#222129c9,#16171ed9); box-shadow:inset 0 1px 0 #ffffff08,0 20px 50px #0002; animation:arrive .6s both; }
-    .sec-studio { grid-column:1; --section-accent:#f2cc97; --tile-top:#574632; --tile-bottom:#30281f; animation-delay:.05s; }
-    .sec-hear { grid-column:2; grid-row:span 2; --section-accent:#d6c5ff; --tile-top:#564677; --tile-bottom:#2c2544; animation-delay:.12s; }
-    .sec-extras { grid-column:1; --section-accent:#a9dfd5; --tile-top:#315957; --tile-bottom:#1d3237; animation-delay:.18s; }
-    .sec-recent { grid-column:1/-1; --section-accent:#d3cbdc; --tile-top:#4d4559; --tile-bottom:#262530; }
-    .section-head { display:flex; align-items:center; gap:16px; margin-bottom:22px; }
-    .section-head-label { color:var(--text-hi); font:400 1.8rem/1.2 var(--font-display); }
-    .section-head-line { flex:1; height:1px; background:linear-gradient(90deg,var(--border),transparent); }
-    .section-number { color:var(--section-accent); font-size:.75rem; letter-spacing:.1em; }
-    .cards { display:flex; flex-direction:column; gap:12px; }
-    .card { display:flex; flex-wrap:wrap; align-items:center; gap:10px; padding:15px; min-width:0; border:1px solid #ffffff10; border-radius:16px; background:linear-gradient(130deg,#ffffff06,#ffffff01); box-shadow:0 3px 10px #0002; transition:transform .22s,border-color .22s,background .22s,box-shadow .22s; }
-    .card-main { display:flex; align-items:center; flex:1 1 180px; min-width:0; min-height:48px; gap:14px; color:inherit; text-decoration:none; border-radius:8px; }
-    .card-icon { display:grid; place-items:center; flex-shrink:0; width:44px; height:44px; border-radius:13px; color:var(--section-accent); border:1px solid #ffffff20; background:linear-gradient(140deg,var(--tile-top),var(--tile-bottom)); box-shadow:inset 0 1px 0 #ffffff20,0 4px 0 #0b0c1255,0 6px 12px #0003; }
-    .card-text { min-width:0; }
-    .card-title { display:block; font-size:1rem; line-height:1.35; font-weight:500; overflow-wrap:anywhere; }
-    .card-sub { display:block; font-size:.875rem; color:var(--text-low); line-height:1.5; margin-top:4px; }
-    .card-actions { display:flex; gap:7px; margin-left:auto; }
-    .action-btn { display:flex; align-items:center; justify-content:center; gap:6px; min-width:44px; min-height:44px; border-radius:12px; border:1px solid #ffffff20; color:var(--text-mid); background:linear-gradient(145deg,#44404b,#24232c); box-shadow:inset 0 1px 0 #ffffff15,0 3px 0 #0a0a10; cursor:pointer; transition:transform .18s,box-shadow .18s,filter .18s; font:500 .875rem var(--font-ui); }
-    .action-btn svg { width:18px; height:18px; }
-    .action-btn.share { color:var(--section-accent); background:linear-gradient(145deg,var(--tile-top),var(--tile-bottom)); }
-    .card.channel { padding:22px; background:radial-gradient(ellipse at 100% 0,#a695e730,transparent 65%),linear-gradient(130deg,#393045,#201c2e); border-color:#bc9ced55; }
-    .channel .card-main { min-height:74px; }
-    .channel .card-icon { width:58px; height:58px; border-radius:18px; }
-    .channel .card-icon svg { width:28px; height:28px; }
-    .channel .card-title { font:400 1.9rem/1.2 var(--font-display); }
-    .cards-compact { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
-    .cards-compact .card { padding:18px; gap:18px; align-content:space-between; }
-    .cards-compact .card-main { flex-basis:100%; flex-direction:column; align-items:flex-start; gap:18px; }
-    .cards-compact .card-actions { width:100%; padding-top:12px; border-top:1px solid var(--border); justify-content:flex-end; }
-    .cards-compact .card:nth-child(2) { --section-accent:#f3c1ac; --tile-top:#704a45; --tile-bottom:#382629; }
-    .cards-compact .card:nth-child(3) { --section-accent:#f1d995; --tile-top:#655633; --tile-bottom:#332d21; }
-    .cards-compact .card:nth-child(4) { --section-accent:#aacef9; --tile-top:#3a526e; --tile-bottom:#212d40; }
-    #recentCards { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); }
-    #recentCards .card-main { flex-basis:100%; }
-    #pwa-hint { grid-column:1/-1; position:relative; display:none; padding:22px 68px 22px 24px; border:1px solid var(--border); border-radius:20px; color:var(--text-low); font-size:.875rem; background:linear-gradient(110deg,#2d2833,#1b1b23); }
-    .pwa-title { display:block; color:var(--text-hi); font-size:1rem; margin-bottom:6px; }
-    #pwa-hint strong { color:var(--accent); font-weight:500; }
-    .pwa-actions { margin-top:10px; }
-    .install-btn,.qr-close { min-height:44px; padding:10px 22px; border:1px solid #e6c39466; border-radius:12px; background:linear-gradient(135deg,#665038,#322a25); color:var(--text-hi); font:500 .875rem var(--font-ui); cursor:pointer; box-shadow:inset 0 1px 0 #ffffff20,0 3px 0 #08080b; }
-    .pwa-dismiss { position:absolute; right:12px; top:12px; width:44px; height:44px; border:0; background:transparent; color:var(--text-mid); font-size:1.5rem; cursor:pointer; border-radius:12px; }
-    footer { position:relative; text-align:center; color:var(--text-low); font-size:.75rem; padding:8px 24px 32px; letter-spacing:.06em; }
-    #toast { position:fixed; bottom:calc(env(safe-area-inset-bottom,0px) + 24px); left:50%; transform:translate(-50%,20px); background:#242c2b; color:var(--success); border:1px solid #a2ceba55; border-radius:100px; padding:12px 24px; box-shadow:0 12px 35px #0008; opacity:0; pointer-events:none; transition:opacity .2s,transform .2s; z-index:999; max-width:calc(100% - 32px); text-align:center; font-size:.875rem; }
-    #toast.show { opacity:1; transform:translate(-50%,0); }
-    #qr-overlay { position:fixed; inset:0; z-index:1000; background:#090a10e8; backdrop-filter:blur(16px); display:flex; align-items:center; justify-content:center; padding:20px; overflow:auto; opacity:0; pointer-events:none; transition:opacity .2s; }
-    #qr-overlay.show { opacity:1; pointer-events:auto; }
-    .qr-panel { width:min(100%,400px); max-height:100%; overflow:auto; text-align:center; padding:28px; border:1px solid var(--border-accent); border-radius:28px; background:linear-gradient(145deg,#34303b,#191920); box-shadow:0 24px 100px #0009; }
-    .qr-code { background:white; padding:16px; border-radius:16px; display:inline-block; max-width:100%; }
-    .qr-code img,.qr-code canvas { display:block; width:232px; height:auto; max-width:100%; }
-    .qr-title { font-size:1.125rem; margin-top:22px; }
-    .qr-url { font-size:.875rem; color:var(--accent); overflow-wrap:anywhere; margin-top:8px; }
-    .qr-hint { font-size:.875rem; color:var(--text-low); margin:18px 0; }
-    a:focus-visible,button:focus-visible { outline:3px solid var(--focus); outline-offset:4px; }
-    button,a { -webkit-tap-highlight-color:transparent; touch-action:manipulation; }
-    .action-btn:active,.install-btn:active,.qr-close:active { transform:translateY(3px); box-shadow:inset 0 1px 0 #ffffff15; }
-    .cta-btn:active { transform:translateY(5px); box-shadow:0 1px 0 #6b4829,0 5px 15px #0006; }
-    @media (hover:hover) {
-      .card:hover { transform:translateY(-3px); border-color:#d3bdf54d; background-color:#ffffff06; box-shadow:0 12px 25px #0004; }
-      .action-btn:hover { filter:brightness(1.22); }
-      .cta-btn:hover { transform:translateY(-3px); box-shadow:inset 0 2px 0 #fff8df,0 9px 0 #6b4829,0 20px 40px #0007,0 0 35px #deb27630; }
-    }
-    @keyframes glint { 0%,65% { transform:translateX(-60%); } 100% { transform:translateX(60%); } }
-    @keyframes arrive { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
-    @media (max-width:1000px) {
-      .wrapper { padding:0 24px 28px; gap:20px; }
-      .sec { padding:20px; }
-      .card { padding:14px; }
-      .header-sub { font-size:.75rem; }
-    }
-    @media (max-width:760px) {
-      .wrapper { display:flex; flex-direction:column; padding:0 16px 24px; gap:20px; }
-      .wrapper > * { width:100%; }
-      header { flex-wrap:wrap; gap:12px; padding:24px 0 20px; }
-      .header-logo { width:54px; height:54px; }
-      .header-brand { flex:1; min-width:0; }
-      h1 { font-size:clamp(1.8rem,6vw,2.5rem); }
-      .header-eyebrow { font-size:.75rem; letter-spacing:.08em; }
-      .header-sub { margin:0; padding:0 0 0 66px; border:0; background:none; font-size:.875rem; }
-      .cta-btn { min-height:86px; }
-      .price-toggle { min-height:86px; padding:18px; }
-      .sec { padding:20px 16px; border-radius:22px; }
-      .card-main { flex-basis:170px; }
-      #recentCards { grid-template-columns:1fr; }
-      #recentCards .card-main { flex-basis:170px; }
-      .cards-compact .card { padding:16px; }
-      .section-head-label { font-size:1.75rem; }
-    }
-    @media (max-width:360px) {
-      .cards-compact { grid-template-columns:1fr; }
-      .price-preview { font-size:1.65rem; }
-      .price-icon { display:none; }
-    }
-    @media (prefers-reduced-motion:reduce) {
-      *,*::before,*::after { animation:none !important; transition:none !important; }
-    }
-  </style>
+  <link rel="stylesheet" href="studio.css" />
 </head>
 <body>
-
 <svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">
   <defs>
+<symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></symbol>
+<symbol id="i-star" viewBox="0 0 24 24"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9z"/></symbol>
+<symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 8V3H3v13h5"/></symbol>
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"/></symbol>
     <symbol id="i-headphones" viewBox="0 0 24 24"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></symbol>
     <symbol id="i-tv" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><polyline points="17 2 12 7 7 2"/></symbol>
     <symbol id="i-play" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></symbol>
@@ -201,42 +49,57 @@
     <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
   </defs>
 </svg>
-
-<div class="bg-orb bg-orb-1"></div>
-<div class="bg-orb bg-orb-2"></div>
-<div id="toast" role="status" aria-live="polite">Link copied</div>
-
-<main class="wrapper">
-
-  <header>
-    <img class="header-logo" src="logo.png" alt="" width="56" height="56" />
-    <div class="header-brand"><p class="header-eyebrow">Lumberport, West Virginia</p>
-    <h1>Heartstrings Studio</h1></div>
-    <p class="header-sub">Studio Concierge</p>
-  </header>
-
-  <div class="cta-wrap">
-    <a class="cta-btn" href="https://heartstringsstudio.github.io/storyroom/" target="_blank" rel="noopener">
-      <span class="cta-icon"><svg aria-hidden="true"><use href="#i-music"/></svg></span>
-      <span class="cta-copy"><span class="cta-label">Commission a Song</span><span class="cta-detail">Your story starts here</span></span>
-    </a>
-  </div>
-
-  <div class="price-wrap">
-    <div class="price-card" id="priceCard">
-      <button class="price-toggle" id="priceToggle" aria-expanded="false" aria-controls="priceBody">
-        <span class="price-toggle-left">
-          <span class="price-icon"><svg aria-hidden="true"><use href="#i-dollar"/></svg></span>
-          <span>
-            <span class="price-toggle-title">Investment</span>
-            <span class="price-toggle-sub" style="display:block">One song · one price</span>
-          </span>
-        </span>
-        <span class="price-preview">$150</span>
-        <span class="price-chevron"><svg aria-hidden="true"><use href="#i-chevron"/></svg></span>
-      </button>
-      <div class="price-body" id="priceBody">
-        <div class="price-inner">
+<a class="skip-link" href="#directory">Skip to studio links</a>
+<div class="app-shell">
+<header class="app-header"><a class="brand" href="./" aria-label="Heartstrings Studio dashboard"><img src="logo.png" alt="" width="44" height="44"><span>Heartstrings<span class="brand-small">STUDIO</span></span></a><button class="quiet-button" id="priceToggle" aria-haspopup="dialog">Pricing <span>$150</span></button></header>
+<main id="mainContent">
+<section class="studio-intro" aria-labelledby="pageTitle"><div class="intro-copy"><p class="eyebrow">LISTEN. CREATE. CONNECT.</p><h1 id="pageTitle">Studio <span>dashboard.</span></h1><p class="intro-description">Listen, create, and share. All in one place.</p><a class="primary-button" href="https://heartstringsstudio.github.io/storyroom/" target="_blank" rel="noopener">Start your song <svg aria-hidden="true"><use href="#i-arrow"/></svg></a></div></section>
+<div class="directory-toolbar" id="directory"><div class="toolbar-top"><h2>Explore the studio</h2><label class="search-box"><svg aria-hidden="true"><use href="#i-search"/></svg><input type="search" id="linkSearch" placeholder="Find a song, playlist, or resource" aria-label="Search studio links" autocomplete="off"><kbd aria-hidden="true">/</kbd></label></div><div class="filter-row"><div class="filters" role="group" aria-label="Filter studio links"><button class="filter active" data-filter="all" aria-pressed="true">All links</button><button class="filter" data-filter="listen" aria-pressed="false">Listen</button><button class="filter" data-filter="studio" aria-pressed="false">Studio</button><button class="filter" data-filter="extras" aria-pressed="false">Extras</button><button class="filter" data-filter="saved" aria-pressed="false"><svg aria-hidden="true"><use href="#i-star"/></svg> Saved <span id="savedCount">0</span></button></div><span id="resultCount" class="result-count" role="status" aria-live="polite">13 links</span></div></div>
+<section id="recentSection" class="recent-section" aria-labelledby="recentHeading" hidden><h2 id="recentHeading">Pick up where you left off</h2><div id="recentCards" class="recent-links"></div></section>
+<div id="emptyState" class="empty-state" hidden><svg aria-hidden="true"><use href="#i-search"/></svg><h2 id="emptyTitle">No links found</h2><p id="emptyCopy">Try a different word or category.</p><button class="quiet-button" id="resetFilters">Show all links</button></div>
+<div class="directory-grid">
+<section class="directory-section sec-studio" data-section="studio" aria-labelledby="studioHeading">
+<div class="section-head"><div><p class="eyebrow">CREATE & CONNECT</p><h2 id="studioHeading">Studio essentials</h2></div><span class="section-count">03</span></div>
+<div class="cards"><article class="card" data-url="https://heartstringsstudio.github.io/heartstringsstudio/" data-title="Heartstrings Studio — Main Site" data-category="studio">
+<a class="card-main" href="https://heartstringsstudio.github.io/heartstringsstudio/" target="_blank" rel="noopener"><span class="card-icon"><svg aria-hidden="true"><use href="#i-music"/></svg></span><span class="card-text"><span class="card-title">Main Studio Site</span><span class="card-sub">Heartstrings Studio home</span></span><svg class="open-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+</article><article class="card" data-url="https://heartstringsstudio.github.io/storyroom/" data-title="Heartstrings Studio — The Story Room" data-category="studio">
+<a class="card-main" href="https://heartstringsstudio.github.io/storyroom/" target="_blank" rel="noopener"><span class="card-icon"><svg aria-hidden="true"><use href="#i-pen"/></svg></span><span class="card-text"><span class="card-title">The Story Room</span><span class="card-sub">Guided custom-song story intake</span></span><svg class="open-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+</article><article class="card" data-url="https://tinyurl.com/heartstringsfh" data-title="Heartstrings Studio — Funeral Home Partners" data-category="studio">
+<a class="card-main" href="https://tinyurl.com/heartstringsfh" target="_blank" rel="noopener"><span class="card-icon"><svg aria-hidden="true"><use href="#i-columns"/></svg></span><span class="card-text"><span class="card-title">Funeral Home Partners</span><span class="card-sub">Partner information and resources</span></span><svg class="open-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+</article></div></section>
+<section class="directory-section sec-hear" data-section="listen" aria-labelledby="listenHeading">
+<div class="section-head"><div><p class="eyebrow">THE LISTENING ROOM</p><h2 id="listenHeading">Find your next favorite</h2></div><span class="section-count">07</span></div>
+<div class="cards"><article class="card featured" data-url="https://tinyurl.com/hsjukebox" data-title="Heartstrings Studio — Hear the Songs" data-category="listen">
+<a class="card-main" href="https://tinyurl.com/hsjukebox" target="_blank" rel="noopener"><span class="card-icon"><svg aria-hidden="true"><use href="#i-headphones"/></svg></span><span class="card-text"><span class="card-title">Song Jukebox</span><span class="card-sub">The full Heartstrings collection</span></span><svg class="open-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+</article><article class="card" data-url="https://youtu.be/uwsCiWGnDuc" data-title="Heartstrings Studio — WBOY 304 Today Interview" data-category="listen">
+<a class="card-main" href="https://youtu.be/uwsCiWGnDuc" target="_blank" rel="noopener"><span class="card-icon"><svg aria-hidden="true"><use href="#i-tv"/></svg></span><span class="card-text"><span class="card-title">WBOY Interview</span><span class="card-sub">304 Today · As Seen on TV</span></span><svg class="open-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+</article><article class="card" data-url="https://www.youtube.com/@heartstringsstudiowv" data-title="Heartstrings Studio — Full YouTube Channel" data-category="listen">
+<a class="card-main" href="https://www.youtube.com/@heartstringsstudiowv" target="_blank" rel="noopener"><span class="card-icon"><svg aria-hidden="true"><use href="#i-play"/></svg></span><span class="card-text"><span class="card-title">Full YouTube Channel</span><span class="card-sub">All songs and videos</span></span><svg class="open-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+</article><article class="card" data-url="https://www.youtube.com/playlist?list=PLBaBQ7Vhr-5-UuSeneZViY8WAyxJujGXa" data-title="Memorial Songs Playlist — Heartstrings Studio" data-category="listen">
+<a class="card-main" href="https://www.youtube.com/playlist?list=PLBaBQ7Vhr-5-UuSeneZViY8WAyxJujGXa" target="_blank" rel="noopener"><span class="card-icon"><svg aria-hidden="true"><use href="#i-feather"/></svg></span><span class="card-text"><span class="card-title">Memorial Songs</span><span class="card-sub">YouTube Playlist</span></span><svg class="open-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+</article><article class="card" data-url="https://www.youtube.com/playlist?list=PLBaBQ7Vhr-59e8e10Hs42Zwx6Knhp1NCL" data-title="Wedding Songs — Heartstrings Studio" data-category="listen">
+<a class="card-main" href="https://www.youtube.com/playlist?list=PLBaBQ7Vhr-59e8e10Hs42Zwx6Knhp1NCL" target="_blank" rel="noopener"><span class="card-icon"><svg aria-hidden="true"><use href="#i-rings"/></svg></span><span class="card-text"><span class="card-title">Wedding Songs</span><span class="card-sub">YouTube Playlist</span></span><svg class="open-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+</article><article class="card" data-url="https://www.youtube.com/playlist?list=PLBaBQ7Vhr-58nEunbI_U_B-wfIgkCNyJv" data-title="Birthday Celebrations — Heartstrings Studio" data-category="listen">
+<a class="card-main" href="https://www.youtube.com/playlist?list=PLBaBQ7Vhr-58nEunbI_U_B-wfIgkCNyJv" target="_blank" rel="noopener"><span class="card-icon"><svg aria-hidden="true"><use href="#i-cake"/></svg></span><span class="card-text"><span class="card-title">Birthdays</span><span class="card-sub">YouTube Playlist</span></span><svg class="open-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+</article><article class="card" data-url="https://www.youtube.com/playlist?list=PLBaBQ7Vhr-58N6PZOuIXyr7GmKvdUxqwJ" data-title="Unreleased Demos — Heartstrings Studio" data-category="listen">
+<a class="card-main" href="https://www.youtube.com/playlist?list=PLBaBQ7Vhr-58N6PZOuIXyr7GmKvdUxqwJ" target="_blank" rel="noopener"><span class="card-icon"><svg aria-hidden="true"><use href="#i-sliders"/></svg></span><span class="card-text"><span class="card-title">Demos</span><span class="card-sub">YouTube Playlist</span></span><svg class="open-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+</article></div></section>
+<section class="directory-section sec-extras" data-section="extras" aria-labelledby="extrasHeading">
+<div class="section-head"><div><p class="eyebrow">EXPLORE</p><h2 id="extrasHeading">Beyond the music</h2></div><span class="section-count">03</span></div>
+<div class="cards"><article class="card" data-url="https://heartstringsstudio.github.io/song-quiz/" data-title="Heartstrings Song Quiz — Can You Guess the Song?" data-category="extras">
+<a class="card-main" href="https://heartstringsstudio.github.io/song-quiz/" target="_blank" rel="noopener"><span class="card-icon"><svg aria-hidden="true"><use href="#i-target"/></svg></span><span class="card-text"><span class="card-title">Song Quiz</span><span class="card-sub">Can you guess the song?</span></span><svg class="open-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+</article><article class="card" data-url="https://heartstringsstudio.github.io/wired-differently/" data-title="Wired Differently — Heartstrings Studio" data-category="extras">
+<a class="card-main" href="https://heartstringsstudio.github.io/wired-differently/" target="_blank" rel="noopener"><span class="card-icon"><svg aria-hidden="true"><use href="#i-zap"/></svg></span><span class="card-text"><span class="card-title">Wired Differently</span><span class="card-sub">Interactive ADHD guide</span></span><svg class="open-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+</article><article class="card" data-url="https://heartstringsstudio.github.io/howe/" data-title="Howe Wedding — Info" data-category="extras">
+<a class="card-main" href="https://heartstringsstudio.github.io/howe/" target="_blank" rel="noopener"><span class="card-icon"><svg aria-hidden="true"><use href="#i-rings"/></svg></span><span class="card-text"><span class="card-title">Howe Wedding</span><span class="card-sub">Wedding info page</span></span><svg class="open-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+</article></div></section>
+</div>
+<aside id="pwa-hint" aria-label="Install this dashboard" hidden><div><strong>Keep the studio one tap away.</strong><p id="pwaCopy">Add this dashboard to your home screen from your browser menu.</p></div><button class="quiet-button" id="installBtn" hidden>Install app</button><button class="icon-button" id="pwaDismiss" aria-label="Dismiss install suggestion">×</button></aside>
+<noscript><p class="noscript-note">All studio links work below. Enable JavaScript for search, sharing, saved links, and pricing.</p></noscript>
+</main>
+<footer><span>Heartstrings Studio</span><span>Lumberport, West Virginia</span></footer>
+</div>
+<dialog id="priceDialog" aria-labelledby="priceTitle"><div class="dialog-header"><div><p class="eyebrow">PERSONAL SONGS. CLEAR PRICING.</p><h2 id="priceTitle">Your story, set to music.</h2></div><button class="icon-button" data-close="priceDialog" aria-label="Close pricing">×</button></div><div class="price-inner">
           <div class="price-row">
             <div>
               <div class="price-row-label">Custom Song</div>
@@ -258,438 +121,8 @@
             </div>
             <div class="price-amount">+$50</div>
           </div>
-          <p class="price-note">$150 flat · One lyric revision · Remake guarantee · Written personally by Tim</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <section class="sec sec-recent" id="recentSection" aria-labelledby="recentHeading" hidden>
-    <div class="section-head">
-      <h2 class="section-head-label" id="recentHeading">Recently Used</h2>
-      <span class="section-head-line"></span>
-    </div>
-    <div class="cards" id="recentCards"></div>
-  </section>
-
-  <section class="sec sec-studio" aria-labelledby="studioHeading">
-    <div class="section-head">
-      <h2 class="section-head-label" id="studioHeading">Studio</h2>
-      <span class="section-head-line"></span>
-      <span class="section-number" aria-hidden="true">01</span>
-    </div>
-    <div class="cards">
-
-      <div class="card" data-url="https://heartstringsstudio.github.io/heartstringsstudio/" data-title="Heartstrings Studio — Main Site">
-        <a class="card-main" href="https://heartstringsstudio.github.io/heartstringsstudio/" target="_blank" rel="noopener">
-          <span class="card-icon"><svg aria-hidden="true"><use href="#i-music"/></svg></span>
-          <span class="card-text">
-            <span class="card-title">Main Studio Site</span>
-            <span class="card-sub">Heartstrings Studio home</span>
-          </span>
-        </a>
-      </div>
-
-      <div class="card" data-url="https://heartstringsstudio.github.io/storyroom/" data-title="Heartstrings Studio — The Story Room">
-        <a class="card-main" href="https://heartstringsstudio.github.io/storyroom/" target="_blank" rel="noopener">
-          <span class="card-icon"><svg aria-hidden="true"><use href="#i-pen"/></svg></span>
-          <span class="card-text">
-            <span class="card-title">The Story Room</span>
-            <span class="card-sub">Guided custom-song story intake</span>
-          </span>
-        </a>
-      </div>
-
-      <div class="card" data-url="https://tinyurl.com/heartstringsfh" data-title="Heartstrings Studio — Funeral Home Partners">
-        <a class="card-main" href="https://tinyurl.com/heartstringsfh" target="_blank" rel="noopener">
-          <span class="card-icon"><svg aria-hidden="true"><use href="#i-columns"/></svg></span>
-          <span class="card-text">
-            <span class="card-title">Funeral Home Partners</span>
-            <span class="card-sub">Partner information and resources</span>
-          </span>
-        </a>
-      </div>
-
-    </div>
-  </section>
-
-  <section class="sec sec-hear" aria-labelledby="hearHeading">
-    <div class="section-head">
-      <h2 class="section-head-label" id="hearHeading">Hear the Songs</h2>
-      <span class="section-head-line"></span>
-      <span class="section-number" aria-hidden="true">02</span>
-    </div>
-    <div class="cards">
-
-      <div class="card channel" data-url="https://tinyurl.com/hsjukebox" data-title="Heartstrings Studio — Hear the Songs">
-        <a class="card-main" href="https://tinyurl.com/hsjukebox" target="_blank" rel="noopener">
-          <span class="card-icon"><svg aria-hidden="true"><use href="#i-headphones"/></svg></span>
-          <span class="card-text">
-            <span class="card-title">Song Jukebox</span>
-            <span class="card-sub">Listen to the full collection</span>
-          </span>
-        </a>
-      </div>
-
-      <div class="card" data-url="https://youtu.be/uwsCiWGnDuc" data-title="Heartstrings Studio — WBOY 304 Today Interview">
-        <a class="card-main" href="https://youtu.be/uwsCiWGnDuc" target="_blank" rel="noopener">
-          <span class="card-icon"><svg aria-hidden="true"><use href="#i-tv"/></svg></span>
-          <span class="card-text">
-            <span class="card-title">WBOY Interview</span>
-            <span class="card-sub">304 Today · As Seen on TV</span>
-          </span>
-        </a>
-      </div>
-
-      <div class="card" data-url="https://www.youtube.com/@heartstringsstudiowv" data-title="Heartstrings Studio — Full YouTube Channel">
-        <a class="card-main" href="https://www.youtube.com/@heartstringsstudiowv" target="_blank" rel="noopener">
-          <span class="card-icon"><svg aria-hidden="true"><use href="#i-play"/></svg></span>
-          <span class="card-text">
-            <span class="card-title">Full YouTube Channel</span>
-            <span class="card-sub">All songs and videos</span>
-          </span>
-        </a>
-      </div>
-
-    </div>
-
-    <div class="cards cards-compact" style="margin-top: var(--space-3)">
-
-      <div class="card" data-url="https://www.youtube.com/playlist?list=PLBaBQ7Vhr-5-UuSeneZViY8WAyxJujGXa" data-title="Memorial Songs Playlist — Heartstrings Studio">
-        <a class="card-main" href="https://www.youtube.com/playlist?list=PLBaBQ7Vhr-5-UuSeneZViY8WAyxJujGXa" target="_blank" rel="noopener">
-          <span class="card-icon"><svg aria-hidden="true"><use href="#i-feather"/></svg></span>
-          <span class="card-text">
-            <span class="card-title">Memorial Songs</span>
-            <span class="card-sub">YouTube Playlist</span>
-          </span>
-        </a>
-      </div>
-
-      <div class="card" data-url="https://www.youtube.com/playlist?list=PLBaBQ7Vhr-59e8e10Hs42Zwx6Knhp1NCL" data-title="Wedding Songs — Heartstrings Studio">
-        <a class="card-main" href="https://www.youtube.com/playlist?list=PLBaBQ7Vhr-59e8e10Hs42Zwx6Knhp1NCL" target="_blank" rel="noopener">
-          <span class="card-icon"><svg aria-hidden="true"><use href="#i-rings"/></svg></span>
-          <span class="card-text">
-            <span class="card-title">Wedding Songs</span>
-            <span class="card-sub">YouTube Playlist</span>
-          </span>
-        </a>
-      </div>
-
-      <div class="card" data-url="https://www.youtube.com/playlist?list=PLBaBQ7Vhr-58nEunbI_U_B-wfIgkCNyJv" data-title="Birthday Celebrations — Heartstrings Studio">
-        <a class="card-main" href="https://www.youtube.com/playlist?list=PLBaBQ7Vhr-58nEunbI_U_B-wfIgkCNyJv" target="_blank" rel="noopener">
-          <span class="card-icon"><svg aria-hidden="true"><use href="#i-cake"/></svg></span>
-          <span class="card-text">
-            <span class="card-title">Birthdays</span>
-            <span class="card-sub">YouTube Playlist</span>
-          </span>
-        </a>
-      </div>
-
-      <div class="card" data-url="https://www.youtube.com/playlist?list=PLBaBQ7Vhr-58N6PZOuIXyr7GmKvdUxqwJ" data-title="Unreleased Demos — Heartstrings Studio">
-        <a class="card-main" href="https://www.youtube.com/playlist?list=PLBaBQ7Vhr-58N6PZOuIXyr7GmKvdUxqwJ" target="_blank" rel="noopener">
-          <span class="card-icon"><svg aria-hidden="true"><use href="#i-sliders"/></svg></span>
-          <span class="card-text">
-            <span class="card-title">Demos</span>
-            <span class="card-sub">YouTube Playlist</span>
-          </span>
-        </a>
-      </div>
-
-    </div>
-  </section>
-
-  <section class="sec sec-extras" aria-labelledby="extrasHeading">
-    <div class="section-head">
-      <h2 class="section-head-label" id="extrasHeading">Extras</h2>
-      <span class="section-head-line"></span>
-      <span class="section-number" aria-hidden="true">03</span>
-    </div>
-    <div class="cards">
-
-      <div class="card" data-url="https://heartstringsstudio.github.io/song-quiz/" data-title="Heartstrings Song Quiz — Can You Guess the Song?">
-        <a class="card-main" href="https://heartstringsstudio.github.io/song-quiz/" target="_blank" rel="noopener">
-          <span class="card-icon"><svg aria-hidden="true"><use href="#i-target"/></svg></span>
-          <span class="card-text">
-            <span class="card-title">Song Quiz</span>
-            <span class="card-sub">Can you guess the song?</span>
-          </span>
-        </a>
-      </div>
-
-      <div class="card" data-url="https://heartstringsstudio.github.io/wired-differently/" data-title="Wired Differently — Heartstrings Studio">
-        <a class="card-main" href="https://heartstringsstudio.github.io/wired-differently/" target="_blank" rel="noopener">
-          <span class="card-icon"><svg aria-hidden="true"><use href="#i-zap"/></svg></span>
-          <span class="card-text">
-            <span class="card-title">Wired Differently</span>
-            <span class="card-sub">Interactive ADHD guide</span>
-          </span>
-        </a>
-      </div>
-
-      <div class="card" data-url="https://heartstringsstudio.github.io/howe/" data-title="Howe Wedding — Info">
-        <a class="card-main" href="https://heartstringsstudio.github.io/howe/" target="_blank" rel="noopener">
-          <span class="card-icon"><svg aria-hidden="true"><use href="#i-rings"/></svg></span>
-          <span class="card-text">
-            <span class="card-title">Howe Wedding</span>
-            <span class="card-sub">Wedding info page</span>
-          </span>
-        </a>
-      </div>
-
-    </div>
-  </section>
-
-  <div id="pwa-hint" role="region" aria-label="Install this dashboard">
-    <button class="pwa-dismiss" id="pwaDismiss" type="button" aria-label="Dismiss install suggestion">×</button>
-    <strong class="pwa-title">Keep Heartstrings one tap away</strong>
-    <span id="pwaCopy">On iPhone, tap <strong>Share</strong>, then <strong>Add to Home Screen</strong>. On Android, use the browser menu and choose <strong>Add to Home Screen</strong>.</span>
-    <div class="pwa-actions">
-      <button class="install-btn" id="installBtn" type="button" hidden>Install dashboard</button>
-    </div>
-  </div>
-
-</main>
-
-<div id="qr-overlay" role="dialog" aria-modal="true" aria-labelledby="qrTitle" aria-describedby="qrHint" aria-hidden="true" inert>
-  <div class="qr-panel">
-    <div class="qr-code" id="qrCode"></div>
-    <div class="qr-title" id="qrTitle"></div>
-    <div class="qr-url" id="qrUrl"></div>
-    <p class="qr-hint" id="qrHint">Point their camera here to open the link</p>
-    <button class="qr-close" id="qrClose" type="button" tabindex="-1">Close</button>
-  </div>
-</div>
-
-<footer>Heartstrings Studio · Lumberport, West Virginia</footer>
-
-<script src="qrcode.min.js"></script>
-<script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js'));
-  }
-
-  function storageGet(key, fallback = null) {
-    try { return localStorage.getItem(key) ?? fallback; }
-    catch (e) { return fallback; }
-  }
-
-  function storageSet(key, value) {
-    try { localStorage.setItem(key, value); return true; }
-    catch (e) { return false; }
-  }
-
-  const pwaHint = document.getElementById('pwa-hint');
-  const pwaCopy = document.getElementById('pwaCopy');
-  const installBtn = document.getElementById('installBtn');
-  const pwaDismiss = document.getElementById('pwaDismiss');
-  const INSTALL_DISMISSED_KEY = 'heartstrings_dashboard_install_dismissed';
-  let deferredInstallPrompt = null;
-
-  function hideInstallHint(remember = false) {
-    pwaHint.style.display = 'none';
-    if (remember) storageSet(INSTALL_DISMISSED_KEY, '1');
-  }
-
-  const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
-  if (!isStandalone && !storageGet(INSTALL_DISMISSED_KEY)) {
-    pwaHint.style.display = 'block';
-  }
-
-  window.addEventListener('beforeinstallprompt', (event) => {
-    event.preventDefault();
-    deferredInstallPrompt = event;
-    installBtn.hidden = false;
-    pwaCopy.textContent = 'Install the dashboard for faster access and reliable offline use.';
-  });
-
-  installBtn.addEventListener('click', async () => {
-    if (!deferredInstallPrompt) return;
-    deferredInstallPrompt.prompt();
-    const { outcome } = await deferredInstallPrompt.userChoice;
-    deferredInstallPrompt = null;
-    installBtn.hidden = true;
-    if (outcome === 'accepted') hideInstallHint(true);
-  });
-  pwaDismiss.addEventListener('click', () => hideInstallHint(true));
-  window.addEventListener('appinstalled', () => hideInstallHint(true));
-
-  const priceToggle = document.getElementById('priceToggle');
-  priceToggle.addEventListener('click', () => {
-    const open = document.getElementById('priceCard').classList.toggle('open');
-    priceToggle.setAttribute('aria-expanded', open);
-  });
-
-  const toast = document.getElementById('toast');
-  let toastTimer;
-  function showToast(msg = 'Link copied') {
-    toast.textContent = msg;
-    toast.classList.add('show');
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => toast.classList.remove('show'), 2000);
-  }
-
-  async function copyLink(url) {
-    try {
-      if (!navigator.clipboard?.writeText) throw new Error('Clipboard API unavailable');
-      await navigator.clipboard.writeText(url);
-      showToast('Link copied');
-    } catch (e) {
-      const field = document.createElement('textarea');
-      field.value = url;
-      field.setAttribute('readonly', '');
-      field.style.position = 'fixed';
-      field.style.opacity = '0';
-      document.body.appendChild(field);
-      field.select();
-      let copied = false;
-      try { copied = document.execCommand('copy'); }
-      catch (copyError) { copied = false; }
-      field.remove();
-      showToast(copied ? 'Link copied' : 'Copy failed');
-    }
-  }
-
-  async function shareLink(url, title) {
-    if (navigator.share) {
-      try {
-        await navigator.share({ title, url });
-      } catch (e) {
-        if (e.name !== 'AbortError') copyLink(url);
-      }
-    } else {
-      copyLink(url);
-    }
-  }
-
-  const qrOverlay = document.getElementById('qr-overlay');
-  const qrCodeBox = document.getElementById('qrCode');
-  const qrClose = document.getElementById('qrClose');
-  let lastQRTrigger = null;
-
-  function showQR(url, title, trigger) {
-    lastQRTrigger = trigger || document.activeElement;
-    qrCodeBox.innerHTML = '';
-    new QRCode(qrCodeBox, {
-      text: url,
-      width: 464,
-      height: 464,
-      colorDark: '#271c16',
-      colorLight: '#ffffff',
-      correctLevel: QRCode.CorrectLevel.M
-    });
-    document.getElementById('qrTitle').textContent = title;
-    document.getElementById('qrUrl').textContent = url.replace(/^https?:\/\//, '');
-    qrOverlay.classList.add('show');
-    qrOverlay.setAttribute('aria-hidden', 'false');
-    qrOverlay.removeAttribute('inert');
-    qrClose.tabIndex = 0;
-    history.pushState({ qr: 1 }, '');
-    qrClose.focus();
-  }
-  function hideQR() {
-    qrOverlay.classList.remove('show');
-    qrOverlay.setAttribute('aria-hidden', 'true');
-    qrOverlay.setAttribute('inert', '');
-    qrClose.tabIndex = -1;
-    if (lastQRTrigger && document.contains(lastQRTrigger)) lastQRTrigger.focus();
-    lastQRTrigger = null;
-  }
-  function closeQR() {
-    if (!qrOverlay.classList.contains('show')) return;
-    if (history.state && history.state.qr) history.back();
-    else hideQR();
-  }
-  window.addEventListener('popstate', hideQR);
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeQR();
-    if (e.key === 'Tab' && qrOverlay.classList.contains('show')) {
-      e.preventDefault();
-      qrClose.focus();
-    }
-  });
-  qrOverlay.addEventListener('click', (e) => { if (e.target === qrOverlay) closeQR(); });
-  qrClose.addEventListener('click', closeQR);
-
-  const SHARE_ICON = '<svg aria-hidden="true"><use href="#i-share"/></svg>';
-  const QR_ICON = '<svg aria-hidden="true"><use href="#i-qr"/></svg>';
-
-  const RECENT_KEY = 'heartstrings_dashboard_recent_links';
-  const recentSection = document.getElementById('recentSection');
-  const recentCards = document.getElementById('recentCards');
-
-  function getRecentLinks() {
-    try { return JSON.parse(storageGet(RECENT_KEY, '[]')); }
-    catch (e) { return []; }
-  }
-
-  function rememberLink(url, title, label) {
-    const updated = [{ url, title, label }, ...getRecentLinks().filter(item => item.url !== url)].slice(0, 3);
-    storageSet(RECENT_KEY, JSON.stringify(updated));
-    renderRecentLinks();
-  }
-
-  function enhanceCard(card) {
-    if (card.dataset.enhanced === 'true') return;
-    const url   = card.dataset.url;
-    const title = card.dataset.title;
-    const label = card.querySelector('.card-title')?.textContent.trim() || title;
-    const actions = document.createElement('div');
-    actions.className = 'card-actions';
-    const shareButton = document.createElement('button');
-    shareButton.className = 'action-btn share';
-    shareButton.type = 'button';
-    shareButton.setAttribute('aria-label', `Share ${label}`);
-    shareButton.innerHTML = SHARE_ICON;
-    const qrButton = document.createElement('button');
-    qrButton.className = 'action-btn qr';
-    qrButton.type = 'button';
-    qrButton.setAttribute('aria-label', `Show QR code for ${label}`);
-    qrButton.innerHTML = QR_ICON;
-    actions.append(shareButton, qrButton);
-    card.appendChild(actions);
-    card.dataset.enhanced = 'true';
-    card.querySelector('.card-main')?.addEventListener('click', () => rememberLink(url, title, label));
-    shareButton.addEventListener('click', e => {
-      e.stopPropagation();
-      rememberLink(url, title, label);
-      shareLink(url, title);
-    });
-    qrButton.addEventListener('click', e => {
-      e.stopPropagation();
-      rememberLink(url, title, label);
-      const staticCard = [...document.querySelectorAll('.card[data-url]')]
-        .find(candidate => !recentSection.contains(candidate) && candidate.dataset.url === url);
-      const returnTarget = document.contains(e.currentTarget) ? e.currentTarget : staticCard?.querySelector('.qr');
-      showQR(url, title, returnTarget);
-    });
-  }
-
-  function renderRecentLinks() {
-    const items = getRecentLinks();
-    recentCards.innerHTML = '';
-    recentSection.hidden = items.length === 0;
-    items.forEach(item => {
-      const card = document.createElement('div');
-      card.className = 'card';
-      card.dataset.url = item.url;
-      card.dataset.title = item.title;
-      const main = document.createElement('a');
-      main.className = 'card-main';
-      main.href = item.url;
-      main.target = '_blank';
-      main.rel = 'noopener';
-      main.innerHTML = '<span class="card-icon"><svg aria-hidden="true"><use href="#i-clock"/></svg></span>' +
-        '<span class="card-text"><span class="card-title"></span><span class="card-sub">Recently opened</span></span>';
-      main.querySelector('.card-title').textContent = item.label;
-      card.appendChild(main);
-      recentCards.appendChild(card);
-      enhanceCard(card);
-    });
-  }
-
-  document.querySelectorAll('.card[data-url]').forEach(enhanceCard);
-  renderRecentLinks();
-</script>
-
-</body>
-</html>
+          <p class="price-note">$150 flat · One lyric revision · Remake guarantee · Written personally by Tim</p></div><a class="primary-button" href="https://heartstringsstudio.github.io/storyroom/" target="_blank" rel="noopener">Start your song <svg aria-hidden="true"><use href="#i-arrow"/></svg></a></dialog>
+<dialog id="qrDialog" aria-labelledby="qrTitle" aria-describedby="qrHint"><div class="dialog-header"><p class="eyebrow">SHARE THE STUDIO</p><button class="icon-button" data-close="qrDialog" aria-label="Close QR code">×</button></div><div class="qr-code" id="qrCode"></div><h2 id="qrTitle"></h2><p id="qrUrl"></p><p class="dialog-hint" id="qrHint">Scan with a phone camera to open this link.</p><div class="dialog-actions"><button class="quiet-button" id="qrCopy">Copy link</button><button class="primary-button" id="qrDownload">Save QR image</button></div></dialog>
+<div id="toast" role="status" aria-live="polite"></div>
+<script src="qrcode.min.js"></script><script src="studio.js"></script>
+</body></html>
