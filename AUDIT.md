@@ -63,6 +63,7 @@ the framing of the file it replaced.
 - Removed the portrait-only installation restriction.
 - Self-hosted the brand fonts for faster, more consistent, offline-friendly loading.
 - Brought the palette, display face, corner radii, CTA and app icons in line with the September 2026 site rebuild (see above).
+- Balanced the two-column desktop layout: Studio and Extras stack in the left column while Hear the Songs spans both of their rows, instead of Extras sitting under Hear and leaving the left column empty for most of the page.
 - Added accessible section headings and relationships.
 - Isolated the dashboard service-worker cache so it cannot delete caches belonging to other Heartstrings apps on the same domain.
 
@@ -81,4 +82,5 @@ the framing of the file it replaced.
 - When adding a new card, include `data-url`, `data-title`, a `.card-main` link, `.card-title`, and `.card-sub`; Share and QR controls will be added automatically.
 - Increment the dashboard cache version in `sw.js` whenever a deployed shell asset changes.
 - Keep the palette in step with `style.css` on the main site; the tokens at the top of `index.html` are the only place colours are defined.
+- The desktop grid balances by hand, not by content: if a section gains or loses cards, re-check that the two columns still end at roughly the same height, and adjust which column each section takes rather than adding row numbers (Recently Used is hidden until the device has history, so row numbers shift).
 - Periodically confirm destination links and YouTube playlists are still current.

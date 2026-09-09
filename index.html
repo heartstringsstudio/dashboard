@@ -233,9 +233,13 @@
       .cta-wrap { grid-column: 1; margin-bottom: 0; align-self: stretch; }
       .price-wrap { grid-column: 2; }
       .sec-recent { grid-column: 1 / -1; }
+      /* Hear the Songs is roughly as tall as Studio and Extras stacked, so it
+         spans both of their rows rather than sitting above Extras and leaving
+         the left column empty. Rows stay implicit — Recently Used is hidden
+         until the device has history, which would shift any hard-coded row. */
       .sec-studio { grid-column: 1; }
-      .sec-hear { grid-column: 2; }
-      .sec-extras { grid-column: 2; }
+      .sec-hear { grid-column: 2; grid-row: span 2; }
+      .sec-extras { grid-column: 1; }
       #pwa-hint { grid-column: 1 / -1; }
     }
 
