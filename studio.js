@@ -1,86 +1,195 @@
-'use strict';
-const $ = id => document.getElementById(id);
-const cards = [...document.querySelectorAll('.card[data-url]')];
-const catalog = new Map(cards.map(card => [card.dataset.url, card]));
-const RECENT_KEY = 'heartstrings_dashboard_recent_links';
-const SAVED_KEY = 'heartstrings_dashboard_saved_links';
-const INSTALL_KEY = 'heartstrings_dashboard_install_dismissed';
-function readStore(key, fallback) { try { const value = localStorage.getItem(key); return value === null ? fallback : JSON.parse(value); } catch { return fallback; } }
-function writeStore(key, value) { try { localStorage.setItem(key, JSON.stringify(value)); return true; } catch { return false; } }
-function knownURLs(value) { return Array.isArray(value) ? [...new Set(value.filter(url => typeof url === 'string' && catalog.has(url)))] : []; }
+"use strict";
+const $ = (id) => document.getElementById(id);
+const cards = [...document.querySelectorAll(".card[data-url]")];
+const catalog = new Map(cards.map((card) => [card.dataset.url, card]));
+const RECENT_KEY = "heartstrings_dashboard_recent_links";
+const SAVED_KEY = "heartstrings_dashboard_saved_links";
+const INSTALL_KEY = "heartstrings_dashboard_install_dismissed";
+function readStore(key, fallback) {
+  try {
+    const value = localStorage.getItem(key);
+    return value === null ? fallback : JSON.parse(value);
+  } catch {
+    return fallback;
+  }
+}
+function writeStore(key, value) {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+    return true;
+  } catch {
+    return false;
+  }
+}
+function knownURLs(value) {
+  return Array.isArray(value)
+    ? [
+        ...new Set(
+          value.filter((url) => typeof url === "string" && catalog.has(url)),
+        ),
+      ]
+    : [];
+}
 let saved = new Set(knownURLs(readStore(SAVED_KEY, [])));
 let recent = readStore(RECENT_KEY, []);
-recent = Array.isArray(recent) ? knownURLs(recent.map(item => typeof item === 'string' ? item : item?.url)).slice(0, 3) : [];
-let activeFilter = 'all';
+recent = Array.isArray(recent)
+  ? knownURLs(
+      recent.map((item) => (typeof item === "string" ? item : item?.url)),
+    ).slice(0, 3)
+  : [];
+let activeFilter = "all";
 let toastTimer;
-function showToast(message) { $('toast').textContent = message; $('toast').classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(() => $('toast').classList.remove('show'), 2600); }
-const icon = name => `<svg aria-hidden="true"><use href="#i-${name}"/></svg>`;
-function labelFor(card) { return card.querySelector('.card-title').textContent.trim(); }
+function showToast(message) {
+  $("toast").textContent = message;
+  $("toast").classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => $("toast").classList.remove("show"), 2600);
+}
+const icon = (name) => `<svg aria-hidden="true"><use href="#i-${name}"/></svg>`;
+function labelFor(card) {
+  return card.querySelector(".card-title").textContent.trim();
+}
 function renderRecent() {
-  $('recentCards').replaceChildren();
-  recent.forEach(url => {
+  $("recentCards").replaceChildren();
+  recent.forEach((url) => {
     const card = catalog.get(url);
-    const link = document.createElement('a');
-    link.href = url; link.target = '_blank'; link.rel = 'noopener';
-    link.innerHTML = icon('clock');
+    const link = document.createElement("a");
+    link.href = url;
+    link.target = "_blank";
+    link.rel = "noopener";
+    link.innerHTML = icon("clock");
     link.append(document.createTextNode(labelFor(card)));
-    link.addEventListener('click', () => remember(url));
-    $('recentCards').append(link);
+    link.addEventListener("click", () => remember(url));
+    $("recentCards").append(link);
   });
-  $('recentSection').hidden = !recent.length || activeFilter !== 'all' || Boolean($('linkSearch').value.trim());
+  $("recentSection").hidden =
+    !recent.length ||
+    activeFilter !== "all" ||
+    Boolean($("linkSearch").value.trim());
 }
 function remember(url) {
-  recent = [url, ...recent.filter(item => item !== url)].slice(0, 3);
-  writeStore(RECENT_KEY, recent.map(item => ({ url:item, title:catalog.get(item).dataset.title, label:labelFor(catalog.get(item)) })));
+  recent = [url, ...recent.filter((item) => item !== url)].slice(0, 3);
+  writeStore(
+    RECENT_KEY,
+    recent.map((item) => ({
+      url: item,
+      title: catalog.get(item).dataset.title,
+      label: labelFor(catalog.get(item)),
+    })),
+  );
   renderRecent();
+  const channel = remoteCatalog.findIndex((card) => card.dataset.url === url);
+  if (channel >= 0) {
+    remoteIndex = channel;
+    renderRemote();
+  }
 }
 function matchesCard(card, query, filter) {
-  const categoryMatch = filter === 'all' || (filter === 'saved' ? saved.has(card.dataset.url) : card.dataset.category === filter);
-  const text = `${labelFor(card)} ${card.querySelector('.card-sub').textContent} ${card.dataset.title}`.toLocaleLowerCase();
-  return categoryMatch && query.split(/\s+/).filter(Boolean).every(word => text.includes(word));
+  const categoryMatch =
+    filter === "all" ||
+    (filter === "saved"
+      ? saved.has(card.dataset.url)
+      : card.dataset.category === filter);
+  const text =
+    `${labelFor(card)} ${card.querySelector(".card-sub").textContent} ${card.dataset.title}`.toLocaleLowerCase();
+  return (
+    categoryMatch &&
+    query
+      .split(/\s+/)
+      .filter(Boolean)
+      .every((word) => text.includes(word))
+  );
 }
 function applyFilters() {
-  const query = $('linkSearch').value.trim().toLocaleLowerCase();
+  const query = $("linkSearch").value.trim().toLocaleLowerCase();
   let count = 0;
-  cards.forEach(card => { card.hidden = !matchesCard(card, query, activeFilter); if (!card.hidden) count++; });
-  document.querySelectorAll('[data-section]').forEach(section => {
-    const visible = [...section.querySelectorAll('.card')].filter(card => !card.hidden).length;
-    section.hidden = visible === 0;
-    section.querySelector('.section-count').textContent = String(visible).padStart(2, '0');
+  cards.forEach((card) => {
+    card.hidden = !matchesCard(card, query, activeFilter);
+    if (!card.hidden) count++;
   });
-  $('resultCount').textContent = `${count} ${count === 1 ? 'link' : 'links'}`;
-  $('savedCount').textContent = saved.size;
-  $('emptyState').hidden = count > 0;
-  const noSaved = activeFilter === 'saved' && saved.size === 0;
-  $('emptyTitle').textContent = noSaved ? 'Your favorites belong here.' : 'No links found';
-  $('emptyCopy').textContent = noSaved ? 'Tap the star on any link to save it on this device.' : 'Try a different word or category.';
-  $('recentSection').hidden = !recent.length || activeFilter !== 'all' || Boolean(query);
+  document.querySelectorAll("[data-section]").forEach((section) => {
+    const visible = [...section.querySelectorAll(".card")].filter(
+      (card) => !card.hidden,
+    ).length;
+    section.hidden = visible === 0;
+    section.querySelector(".section-count").textContent = String(
+      visible,
+    ).padStart(2, "0");
+  });
+  $("resultCount").textContent = `${count} ${count === 1 ? "link" : "links"}`;
+  $("savedCount").textContent = saved.size;
+  $("emptyState").hidden = count > 0;
+  const noSaved = activeFilter === "saved" && saved.size === 0;
+  $("emptyTitle").textContent = noSaved
+    ? "Your favorites belong here."
+    : "No links found";
+  $("emptyCopy").textContent = noSaved
+    ? "Tap the star on any link to save it on this device."
+    : "Try a different word or category.";
+  $("recentSection").hidden =
+    !recent.length || activeFilter !== "all" || Boolean(query);
 }
 function syncSaved() {
-  cards.forEach(card => { const isSaved = saved.has(card.dataset.url); const button = card.querySelector('.save-btn'); button.setAttribute('aria-pressed', String(isSaved)); button.setAttribute('aria-label', `${isSaved ? 'Unsave' : 'Save'} ${labelFor(card)}`); button.title = isSaved ? 'Remove from saved' : 'Save on this device'; });
+  cards.forEach((card) => {
+    const isSaved = saved.has(card.dataset.url);
+    const button = card.querySelector(".save-btn");
+    button.setAttribute("aria-pressed", String(isSaved));
+    button.setAttribute(
+      "aria-label",
+      `${isSaved ? "Unsave" : "Save"} ${labelFor(card)}`,
+    );
+    button.title = isSaved ? "Remove from saved" : "Save on this device";
+  });
   applyFilters();
 }
 async function copyLink(url) {
-  try { if (!navigator.clipboard?.writeText) throw new Error('Unavailable'); await navigator.clipboard.writeText(url); showToast('Link copied'); return true; }
-  catch {
-    const field = document.createElement('textarea'); field.value = url; field.readOnly = true; field.style.cssText = 'position:fixed;opacity:0;left:0;top:0';
+  try {
+    if (!navigator.clipboard?.writeText) throw new Error("Unavailable");
+    await navigator.clipboard.writeText(url);
+    showToast("Link copied");
+    return true;
+  } catch {
+    const field = document.createElement("textarea");
+    field.value = url;
+    field.readOnly = true;
+    field.style.cssText = "position:fixed;opacity:0;left:0;top:0";
     const focused = document.activeElement;
-    (document.querySelector('dialog[open]') || document.body).append(field); field.select();
-    let success = false; try { success = document.execCommand('copy'); } catch {}
-    field.remove(); focused?.focus(); showToast(success ? 'Link copied' : 'Could not copy. Open the link to copy its address.'); return success;
+    (document.querySelector("dialog[open]") || document.body).append(field);
+    field.select();
+    let success = false;
+    try {
+      success = document.execCommand("copy");
+    } catch {}
+    field.remove();
+    focused?.focus();
+    showToast(
+      success
+        ? "Link copied"
+        : "Could not copy. Open the link to copy its address.",
+    );
+    return success;
   }
 }
 async function shareLink(url, title) {
-  if (!navigator.share) { await copyLink(url); return; }
-  try { await navigator.share({ title, url }); } catch (error) { if (error.name !== 'AbortError') await copyLink(url); }
+  if (!navigator.share) {
+    await copyLink(url);
+    return;
+  }
+  try {
+    await navigator.share({ title, url });
+  } catch (error) {
+    if (error.name !== "AbortError") await copyLink(url);
+  }
 }
-let qrURL = ''; let qrLabel = ''; let dialogTrigger = null;
+let qrURL = "";
+let qrLabel = "";
+let dialogTrigger = null;
 function openDialog(dialog, trigger) {
   dialogTrigger = trigger || document.activeElement;
   dialog.showModal();
-  document.body.style.overflow = 'hidden';
-  history.pushState({ studioDialog:dialog.id }, '');
-  dialog.querySelector('[data-close]')?.focus();
+  document.body.style.overflow = "hidden";
+  history.pushState({ studioDialog: dialog.id }, "");
+  dialog.querySelector("[data-close]")?.focus();
 }
 function closeDialog(dialog) {
   if (!dialog.open) return;
@@ -88,81 +197,366 @@ function closeDialog(dialog) {
   else dialog.close();
 }
 function showQR(card, trigger) {
-  if (typeof QRCode === 'undefined') { showToast('QR tool unavailable. Use Copy to share this link.'); return; }
-  qrURL = card.dataset.url; qrLabel = labelFor(card); $('qrCode').replaceChildren();
-  try { new QRCode($('qrCode'), { text:qrURL, width:464, height:464, colorDark:'#10232b', colorLight:'#ffffff', correctLevel:QRCode.CorrectLevel.M }); }
-  catch { showToast('Could not create QR code. Use Copy to share this link.'); return; }
-  $('qrTitle').textContent = qrLabel; $('qrUrl').textContent = qrURL.replace(/^https?:\/\//, '');
-  openDialog($('qrDialog'), trigger);
+  if (typeof QRCode === "undefined") {
+    showToast("QR tool unavailable. Use Copy to share this link.");
+    return;
+  }
+  qrURL = card.dataset.url;
+  qrLabel = labelFor(card);
+  $("qrCode").replaceChildren();
+  try {
+    new QRCode($("qrCode"), {
+      text: qrURL,
+      width: 464,
+      height: 464,
+      colorDark: "#21170f",
+      colorLight: "#ffffff",
+      correctLevel: QRCode.CorrectLevel.M,
+    });
+  } catch {
+    showToast("Could not create QR code. Use Copy to share this link.");
+    return;
+  }
+  $("qrTitle").textContent = qrLabel;
+  $("qrUrl").textContent = qrURL.replace(/^https?:\/\//, "");
+  openDialog($("qrDialog"), trigger);
 }
-cards.forEach(card => {
-  const actions = document.createElement('div'); actions.className = 'card-actions';
-  const actionsSpec = [['share','Share','share'],['copy','Copy','copy'],['qr','QR','qr'],['star','','save']];
-  actionsSpec.forEach(([symbol,text,action]) => {
-    const button = document.createElement('button'); button.type = 'button'; button.className = `action-btn ${action}-btn`;
-    button.innerHTML = icon(symbol) + (text ? `<span>${text}</span>` : '');
-    button.setAttribute('aria-label', `${action === 'qr' ? 'Show QR code for' : action === 'copy' ? 'Copy link for' : action === 'save' ? 'Save' : 'Share'} ${labelFor(card)}`);
-    button.addEventListener('click', () => {
+cards.forEach((card) => {
+  const actions = document.createElement("div");
+  actions.className = "card-actions";
+  const actionsSpec = [
+    ["share", "Share", "share"],
+    ["copy", "Copy", "copy"],
+    ["qr", "QR", "qr"],
+    ["star", "", "save"],
+  ];
+  actionsSpec.forEach(([symbol, text, action]) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = `action-btn ${action}-btn`;
+    button.innerHTML = icon(symbol) + (text ? `<span>${text}</span>` : "");
+    button.setAttribute(
+      "aria-label",
+      `${action === "qr" ? "Show QR code for" : action === "copy" ? "Copy link for" : action === "save" ? "Save" : "Share"} ${labelFor(card)}`,
+    );
+    button.addEventListener("click", () => {
       const url = card.dataset.url;
-      if (action === 'save') {
-        const wasSaved = saved.has(url); wasSaved ? saved.delete(url) : saved.add(url);
-        const persisted = writeStore(SAVED_KEY, [...saved]); syncSaved();
-        if (card.hidden) document.querySelector('[data-filter="saved"]').focus();
-        showToast(persisted ? (wasSaved ? 'Removed from saved' : 'Saved on this device') : 'Updated for this visit. Device storage is unavailable.');
+      if (action === "save") {
+        const wasSaved = saved.has(url);
+        wasSaved ? saved.delete(url) : saved.add(url);
+        const persisted = writeStore(SAVED_KEY, [...saved]);
+        syncSaved();
+        card.classList.remove("saving");
+        requestAnimationFrame(() => card.classList.add("saving"));
+        if (card.hidden)
+          document.querySelector('[data-filter="saved"]').focus();
+        showToast(
+          persisted
+            ? wasSaved
+              ? "Removed from saved"
+              : "Saved on this device"
+            : "Updated for this visit. Device storage is unavailable.",
+        );
       } else {
         remember(url);
-        if (action === 'share') shareLink(url, card.dataset.title);
-        if (action === 'copy') copyLink(url);
-        if (action === 'qr') showQR(card, button);
+        if (action === "share") shareLink(url, card.dataset.title);
+        if (action === "copy") copyLink(url);
+        if (action === "qr") showQR(card, button);
       }
     });
     actions.append(button);
   });
   card.append(actions);
-  card.querySelector('.card-main').addEventListener('click', () => remember(card.dataset.url));
+  card
+    .querySelector(".card-main")
+    .addEventListener("click", () => remember(card.dataset.url));
 });
-$('linkSearch').addEventListener('input', applyFilters);
-document.querySelectorAll('[data-filter]').forEach(button => button.addEventListener('click', () => {
-  activeFilter = button.dataset.filter;
-  document.querySelectorAll('[data-filter]').forEach(item => { const selected = item === button; item.classList.toggle('active', selected); item.setAttribute('aria-pressed', String(selected)); });
-  applyFilters();
-}));
-$('resetFilters').addEventListener('click', () => { $('linkSearch').value = ''; document.querySelector('[data-filter="all"]').click(); $('linkSearch').focus(); });
-document.addEventListener('keydown', event => {
-  const typing = /INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName) || document.activeElement.isContentEditable;
-  if (event.key === '/' && !typing && !event.ctrlKey && !event.metaKey && !event.altKey && !document.querySelector('dialog[open]')) { event.preventDefault(); $('linkSearch').focus(); }
+$("linkSearch").addEventListener("input", applyFilters);
+document.querySelectorAll("[data-filter]").forEach((button) =>
+  button.addEventListener("click", () => {
+    activeFilter = button.dataset.filter;
+    document.querySelectorAll("[data-filter]").forEach((item) => {
+      const selected = item.dataset.filter === activeFilter;
+      item.classList.toggle("active", selected);
+      item.setAttribute("aria-pressed", String(selected));
+    });
+    applyFilters();
+    if (button.closest(".remote-dock"))
+      $("directory").scrollIntoView({
+        behavior: motionAllowed() ? "smooth" : "instant",
+        block: "start",
+      });
+  }),
+);
+$("resetFilters").addEventListener("click", () => {
+  $("linkSearch").value = "";
+  document.querySelector('[data-filter="all"]').click();
+  $("linkSearch").focus();
 });
-$('priceToggle').addEventListener('click', event => openDialog($('priceDialog'), event.currentTarget));
-document.querySelectorAll('[data-close]').forEach(button => button.addEventListener('click', () => closeDialog($(button.dataset.close))));
-document.querySelectorAll('dialog').forEach(dialog => {
-  dialog.addEventListener('cancel', event => { event.preventDefault(); closeDialog(dialog); });
-  dialog.addEventListener('click', event => { const rect = dialog.getBoundingClientRect(); if (event.target === dialog && (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom)) closeDialog(dialog); });
-  dialog.addEventListener('close', () => { document.body.style.overflow = ''; if (dialogTrigger?.isConnected) dialogTrigger.focus(); dialogTrigger = null; });
+document.addEventListener("keydown", (event) => {
+  const typing =
+    /INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName) ||
+    document.activeElement.isContentEditable;
+  if (
+    event.key === "/" &&
+    !typing &&
+    !event.ctrlKey &&
+    !event.metaKey &&
+    !event.altKey &&
+    !document.querySelector("dialog[open]")
+  ) {
+    event.preventDefault();
+    $("linkSearch").focus();
+  }
 });
-window.addEventListener('popstate', () => document.querySelectorAll('dialog[open]').forEach(dialog => dialog.close()));
-$('qrCopy').addEventListener('click', () => copyLink(qrURL));
-$('qrDownload').addEventListener('click', () => {
-  const canvas = $('qrCode').querySelector('canvas');
-  if (!canvas) { showToast('QR image is unavailable. Use Copy link instead.'); return; }
+$("priceToggle").addEventListener("click", (event) =>
+  openDialog($("priceDialog"), event.currentTarget),
+);
+document
+  .querySelectorAll("[data-close]")
+  .forEach((button) =>
+    button.addEventListener("click", () =>
+      closeDialog($(button.dataset.close)),
+    ),
+  );
+document.querySelectorAll("dialog").forEach((dialog) => {
+  dialog.addEventListener("cancel", (event) => {
+    event.preventDefault();
+    closeDialog(dialog);
+  });
+  dialog.addEventListener("click", (event) => {
+    const rect = dialog.getBoundingClientRect();
+    if (
+      event.target === dialog &&
+      (event.clientX < rect.left ||
+        event.clientX > rect.right ||
+        event.clientY < rect.top ||
+        event.clientY > rect.bottom)
+    )
+      closeDialog(dialog);
+  });
+  dialog.addEventListener("close", () => {
+    document.body.style.overflow = "";
+    if (dialogTrigger?.isConnected) dialogTrigger.focus();
+    dialogTrigger = null;
+  });
+});
+window.addEventListener("popstate", () =>
+  document.querySelectorAll("dialog[open]").forEach((dialog) => dialog.close()),
+);
+$("qrCopy").addEventListener("click", () => copyLink(qrURL));
+$("qrDownload").addEventListener("click", () => {
+  const canvas = $("qrCode").querySelector("canvas");
+  if (!canvas) {
+    showToast("QR image is unavailable. Use Copy link instead.");
+    return;
+  }
   // Include a white quiet zone in the downloaded PNG for reliable scanning.
-  const output = document.createElement('canvas'); output.width = output.height = 528;
-  const context = output.getContext('2d'); context.fillStyle = '#ffffff'; context.fillRect(0,0,528,528); context.drawImage(canvas,32,32);
-  const link = document.createElement('a'); link.href = output.toDataURL('image/png'); link.download = `heartstrings-${qrLabel.toLowerCase().replace(/[^a-z0-9]+/g,'-')}-qr.png`; document.body.append(link); link.click(); link.remove(); showToast('QR image download started');
+  const output = document.createElement("canvas");
+  output.width = output.height = 528;
+  const context = output.getContext("2d");
+  context.fillStyle = "#ffffff";
+  context.fillRect(0, 0, 528, 528);
+  context.drawImage(canvas, 32, 32);
+  const link = document.createElement("a");
+  link.href = output.toDataURL("image/png");
+  link.download = `heartstrings-${qrLabel.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-qr.png`;
+  document.body.append(link);
+  link.click();
+  link.remove();
+  showToast("QR image download started");
 });
 let installPrompt;
-const standalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone;
+const standalone =
+  window.matchMedia("(display-mode: standalone)").matches ||
+  navigator.standalone;
 const installDismissed = readStore(INSTALL_KEY, false);
-$('pwa-hint').hidden = standalone || Boolean(installDismissed);
-if (/iPad|iPhone|iPod/.test(navigator.userAgent)) $('pwaCopy').textContent = 'Tap Share in Safari, then Add to Home Screen.';
-window.addEventListener('beforeinstallprompt', event => { event.preventDefault(); installPrompt = event; $('installBtn').hidden = false; $('pwaCopy').textContent = 'Install for quick access. Your studio links stay available offline.'; });
-$('installBtn').addEventListener('click', async () => {
-  if (!installPrompt) return;
-  try { await installPrompt.prompt(); const choice = await installPrompt.userChoice; if (choice.outcome === 'accepted') $('pwa-hint').hidden = true; }
-  catch { showToast('Use your browser menu to add the app to your home screen.'); }
-  finally { installPrompt = null; $('installBtn').hidden = true; }
+$("pwa-hint").hidden = standalone || Boolean(installDismissed);
+if (/iPad|iPhone|iPod/.test(navigator.userAgent))
+  $("pwaCopy").textContent = "Tap Share in Safari, then Add to Home Screen.";
+window.addEventListener("beforeinstallprompt", (event) => {
+  event.preventDefault();
+  installPrompt = event;
+  $("installBtn").hidden = false;
+  $("pwaCopy").textContent =
+    "Install for quick access. Your studio links stay available offline.";
 });
-$('pwaDismiss').addEventListener('click', () => { $('pwa-hint').hidden = true; writeStore(INSTALL_KEY,true); });
-window.addEventListener('appinstalled', () => { $('pwa-hint').hidden = true; writeStore(INSTALL_KEY,true); });
-window.addEventListener('storage', event => { if (event.key === SAVED_KEY) { saved = new Set(knownURLs(readStore(SAVED_KEY, []))); syncSaved(); } });
-renderRecent(); syncSaved();
-if ('serviceWorker' in navigator) window.addEventListener('load', () => { navigator.serviceWorker.register('./sw.js').catch(() => { /* Links and tools still work without offline installation. */ }); });
+$("installBtn").addEventListener("click", async () => {
+  if (!installPrompt) return;
+  try {
+    await installPrompt.prompt();
+    const choice = await installPrompt.userChoice;
+    if (choice.outcome === "accepted") $("pwa-hint").hidden = true;
+  } catch {
+    showToast("Use your browser menu to add the app to your home screen.");
+  } finally {
+    installPrompt = null;
+    $("installBtn").hidden = true;
+  }
+});
+$("pwaDismiss").addEventListener("click", () => {
+  $("pwa-hint").hidden = true;
+  writeStore(INSTALL_KEY, true);
+});
+window.addEventListener("appinstalled", () => {
+  $("pwa-hint").hidden = true;
+  writeStore(INSTALL_KEY, true);
+});
+window.addEventListener("storage", (event) => {
+  if (event.key === SAVED_KEY) {
+    saved = new Set(knownURLs(readStore(SAVED_KEY, [])));
+    syncSaved();
+  }
+});
+// Local preferences enhance the ordinary links without requiring an account.
+const SETTINGS_KEY = "heartstrings_dashboard_console_settings";
+const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+function validSettings(value) {
+  const settings = value && typeof value === "object" ? value : {};
+  return {
+    glow:
+      typeof settings.glow === "number" && Number.isFinite(settings.glow)
+        ? Math.max(0, Math.min(100, settings.glow))
+        : 35,
+    motion: typeof settings.motion === "boolean" ? settings.motion : true,
+    compact: settings.compact === true,
+  };
+}
+let settings = validSettings(readStore(SETTINGS_KEY, {}));
+function motionAllowed() {
+  return settings.motion && !reducedMotion.matches;
+}
+function applySettings() {
+  document.documentElement.style.setProperty(
+    "--glow",
+    String(settings.glow / 100),
+  );
+  document.documentElement.classList.toggle("motion-off", !motionAllowed());
+  document.body.classList.toggle("motion-off", !motionAllowed());
+  document.body.classList.toggle("compact", settings.compact);
+  $("glowRange").value = settings.glow;
+  $("glowValue").textContent = `${settings.glow}%`;
+  $("motionToggle").setAttribute("aria-pressed", String(motionAllowed()));
+  $("motionToggle").setAttribute(
+    "aria-disabled",
+    String(reducedMotion.matches),
+  );
+  $("motionToggle").title = reducedMotion.matches
+    ? "Motion is off to match your device accessibility setting"
+    : "Toggle dashboard animations";
+  $("compactToggle").setAttribute("aria-pressed", String(settings.compact));
+}
+function saveSettings() {
+  if (!writeStore(SETTINGS_KEY, settings))
+    showToast("Adjusted for this visit. Device storage is unavailable.");
+}
+$("glowRange").addEventListener("input", () => {
+  settings.glow = Number($("glowRange").value);
+  applySettings();
+});
+$("glowRange").addEventListener("change", saveSettings);
+$("motionToggle").addEventListener("click", () => {
+  if (reducedMotion.matches) {
+    showToast("Motion is off to match your device accessibility setting.");
+    return;
+  }
+  settings.motion = !settings.motion;
+  applySettings();
+  saveSettings();
+  if (motionAllowed()) animateRemote();
+});
+$("compactToggle").addEventListener("click", () => {
+  settings.compact = !settings.compact;
+  applySettings();
+  saveSettings();
+});
+reducedMotion.addEventListener("change", applySettings);
+window.addEventListener("storage", (event) => {
+  if (event.key === SETTINGS_KEY || event.key === null) {
+    settings = validSettings(readStore(SETTINGS_KEY, {}));
+    applySettings();
+  }
+});
+// Jukebox first, then the remaining existing destinations in directory order.
+const jukebox = cards.find((card) => card.classList.contains("featured"));
+const remoteCatalog = [
+  jukebox,
+  ...cards.filter((card) => card !== jukebox),
+].filter(Boolean);
+let remoteIndex = Math.max(
+  0,
+  remoteCatalog.findIndex((card) => card.dataset.url === recent[0]),
+);
+let tuningTimer;
+function animateRemote() {
+  const screen = document.querySelector(".remote-screen");
+  screen.classList.remove("tuning");
+  if (!motionAllowed()) return;
+  requestAnimationFrame(() => screen.classList.add("tuning"));
+  clearTimeout(tuningTimer);
+  tuningTimer = setTimeout(() => screen.classList.remove("tuning"), 700);
+}
+function renderRemote() {
+  const card = remoteCatalog[remoteIndex];
+  const label = labelFor(card);
+  $("remoteTitle").textContent = label;
+  $("remoteDescription").textContent =
+    card.querySelector(".card-sub").textContent;
+  $("remoteCategory").textContent = {
+    listen: "LISTENING ROOM",
+    studio: "STUDIO ESSENTIALS",
+    extras: "BEYOND THE MUSIC",
+  }[card.dataset.category];
+  $("remoteChannel").textContent =
+    `CH ${String(remoteIndex + 1).padStart(2, "0")} / ${remoteCatalog.length}`;
+  $("remoteIcon").replaceChildren(
+    card.querySelector(".card-icon svg").cloneNode(true),
+  );
+  $("remoteOpen").href = card.dataset.url;
+  $("remoteOpen").querySelector("span").textContent = "Open channel";
+  $("remoteOpen").setAttribute("aria-label", `Open ${label} in a new tab`);
+}
+function stepRemote(direction) {
+  remoteIndex =
+    (remoteIndex + direction + remoteCatalog.length) % remoteCatalog.length;
+  renderRemote();
+  animateRemote();
+}
+$("remotePrev").addEventListener("click", () => stepRemote(-1));
+$("remoteNext").addEventListener("click", () => stepRemote(1));
+$("remoteOpen").addEventListener("click", () =>
+  remember(remoteCatalog[remoteIndex].dataset.url),
+);
+document
+  .querySelector(".studio-remote")
+  .addEventListener("keydown", (event) => {
+    if (
+      (event.key === "ArrowLeft" || event.key === "ArrowRight") &&
+      !event.altKey &&
+      !event.metaKey &&
+      !event.ctrlKey
+    ) {
+      event.preventDefault();
+      stepRemote(event.key === "ArrowLeft" ? -1 : 1);
+    }
+  });
+document.querySelectorAll(".primary-button").forEach((link) =>
+  link.addEventListener("click", () => {
+    if (catalog.has(link.href)) remember(link.href);
+  }),
+);
+applySettings();
+renderRemote();
+document
+  .querySelectorAll(".studio-remote, .console-settings, .remote-dock")
+  .forEach((element) => {
+    element.hidden = false;
+  });
+renderRecent();
+syncSaved();
+if ("serviceWorker" in navigator)
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./sw.js").catch(() => {
+      /* Links and tools still work without offline installation. */
+    });
+  });

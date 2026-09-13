@@ -6,7 +6,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Heartstrings" />
-  <meta name="theme-color" content="#0b0e12" />
+  <meta name="theme-color" content="#141110" />
   <link rel="manifest" href="manifest.json" />
   <link rel="icon" href="logo.png" type="image/png" />
   <link rel="apple-touch-icon" href="apple-touch-icon.png" />
@@ -21,7 +21,7 @@
   <meta name="twitter:title" content="Heartstrings Studio" />
   <meta name="twitter:description" content="One-of-a-kind custom songs written from your memories. $150 flat, delivered in 48–72 hours." />
   <meta name="twitter:image" content="https://heartstringsstudio.github.io/dashboard/logo.png" />
-  <link rel="stylesheet" href="studio.css" />
+  <link rel="stylesheet" href="studio.css?v=9" />
 </head>
 <body>
 <svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">
@@ -51,10 +51,25 @@
 </svg>
 <a class="skip-link" href="#directory">Skip to studio links</a>
 <div class="app-shell">
-<header class="app-header"><a class="brand" href="./" aria-label="Heartstrings Studio dashboard"><img src="logo.png" alt="" width="44" height="44"><span>Heartstrings<span class="brand-small">STUDIO</span></span></a><button class="quiet-button" id="priceToggle" aria-haspopup="dialog">Pricing <span>$150</span></button></header>
+<header class="app-header"><a class="brand" href="./" aria-label="Heartstrings Studio dashboard"><img src="logo.png" alt="" width="44" height="44"><span>Heartstrings<span class="brand-small">STUDIO</span></span></a><span class="edition">THE COPPER EDITION <span>HS / 01</span></span><button class="quiet-button" id="priceToggle" aria-haspopup="dialog">Pricing <span>$150</span></button></header>
 <main id="mainContent">
-<section class="studio-intro" aria-labelledby="pageTitle"><div class="intro-copy"><p class="eyebrow">LISTEN. CREATE. CONNECT.</p><h1 id="pageTitle">Studio <span>dashboard.</span></h1><p class="intro-description">Listen, create, and share. All in one place.</p><a class="primary-button" href="https://heartstringsstudio.github.io/storyroom/" target="_blank" rel="noopener">Start your song <svg aria-hidden="true"><use href="#i-arrow"/></svg></a></div></section>
-<div class="directory-toolbar" id="directory"><div class="toolbar-top"><h2>Explore the studio</h2><label class="search-box"><svg aria-hidden="true"><use href="#i-search"/></svg><input type="search" id="linkSearch" placeholder="Find a song, playlist, or resource" aria-label="Search studio links" autocomplete="off"><kbd aria-hidden="true">/</kbd></label></div><div class="filter-row"><div class="filters" role="group" aria-label="Filter studio links"><button class="filter active" data-filter="all" aria-pressed="true">All links</button><button class="filter" data-filter="listen" aria-pressed="false">Listen</button><button class="filter" data-filter="studio" aria-pressed="false">Studio</button><button class="filter" data-filter="extras" aria-pressed="false">Extras</button><button class="filter" data-filter="saved" aria-pressed="false"><svg aria-hidden="true"><use href="#i-star"/></svg> Saved <span id="savedCount">0</span></button></div><span id="resultCount" class="result-count" role="status" aria-live="polite">13 links</span></div></div>
+<section class="studio-intro" aria-labelledby="pageTitle">
+  <div class="intro-art" aria-hidden="true"></div>
+  <div class="intro-copy"><p class="eyebrow"><span class="status-light" aria-hidden="true"></span> HEARTSTRINGS CONTROL ROOM</p><h1 id="pageTitle">Your studio.<br><span>Within reach.</span></h1><p class="intro-description">A story to tell. A song to find.<br>One place to make the connection.</p><a class="primary-button" href="https://heartstringsstudio.github.io/storyroom/" target="_blank" rel="noopener">Start your song <svg aria-hidden="true"><use href="#i-arrow"/></svg></a><p class="intro-footnote">MADE WITH HEART · LUMBERPORT, WV</p></div>
+  <section class="studio-remote" aria-labelledby="remoteHeading" hidden>
+    <div class="remote-label"><h2 id="remoteHeading">STUDIO REMOTE</h2><span>HS—01</span></div>
+    <div class="remote-screen"><div class="screen-top"><span id="remoteCategory">LISTEN</span><span id="remoteChannel">CH 01 / 13</span></div><div class="screen-content" aria-live="polite" aria-atomic="true"><span class="screen-icon" id="remoteIcon" aria-hidden="true"></span><h3 id="remoteTitle">Song Jukebox</h3><p id="remoteDescription">The full Heartstrings collection</p></div><div class="screen-bottom"><span class="signal-bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><span>SELECT A DESTINATION</span></div></div>
+    <div class="remote-transport"><button class="remote-step" id="remotePrev" aria-label="Previous destination"><svg aria-hidden="true"><use href="#i-chevron"/></svg></button><a class="remote-open" id="remoteOpen" href="https://tinyurl.com/hsjukebox" target="_blank" rel="noopener"><span>Open Jukebox</span><svg aria-hidden="true"><use href="#i-arrow"/></svg></a><button class="remote-step" id="remoteNext" aria-label="Next destination"><svg aria-hidden="true"><use href="#i-chevron"/></svg></button></div>
+    <p class="remote-hint">Browse with the arrows. Open in a new tab.</p>
+  </section>
+</section>
+<section class="console-settings" aria-label="Dashboard controls" hidden>
+  <div class="console-caption"><svg aria-hidden="true"><use href="#i-sliders"/></svg><span>Make yourself comfortable</span></div>
+  <label class="glow-control" for="glowRange">Screen glow <input id="glowRange" type="range" min="0" max="100" step="5" value="35"><output id="glowValue" for="glowRange">35%</output></label>
+  <button class="setting-toggle" id="motionToggle" aria-pressed="true"><span class="toggle-track" aria-hidden="true"></span>Motion</button>
+  <button class="setting-toggle" id="compactToggle" aria-pressed="false"><svg aria-hidden="true"><use href="#i-columns"/></svg>Compact view</button>
+</section>
+<div class="directory-toolbar" id="directory"><div class="toolbar-top"><h2>Your studio channels</h2><label class="search-box"><svg aria-hidden="true"><use href="#i-search"/></svg><input type="search" id="linkSearch" placeholder="Search songs, tools, and more" aria-label="Search studio links" autocomplete="off"><kbd aria-hidden="true">/</kbd></label></div><div class="filter-row"><div class="filters directory-filters" role="group" aria-label="Filter studio links"><button class="filter active" data-filter="all" aria-pressed="true">All links</button><button class="filter" data-filter="listen" aria-pressed="false">Listen</button><button class="filter" data-filter="studio" aria-pressed="false">Studio</button><button class="filter" data-filter="extras" aria-pressed="false">Extras</button><button class="filter" data-filter="saved" aria-pressed="false"><svg aria-hidden="true"><use href="#i-star"/></svg> Saved <span id="savedCount">0</span></button></div><span id="resultCount" class="result-count" role="status" aria-live="polite">13 links</span></div></div>
 <section id="recentSection" class="recent-section" aria-labelledby="recentHeading" hidden><h2 id="recentHeading">Pick up where you left off</h2><div id="recentCards" class="recent-links"></div></section>
 <div id="emptyState" class="empty-state" hidden><svg aria-hidden="true"><use href="#i-search"/></svg><h2 id="emptyTitle">No links found</h2><p id="emptyCopy">Try a different word or category.</p><button class="quiet-button" id="resetFilters">Show all links</button></div>
 <div class="directory-grid">
@@ -97,7 +112,14 @@
 <aside id="pwa-hint" aria-label="Install this dashboard" hidden><div><strong>Keep the studio one tap away.</strong><p id="pwaCopy">Add this dashboard to your home screen from your browser menu.</p></div><button class="quiet-button" id="installBtn" hidden>Install app</button><button class="icon-button" id="pwaDismiss" aria-label="Dismiss install suggestion">×</button></aside>
 <noscript><p class="noscript-note">All studio links work below. Enable JavaScript for search, sharing, saved links, and pricing.</p></noscript>
 </main>
-<footer><span>Heartstrings Studio</span><span>Lumberport, West Virginia</span></footer>
+<footer><span>Heartstrings Studio · Stories worth holding onto.</span><span>Lumberport, West Virginia</span></footer>
+<nav class="remote-dock" aria-label="Quick channel filters" hidden>
+<button class="dock-button active" data-filter="all" aria-pressed="true"><svg aria-hidden="true"><use href="#i-sliders"/></svg><span>All</span></button>
+<button class="dock-button" data-filter="listen" aria-pressed="false"><svg aria-hidden="true"><use href="#i-headphones"/></svg><span>Listen</span></button>
+<button class="dock-button" data-filter="studio" aria-pressed="false"><svg aria-hidden="true"><use href="#i-pen"/></svg><span>Studio</span></button>
+<button class="dock-button" data-filter="extras" aria-pressed="false"><svg aria-hidden="true"><use href="#i-zap"/></svg><span>Extras</span></button>
+<button class="dock-button" data-filter="saved" aria-pressed="false"><svg aria-hidden="true"><use href="#i-star"/></svg><span>Saved</span></button>
+</nav>
 </div>
 <dialog id="priceDialog" aria-labelledby="priceTitle"><div class="dialog-header"><div><p class="eyebrow">PERSONAL SONGS. CLEAR PRICING.</p><h2 id="priceTitle">Your story, set to music.</h2></div><button class="icon-button" data-close="priceDialog" aria-label="Close pricing">×</button></div><div class="price-inner">
           <div class="price-row">
@@ -124,5 +146,5 @@
           <p class="price-note">$150 flat · One lyric revision · Remake guarantee · Written personally by Tim</p></div><a class="primary-button" href="https://heartstringsstudio.github.io/storyroom/" target="_blank" rel="noopener">Start your song <svg aria-hidden="true"><use href="#i-arrow"/></svg></a></dialog>
 <dialog id="qrDialog" aria-labelledby="qrTitle" aria-describedby="qrHint"><div class="dialog-header"><p class="eyebrow">SHARE THE STUDIO</p><button class="icon-button" data-close="qrDialog" aria-label="Close QR code">×</button></div><div class="qr-code" id="qrCode"></div><h2 id="qrTitle"></h2><p id="qrUrl"></p><p class="dialog-hint" id="qrHint">Scan with a phone camera to open this link.</p><div class="dialog-actions"><button class="quiet-button" id="qrCopy">Copy link</button><button class="primary-button" id="qrDownload">Save QR image</button></div></dialog>
 <div id="toast" role="status" aria-live="polite"></div>
-<script src="qrcode.min.js"></script><script src="studio.js"></script>
+<script src="qrcode.min.js"></script><script src="studio.js?v=9"></script>
 </body></html>

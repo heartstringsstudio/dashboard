@@ -1,33 +1,36 @@
 # Heartstrings Studio dashboard
 
-Updated September 9, 2026 — studio control room redesign.
+Updated September 13, 2026 — copper studio remote.
 
 ## Experience
 
-A compact brand bar replaces the competing top-level panels. Pricing opens in a native modal. A short photographic studio introduction gives direct access to song intake; search and category controls lead into a responsive directory.
+Warm charcoal, brushed copper gradients, champagne highlights, and raised metallic controls replace the teal theme. The introduction combines a copper-treated studio photograph, a clear song-intake action, and a working destination selector. Section banners are replaced with compact headings so the directory is easier to scan.
 
-The visual system uses graphite surfaces, cyan illuminated primary controls, copper accents, DM Sans typography, raised button edges, and three generated recording-studio backgrounds. WebP images total approximately 247 KB. Reduced-motion preferences suppress entrance and hover animation. Existing logos and social-preview metadata are retained.
+The studio remote browses all 13 existing destinations, beginning with the jukebox or the most recently used link. Previous/next buttons wrap around; left/right arrow keys work while focus is inside the remote. The center control opens the named destination in a new tab. This is a link remote, not an audio player. The brief signal-bar animation is decorative.
 
-## Functionality
+A fixed five-button dock filters All, Listen, Studio, Extras, and Saved, stays synchronized with the directory filters, and returns the viewer to the results. Search and filters work together. Compact view reduces card height while keeping sharing and saving controls visible.
 
-- Search matches words across link titles and descriptions, combined with All, Listen, Studio, Extras, and Saved filters.
-- Saved links stay on this device. Stars show their state and update the Saved count. Storage failure is reported without breaking the directory.
-- Each destination offers labeled Share, Copy, QR, and Save controls.
-- The QR modal includes a PNG download with a white quiet zone for scanning.
-- Pricing and QR dialogs use native modal focus handling, Escape, backdrop closing, and browser Back support.
-- Existing recent-link records are migrated; malformed data and unknown URLs are ignored. The last three links appear as compact shortcuts.
-- Press / outside a text field to focus search. Empty states offer a reset action.
-- All 13 destination cards and their URLs remain available as ordinary links without JavaScript. Search, dialogs, and sharing enhancements require JavaScript.
-- PWA installation remains supported; the v8 offline shell includes the stylesheet, application script, and artwork.
+Screen glow (including fully off), motion, and compact view persist on this device. Operating-system reduced-motion preferences take priority. Animations include an initial reveal, short meter movement, destination transitions, save feedback, and tactile button presses. There is no continuous animation loop.
+
+## Preserved functionality
+
+- All 13 original destinations, URLs, titles, and categories remain ordinary links.
+- Per-link Share, Copy, QR, and Save controls; QR image downloads retain a white quiet zone.
+- Device-local favorites and the last three recent destinations; unavailable storage reports the limitation without breaking controls.
+- Pricing modal, memorial rush policy, QR modal, Escape/backdrop/Back behavior, and keyboard search shortcut.
+- Native app-install support. The v9 service-worker shell retains the dashboard-only cache prefix. Versioned CSS/JS URLs prevent an older worker from mixing teal assets with the new markup.
+- Existing logo, social previews, and local fonts. Existing studio artwork receives a CSS sepia treatment; no new image downloads are required.
 
 ## Validation
 
-JavaScript syntax, unique IDs, SVG references, all local assets, offline shell files, and the 13 original destination/metadata pairs pass static validation. An isolated DOM test exercises category/search intersection, reset, save/unsave, empty states, copy, recent migration, malformed storage, QR generation/closing, and pricing open/close. Browser visual and end-to-end testing was not performed.
+JavaScript syntax and git whitespace checks pass. An isolated jsdom interaction harness verifies all destinations and metadata against the previous main branch, remote wraparound and keyboard navigation, synchronized dock/category buttons, search/filter intersection and reset, saved-link empty states, copy/recent tracking, QR/pricing opening, preference restoration, system reduced motion, malformed storage, and storage-denied behavior. IDs, SVG references, local assets, and offline-shell entries are checked.
+
+The local preview was inaccessible to the connected browser. Live browser verification is performed after publication and recorded separately; the DOM harness is not a substitute for visual or device testing.
 
 ## Maintenance
 
-Source: index.html, studio.css, studio.js. No application package dependencies or build step are required. Add links as .card elements with data-url, data-title, data-category, .card-main, .card-title, and .card-sub. Category must match the containing data-section. Controls are generated by studio.js.
+Source files: index.html, studio.css, studio.js. No build step or runtime package dependency. Add destinations as .card elements with data-url, data-title, data-category, .card-main, .card-title, .card-sub, and a .card-icon SVG. The remote derives its destinations from these cards. Category must match the containing data-section.
 
-Background assets were generated specifically for this app, then optimized to WebP: assets/control-room.webp, assets/vocal-booth.webp, assets/console-detail.webp. They depict illustrative studio environments, not photographs of Tim's physical studio.
+Preference key: heartstrings_dashboard_console_settings. Favorites and recent-link storage keys are unchanged. Increment the service-worker cache and matching CSS/JS version queries together after shell changes. Preserve the /dashboard/ manifest scope; never delete another app's caches.
 
-Increment the service-worker cache after shell changes; retain the heartstrings-dashboard- cache prefix and /dashboard/ manifest scope. Other apps' caches must never be cleared.
+The existing generated studio artwork illustrates an atmosphere, not Tim's physical studio.
