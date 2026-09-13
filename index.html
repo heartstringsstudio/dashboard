@@ -19,13 +19,13 @@
     <title>Link Sharing · Heartstrings Studio</title>
     <meta
       name="description"
-      content="A personal link-sharing desk for Heartstrings Studio. Find, copy, share, and save links."
+      content="A personal link-sharing desk for Heartstrings Studio. Open, share, and save links."
     />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Heartstrings Links" />
     <meta
       property="og:description"
-      content="A personal link-sharing desk for Heartstrings Studio. Find, copy, share, and save links."
+      content="A personal link-sharing desk for Heartstrings Studio. Open, share, and save links."
     />
     <meta
       property="og:image"
@@ -39,13 +39,13 @@
     <meta name="twitter:title" content="Heartstrings Links" />
     <meta
       name="twitter:description"
-      content="A personal link-sharing desk for Heartstrings Studio. Find, copy, share, and save links."
+      content="A personal link-sharing desk for Heartstrings Studio. Open, share, and save links."
     />
     <meta
       name="twitter:image"
       content="https://heartstringsstudio.github.io/dashboard/logo.png"
     />
-    <link rel="stylesheet" href="studio.css?v=10" />
+    <link rel="stylesheet" href="studio.css?v=11" />
   </head>
   <body>
     <svg
@@ -54,18 +54,10 @@
       aria-hidden="true"
     >
       <defs>
-        <symbol id="i-search" viewBox="0 0 24 24">
-          <circle cx="10.5" cy="10.5" r="6.5" />
-          <path d="m16 16 5 5" />
-        </symbol>
         <symbol id="i-star" viewBox="0 0 24 24">
           <path
             d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9z"
           />
-        </symbol>
-        <symbol id="i-copy" viewBox="0 0 24 24">
-          <rect x="8" y="8" width="12" height="13" rx="2" />
-          <path d="M16 8V3H3v13h5" />
         </symbol>
         <symbol id="i-arrow" viewBox="0 0 24 24">
           <path d="M5 12h14m-6-6 6 6-6 6" />
@@ -176,17 +168,7 @@
       <main id="mainContent">
         <div class="directory-toolbar" id="directory">
           <div class="toolbar-top">
-            <h2>Find a link</h2>
-            <label class="search-box"
-              ><svg aria-hidden="true"><use href="#i-search" /></svg
-              ><input
-                type="search"
-                id="linkSearch"
-                placeholder="Search songs, tools, and more"
-                aria-label="Search studio links"
-                autocomplete="off"
-              /><kbd aria-hidden="true">/</kbd></label
-            >
+            <h2>Your links</h2>
           </div>
           <div class="filter-row">
             <div
@@ -267,9 +249,9 @@
           <div id="recentCards" class="recent-links"></div>
         </section>
         <div id="emptyState" class="empty-state" hidden>
-          <svg aria-hidden="true"><use href="#i-search" /></svg>
+          <svg aria-hidden="true"><use href="#i-star" /></svg>
           <h2 id="emptyTitle">No links found</h2>
-          <p id="emptyCopy">Try a different word or category.</p>
+          <p id="emptyCopy">Choose another category or show all links.</p>
           <button class="quiet-button" id="resetFilters">Show all links</button>
         </div>
         <div class="directory-grid">
@@ -591,8 +573,7 @@
         </aside>
         <noscript
           ><p class="noscript-note">
-            All links work without JavaScript. Enable JavaScript for search,
-            copying, sharing, QR codes, and saved links.
+            All links work without JavaScript. Enable JavaScript for sharing, QR codes, and saved links.
           </p></noscript
         >
       </main>
@@ -642,12 +623,13 @@
         Scan with a phone camera to open this link.
       </p>
       <div class="dialog-actions">
-        <button class="quiet-button" id="qrCopy">Copy link</button
+        <button class="quiet-button" id="qrShare">Share link</button
         ><button class="primary-button" id="qrDownload">Save QR image</button>
       </div>
     </dialog>
     <div id="toast" role="status" aria-live="polite"></div>
     <script src="qrcode.min.js"></script>
-    <script src="studio.js?v=10"></script>
+    <script src="studio.js?v=11"></script>
   </body>
 </html>
+

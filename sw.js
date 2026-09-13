@@ -1,10 +1,10 @@
 const CACHE_PREFIX = "heartstrings-dashboard-";
-const CACHE = `${CACHE_PREFIX}v10`;
+const CACHE = `${CACHE_PREFIX}v11`;
 const SHELL = [
   "./",
   "./index.html",
-  "./studio.css?v=10",
-  "./studio.js?v=10",
+  "./studio.css?v=11",
+  "./studio.js?v=11",
   "./manifest.json",
   "./logo.png",
   "./icon-192.png",
@@ -73,3 +73,4 @@ self.addEventListener("fetch", (e) => {
     }
   }
 });
+

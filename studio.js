@@ -63,9 +63,7 @@ function renderRecent() {
     $("recentCards").append(link);
   });
   $("recentSection").hidden =
-    !recent.length ||
-    activeFilter !== "all" ||
-    Boolean($("linkSearch").value.trim());
+    !recent.length || activeFilter !== "all";
 }
 function remember(url) {
   recent = [url, ...recent.filter((item) => item !== url)].slice(0, 3);
@@ -79,27 +77,18 @@ function remember(url) {
   );
   renderRecent();
 }
-function matchesCard(card, query, filter) {
-  const categoryMatch =
+function matchesCard(card, filter) {
+  return (
     filter === "all" ||
     (filter === "saved"
       ? saved.has(card.dataset.url)
-      : card.dataset.category === filter);
-  const text =
-    `${labelFor(card)} ${card.querySelector(".card-sub").textContent} ${card.dataset.title}`.toLocaleLowerCase();
-  return (
-    categoryMatch &&
-    query
-      .split(/\s+/)
-      .filter(Boolean)
-      .every((word) => text.includes(word))
+      : card.dataset.category === filter)
   );
 }
 function applyFilters() {
-  const query = $("linkSearch").value.trim().toLocaleLowerCase();
   let count = 0;
   cards.forEach((card) => {
-    card.hidden = !matchesCard(card, query, activeFilter);
+    card.hidden = !matchesCard(card, activeFilter);
     if (!card.hidden) count++;
   });
   document.querySelectorAll("[data-section]").forEach((section) => {
@@ -120,9 +109,9 @@ function applyFilters() {
     : "No links found";
   $("emptyCopy").textContent = noSaved
     ? "Tap the star on any link to save it on this device."
-    : "Try a different word or category.";
+    : "Choose another category or show all links.";
   $("recentSection").hidden =
-    !recent.length || activeFilter !== "all" || Boolean(query);
+    !recent.length || activeFilter !== "all";
 }
 function syncSaved() {
   cards.forEach((card) => {
@@ -193,7 +182,7 @@ function closeDialog(dialog) {
 }
 function showQR(card, trigger) {
   if (typeof QRCode === "undefined") {
-    showToast("QR tool unavailable. Use Copy to share this link.");
+    showToast("QR tool unavailable. Use Share to send this link.");
     return;
   }
   qrURL = card.dataset.url;
@@ -209,7 +198,7 @@ function showQR(card, trigger) {
       correctLevel: QRCode.CorrectLevel.M,
     });
   } catch {
-    showToast("Could not create QR code. Use Copy to share this link.");
+    showToast("Could not create QR code. Use Share to send this link.");
     return;
   }
   $("qrTitle").textContent = qrLabel;
@@ -220,7 +209,6 @@ cards.forEach((card) => {
   const actions = document.createElement("div");
   actions.className = "card-actions";
   const actionsSpec = [
-    ["copy", "Copy", "copy"],
     ["share", "Share", "share"],
     ["qr", "QR", "qr"],
     ["star", "", "save"],
@@ -232,7 +220,7 @@ cards.forEach((card) => {
     button.innerHTML = icon(symbol) + (text ? `<span>${text}</span>` : "");
     button.setAttribute(
       "aria-label",
-      `${action === "qr" ? "Show QR code for" : action === "copy" ? "Copy link for" : action === "save" ? "Save" : "Share"} ${labelFor(card)}`,
+      `${action === "qr" ? "Show QR code for" : action === "save" ? "Save" : "Share"} ${labelFor(card)}`,
     );
     button.addEventListener("click", () => {
       const url = card.dataset.url;
@@ -255,7 +243,6 @@ cards.forEach((card) => {
       } else {
         remember(url);
         if (action === "share") shareLink(url, card.dataset.title);
-        if (action === "copy") copyLink(url);
         if (action === "qr") showQR(card, button);
       }
     });
@@ -266,7 +253,6 @@ cards.forEach((card) => {
     .querySelector(".card-main")
     .addEventListener("click", () => remember(card.dataset.url));
 });
-$("linkSearch").addEventListener("input", applyFilters);
 document.querySelectorAll("[data-filter]").forEach((button) =>
   button.addEventListener("click", () => {
     activeFilter = button.dataset.filter;
@@ -284,25 +270,9 @@ document.querySelectorAll("[data-filter]").forEach((button) =>
   }),
 );
 $("resetFilters").addEventListener("click", () => {
-  $("linkSearch").value = "";
-  document.querySelector('[data-filter="all"]').click();
-  $("linkSearch").focus();
-});
-document.addEventListener("keydown", (event) => {
-  const typing =
-    /INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName) ||
-    document.activeElement.isContentEditable;
-  if (
-    event.key === "/" &&
-    !typing &&
-    !event.ctrlKey &&
-    !event.metaKey &&
-    !event.altKey &&
-    !document.querySelector("dialog[open]")
-  ) {
-    event.preventDefault();
-    $("linkSearch").focus();
-  }
+  const allFilter = document.querySelector('[data-filter="all"]');
+  allFilter.click();
+  allFilter.focus();
 });
 document
   .querySelectorAll("[data-close]")
@@ -336,11 +306,11 @@ document.querySelectorAll("dialog").forEach((dialog) => {
 window.addEventListener("popstate", () =>
   document.querySelectorAll("dialog[open]").forEach((dialog) => dialog.close()),
 );
-$("qrCopy").addEventListener("click", () => copyLink(qrURL));
+$("qrShare").addEventListener("click", () => shareLink(qrURL, qrLabel));
 $("qrDownload").addEventListener("click", () => {
   const canvas = $("qrCode").querySelector("canvas");
   if (!canvas) {
-    showToast("QR image is unavailable. Use Copy link instead.");
+    showToast("QR image is unavailable. Use Share link instead.");
     return;
   }
   // Include a white quiet zone in the downloaded PNG for reliable scanning.
@@ -482,3 +452,4 @@ if ("serviceWorker" in navigator)
       /* Links and tools still work without offline installation. */
     });
   });
+
