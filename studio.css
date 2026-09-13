@@ -5,13 +5,6 @@
   font-style: normal;
   font-display: swap;
 }
-@font-face {
-  font-family: "Libre Caslon";
-  src: url("fonts/libre-caslon-display-400-latin.woff2") format("woff2");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
 :root {
   color-scheme: dark;
   --bg: #141110;
@@ -135,20 +128,9 @@ button:disabled {
   color: var(--muted);
   line-height: 1.6;
 }
-.edition {
-  color: var(--muted);
-  font-size: 0.625rem;
-  letter-spacing: 0.2em;
-}
-.edition span {
-  margin-left: 22px;
-  color: var(--copper);
-}
-/* Machined edges and warm, metallic controls. */
 .quiet-button,
 .action-btn,
-.setting-toggle,
-.remote-step {
+.setting-toggle {
   display: inline-flex;
   justify-content: center;
   align-items: center;
@@ -174,8 +156,7 @@ button:disabled {
   padding-left: 10px;
   border-left: 1px solid var(--line);
 }
-.primary-button,
-.remote-open {
+.primary-button {
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -199,8 +180,7 @@ button:disabled {
     filter 0.2s,
     box-shadow 0.2s;
 }
-.primary-button svg,
-.remote-open svg {
+.primary-button svg {
   width: 18px;
   height: 18px;
 }
@@ -210,230 +190,6 @@ button:disabled {
   font-weight: 500;
   color: var(--copper);
   line-height: 1.5;
-}
-.status-light {
-  display: inline-block;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #efb988;
-  box-shadow: 0 0 8px #e89255a1;
-  margin-right: 8px;
-  vertical-align: middle;
-}
-/* Intro uses existing studio artwork through a copper photographic treatment. */
-.studio-intro {
-  position: relative;
-  isolation: isolate;
-  display: grid;
-  grid-template-columns: 1.05fr 1fr;
-  align-items: center;
-  gap: 30px;
-  overflow: hidden;
-  border: 1px solid #dcb28a40;
-  border-radius: 22px;
-  background: #251c16;
-  box-shadow:
-    inset 0 1px #ffe3c320,
-    0 24px 60px #0005;
-  padding: 40px;
-}
-.intro-art {
-  position: absolute;
-  inset: 0;
-  z-index: -2;
-  background: url("assets/control-room.webp") center/cover;
-  filter: sepia(1) saturate(0.65);
-  opacity: 0.4;
-}
-.studio-intro::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background:
-    linear-gradient(90deg, #1a1411eb 5%, #1a1411b8 48%, #1a141130),
-    linear-gradient(0deg, #1a1411bb, transparent);
-}
-.intro-copy h1 {
-  font-family: "Libre Caslon", Georgia, serif;
-  font-size: clamp(3.2rem, 5.4vw, 4.9rem);
-  line-height: 0.99;
-  letter-spacing: -0.035em;
-  font-weight: 400;
-  margin: 22px 0;
-}
-.intro-copy h1 span {
-  color: #e7b28b;
-  background: linear-gradient(110deg, #c1835c, #f5d5b6 60%, #bc794e);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-.intro-description {
-  color: #cebaaa;
-  font-size: 0.9375rem;
-  margin-bottom: 26px;
-  line-height: 1.7;
-}
-.intro-footnote {
-  color: #bca28d;
-  font-size: 0.5625rem;
-  letter-spacing: 0.15em;
-  margin-top: 28px;
-}
-/* The remote selects real destinations. Its meter is decorative, never playback state. */
-.studio-remote {
-  position: relative;
-  min-width: 0;
-  max-width: 440px;
-  width: 100%;
-  justify-self: end;
-  padding: 21px;
-  background:
-    repeating-linear-gradient(0deg, #ffffff02 0 1px, transparent 1px 3px),
-    linear-gradient(135deg, #514339, #302823 25%, #211b18 75%, #493b31);
-  border: 1px solid #b894754d;
-  border-radius: 20px;
-  box-shadow:
-    inset 0 1px 1px #f6ddbf57,
-    inset 0 -2px 2px #000a,
-    0 18px 38px #0008;
-}
-.remote-label {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 16px;
-  color: #c8b6a6;
-  letter-spacing: 0.17em;
-}
-.remote-label h2,
-.remote-label > span {
-  font-size: 0.5625rem;
-  font-weight: 500;
-}
-.remote-screen {
-  position: relative;
-  overflow: hidden;
-  background: radial-gradient(ellipse at 50% 75%, #3a2417, #120f0d 85%);
-  border: 1px solid #be8d5d68;
-  outline: 3px solid #160f0b80;
-  border-radius: 10px;
-  padding: 18px 20px;
-  box-shadow:
-    inset 0 2px 12px #000a,
-    0 0 calc(65px * var(--glow)) rgb(224 132 65 / var(--glow));
-  transition: box-shadow 0.15s;
-}
-.remote-screen::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0.16;
-  background:
-    repeating-linear-gradient(0deg, transparent 0 3px, #eabd8b14 3px 4px),
-    linear-gradient(130deg, #ffe1bb13, transparent 45%);
-}
-.screen-top,
-.screen-bottom {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  font-size: 0.5625rem;
-  color: #c99d78;
-  letter-spacing: 0.1em;
-}
-.screen-top {
-  padding-bottom: 13px;
-  border-bottom: 1px solid #c697662b;
-}
-.screen-content {
-  padding: 20px 0 18px;
-  min-height: 148px;
-}
-.screen-icon {
-  float: right;
-  padding: 8px;
-  color: #dba06a;
-}
-.screen-icon svg {
-  width: 28px;
-  height: 28px;
-}
-.screen-content h3 {
-  font-size: 1.5rem;
-  font-weight: 500;
-  letter-spacing: -0.04em;
-  color: #f4cda5;
-  text-shadow: 0 0 calc(24px * var(--glow)) #ffb168c4;
-  line-height: 1.25;
-  padding-right: 45px;
-  margin: 3px 0 10px;
-}
-.screen-content p {
-  font-size: 0.8125rem;
-  color: #c9ad94;
-  max-width: 240px;
-}
-.screen-bottom {
-  min-height: 26px;
-}
-.signal-bars {
-  display: flex;
-  align-items: end;
-  gap: 3px;
-  height: 22px;
-}
-.signal-bars i {
-  width: 3px;
-  height: 35%;
-  background: linear-gradient(#f5cf9f, #8c4d2e);
-  transform-origin: bottom;
-}
-.signal-bars i:nth-child(3n) {
-  height: 95%;
-}
-.signal-bars i:nth-child(3n + 1) {
-  height: 65%;
-}
-.signal-bars i:nth-child(2n) {
-  height: 50%;
-}
-.remote-transport {
-  display: grid;
-  grid-template-columns: 48px minmax(0, 1fr) 48px;
-  gap: 10px;
-  margin-top: 20px;
-}
-.remote-step {
-  padding: 0;
-  min-height: 50px;
-  border-radius: 50%;
-  background: linear-gradient(145deg, #6d5c4e, #302721 55%, #483b32);
-  border-color: #b5a18b70;
-}
-.remote-step svg {
-  width: 20px;
-  height: 20px;
-  transform: rotate(90deg);
-}
-#remoteNext svg {
-  transform: rotate(-90deg);
-}
-.remote-open {
-  padding: 10px 12px;
-  font-size: 0.8125rem;
-  gap: 10px;
-  text-align: center;
-}
-.remote-hint {
-  font-size: 0.625rem;
-  color: #bba899;
-  text-align: center;
-  margin-top: 15px;
 }
 .console-settings {
   display: flex;
@@ -894,7 +650,6 @@ footer {
   font-size: 0.6875rem;
   letter-spacing: 0.02em;
 }
-/* Persistent thumb-friendly channel selector. */
 .remote-dock {
   position: fixed;
   bottom: calc(16px + env(safe-area-inset-bottom));
@@ -994,34 +749,6 @@ dialog::backdrop {
   letter-spacing: -0.03em;
   margin-top: 8px;
 }
-.price-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px;
-  padding: 18px 0;
-  border-top: 1px solid var(--line);
-}
-.price-row-label {
-  font-weight: 500;
-}
-.price-row-desc,
-.price-note {
-  font-size: 0.875rem;
-  color: var(--muted);
-  line-height: 1.6;
-}
-.price-row-desc {
-  margin-top: 4px;
-}
-.price-amount {
-  color: var(--copper);
-  font-size: 1.5rem;
-  white-space: nowrap;
-}
-.price-note {
-  padding: 12px 0 22px;
-}
 #qrDialog {
   text-align: center;
   width: min(420px, calc(100% - 32px));
@@ -1111,14 +838,12 @@ dialog::backdrop {
       0 7px #0d0a0870,
       0 16px 25px #0005;
   }
-  .primary-button:hover,
-  .remote-open:hover {
+  .primary-button:hover {
     filter: brightness(1.1);
     transform: translateY(-2px);
   }
   .quiet-button:hover,
   .action-btn:hover,
-  .remote-step:hover,
   .setting-toggle:hover {
     filter: brightness(1.2);
   }
@@ -1133,41 +858,18 @@ dialog::backdrop {
   }
 }
 .primary-button:active,
-.remote-open:active,
 .action-btn:active,
 .quiet-button:active,
-.remote-step:active,
 .setting-toggle:active,
 .dock-button:active {
   transform: translateY(3px);
   box-shadow: inset 0 1px #ffffff20;
 }
-.studio-intro {
-  animation: reveal 0.7s ease both;
-}
 .directory-grid {
   animation: reveal 0.7s 0.12s ease both;
 }
-.signal-bars i {
-  animation: meter 2.6s ease-in-out 2;
-}
-.signal-bars i:nth-child(2n) {
-  animation-delay: 0.2s;
-}
-.signal-bars i:nth-child(3n) {
-  animation-delay: 0.5s;
-}
-.remote-screen.tuning .screen-content {
-  animation: tune 0.3s ease;
-}
-.remote-screen.tuning .signal-bars i {
-  animation: meter 0.5s ease 1;
-}
 .card.saving .save-btn svg {
   animation: save-pop 0.35s ease;
-}
-.remote-screen {
-  animation: screen-on 0.8s ease both;
 }
 @keyframes reveal {
   from {
@@ -1179,32 +881,9 @@ dialog::backdrop {
     transform: none;
   }
 }
-@keyframes tune {
-  from {
-    opacity: 0.35;
-    transform: translateY(5px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-@keyframes meter {
-  50% {
-    transform: scaleY(0.35);
-  }
-}
 @keyframes save-pop {
   50% {
     transform: scale(1.3) rotate(-12deg);
-  }
-}
-@keyframes screen-on {
-  from {
-    opacity: 0.2;
-  }
-  to {
-    opacity: 1;
   }
 }
 body.motion-off *,
@@ -1220,13 +899,6 @@ html.motion-off {
   .app-shell {
     padding: 0 28px;
   }
-  .studio-intro {
-    padding: 30px;
-    gap: 25px;
-  }
-  .intro-copy h1 {
-    font-size: 3.8rem;
-  }
   .cards {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -1240,9 +912,6 @@ html.motion-off {
   .glow-control {
     margin-left: auto;
   }
-  .edition {
-    font-size: 0.5625rem;
-  }
 }
 @media (max-width: 800px) {
   .app-shell {
@@ -1250,37 +919,6 @@ html.motion-off {
   }
   .app-header {
     min-height: 84px;
-  }
-  .edition {
-    display: none;
-  }
-  .studio-intro {
-    padding: 26px;
-    gap: 22px;
-  }
-  .intro-copy h1 {
-    font-size: 3rem;
-  }
-  .intro-copy .eyebrow {
-    font-size: 0.5625rem;
-  }
-  .studio-remote {
-    padding: 16px;
-  }
-  .remote-screen {
-    padding: 14px;
-  }
-  .screen-content h3 {
-    font-size: 1.25rem;
-  }
-  .remote-transport {
-    grid-template-columns: 44px minmax(0, 1fr) 44px;
-    gap: 8px;
-  }
-  .remote-open {
-    padding: 8px;
-    font-size: 0.75rem;
-    gap: 5px;
   }
   .console-caption {
     display: none;
@@ -1321,56 +959,6 @@ html.motion-off {
   .app-header .quiet-button {
     padding: 8px 12px;
     gap: 8px;
-  }
-  .studio-intro {
-    grid-template-columns: 1fr;
-    padding: 26px 22px 22px;
-    gap: 28px;
-    border-radius: 17px;
-  }
-  .intro-art {
-    background-position: 62% top;
-  }
-  .intro-copy h1 {
-    font-size: 3.5rem;
-    margin: 18px 0;
-  }
-  .intro-copy .eyebrow {
-    font-size: 0.625rem;
-    letter-spacing: 0.1em;
-  }
-  .intro-description {
-    font-size: 0.875rem;
-    margin-bottom: 22px;
-  }
-  .intro-footnote {
-    display: none;
-  }
-  .studio-remote {
-    max-width: 100%;
-    padding: 18px;
-  }
-  .screen-content {
-    min-height: 122px;
-    padding: 15px 0;
-  }
-  .screen-content h3 {
-    font-size: 1.375rem;
-  }
-  .remote-screen {
-    padding: 14px 17px;
-  }
-  .remote-label {
-    margin-bottom: 13px;
-  }
-  .remote-transport {
-    margin-top: 17px;
-  }
-  .remote-hint {
-    margin-top: 12px;
-  }
-  .remote-open {
-    font-size: 0.8125rem;
   }
   .console-settings {
     display: grid;
@@ -1479,12 +1067,6 @@ html.motion-off {
   .dialog-header {
     gap: 12px;
   }
-  .price-amount {
-    font-size: 1.25rem;
-  }
-  .price-row {
-    gap: 16px;
-  }
   .remote-dock {
     bottom: calc(12px + env(safe-area-inset-bottom));
     gap: 4px;
@@ -1498,22 +1080,6 @@ html.motion-off {
   .brand img {
     width: 32px;
     height: 32px;
-  }
-  .studio-intro {
-    padding: 24px 16px 18px;
-  }
-  .intro-copy h1 {
-    font-size: 3rem;
-  }
-  .studio-remote {
-    padding: 14px;
-  }
-  .remote-transport {
-    grid-template-columns: 44px minmax(0, 1fr) 44px;
-    gap: 6px;
-  }
-  .remote-open {
-    font-size: 0.75rem;
   }
   .filters .filter {
     padding-inline: 5px;
@@ -1543,6 +1109,120 @@ html.motion-off {
   }
 }
 
-.studio-intro:has(.studio-remote[hidden]) {
-  grid-template-columns: 1fr;
+/* Personal link utility: search and sharing first, appearance tucked away. */
+.app-shell {
+  max-width: 1180px;
+}
+.app-header {
+  min-height: 78px;
+  border-bottom: 1px solid var(--line);
+}
+.brand h1 {
+  font: 500 1.2rem/1.3 var(--font);
+  letter-spacing: -0.025em;
+}
+.brand img {
+  width: 36px;
+  height: 36px;
+}
+.brand-small {
+  font-size: 0.5625rem;
+  margin-top: 4px;
+  letter-spacing: 0.16em;
+}
+.utility-label {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+.directory-toolbar {
+  padding: 22px 0 12px;
+}
+.toolbar-top h2 {
+  font: 500 1.125rem/1.4 var(--font);
+}
+.search-box {
+  width: min(100%, 500px);
+}
+.appearance-settings {
+  margin: 0 0 20px;
+}
+.appearance-settings summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: max-content;
+  min-height: 44px;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 0.8125rem;
+  list-style: none;
+}
+.appearance-settings summary::-webkit-details-marker {
+  display: none;
+}
+.appearance-settings summary::after {
+  content: "+";
+  margin-left: 6px;
+  color: var(--copper);
+}
+.appearance-settings[open] summary::after {
+  content: "−";
+}
+.appearance-settings summary svg {
+  width: 16px;
+  height: 16px;
+}
+.console-settings {
+  margin: 0 0 12px;
+  justify-content: flex-start;
+}
+.glow-control {
+  margin-left: 0;
+  margin-right: auto;
+}
+.card-actions .copy-btn {
+  background: var(--metal);
+  color: #28170d;
+  border-color: #e8bf9870;
+  font-weight: 600;
+  box-shadow:
+    inset 0 1px #ffe5c780,
+    0 2px #70442c;
+}
+.remote-dock {
+  box-shadow:
+    inset 0 1px #e7c6a34f,
+    0 5px 0 #0c0907,
+    0 12px 40px #000a,
+    0 0 calc(36px * var(--glow)) rgb(224 132 65 / var(--glow));
+}
+.card:focus-within {
+  border-color: var(--copper);
+  box-shadow: 0 0 calc(24px * var(--glow)) rgb(224 132 65 / var(--glow));
+}
+footer {
+  justify-content: center;
+}
+@media (max-width: 680px) {
+  .app-header {
+    min-height: 72px;
+  }
+  .utility-label {
+    display: none;
+  }
+  .toolbar-top h2 {
+    margin-bottom: 12px;
+  }
+  .search-box {
+    width: 100%;
+  }
+  .directory-toolbar {
+    padding-top: 18px;
+  }
+  .appearance-settings {
+    margin-bottom: 16px;
+  }
+  .glow-control {
+    margin-right: 0;
+  }
 }

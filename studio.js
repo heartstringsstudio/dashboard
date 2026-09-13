@@ -78,11 +78,6 @@ function remember(url) {
     })),
   );
   renderRecent();
-  const channel = remoteCatalog.findIndex((card) => card.dataset.url === url);
-  if (channel >= 0) {
-    remoteIndex = channel;
-    renderRemote();
-  }
 }
 function matchesCard(card, query, filter) {
   const categoryMatch =
@@ -225,8 +220,8 @@ cards.forEach((card) => {
   const actions = document.createElement("div");
   actions.className = "card-actions";
   const actionsSpec = [
-    ["share", "Share", "share"],
     ["copy", "Copy", "copy"],
+    ["share", "Share", "share"],
     ["qr", "QR", "qr"],
     ["star", "", "save"],
   ];
@@ -309,9 +304,6 @@ document.addEventListener("keydown", (event) => {
     $("linkSearch").focus();
   }
 });
-$("priceToggle").addEventListener("click", (event) =>
-  openDialog($("priceDialog"), event.currentTarget),
-);
 document
   .querySelectorAll("[data-close]")
   .forEach((button) =>
@@ -379,7 +371,7 @@ window.addEventListener("beforeinstallprompt", (event) => {
   installPrompt = event;
   $("installBtn").hidden = false;
   $("pwaCopy").textContent =
-    "Install for quick access. Your studio links stay available offline.";
+    "Install for quick access. The link list stays available offline. Destinations require internet.";
 });
 $("installBtn").addEventListener("click", async () => {
   if (!installPrompt) return;
@@ -419,7 +411,7 @@ function validSettings(value) {
         ? Math.max(0, Math.min(100, settings.glow))
         : 35,
     motion: typeof settings.motion === "boolean" ? settings.motion : true,
-    compact: settings.compact === true,
+    compact: typeof settings.compact === "boolean" ? settings.compact : true,
   };
 }
 let settings = validSettings(readStore(SETTINGS_KEY, {}));
@@ -463,7 +455,6 @@ $("motionToggle").addEventListener("click", () => {
   settings.motion = !settings.motion;
   applySettings();
   saveSettings();
-  if (motionAllowed()) animateRemote();
 });
 $("compactToggle").addEventListener("click", () => {
   settings.compact = !settings.compact;
@@ -477,78 +468,9 @@ window.addEventListener("storage", (event) => {
     applySettings();
   }
 });
-// Jukebox first, then the remaining existing destinations in directory order.
-const jukebox = cards.find((card) => card.classList.contains("featured"));
-const remoteCatalog = [
-  jukebox,
-  ...cards.filter((card) => card !== jukebox),
-].filter(Boolean);
-let remoteIndex = Math.max(
-  0,
-  remoteCatalog.findIndex((card) => card.dataset.url === recent[0]),
-);
-let tuningTimer;
-function animateRemote() {
-  const screen = document.querySelector(".remote-screen");
-  screen.classList.remove("tuning");
-  if (!motionAllowed()) return;
-  requestAnimationFrame(() => screen.classList.add("tuning"));
-  clearTimeout(tuningTimer);
-  tuningTimer = setTimeout(() => screen.classList.remove("tuning"), 700);
-}
-function renderRemote() {
-  const card = remoteCatalog[remoteIndex];
-  const label = labelFor(card);
-  $("remoteTitle").textContent = label;
-  $("remoteDescription").textContent =
-    card.querySelector(".card-sub").textContent;
-  $("remoteCategory").textContent = {
-    listen: "LISTENING ROOM",
-    studio: "STUDIO ESSENTIALS",
-    extras: "BEYOND THE MUSIC",
-  }[card.dataset.category];
-  $("remoteChannel").textContent =
-    `CH ${String(remoteIndex + 1).padStart(2, "0")} / ${remoteCatalog.length}`;
-  $("remoteIcon").replaceChildren(
-    card.querySelector(".card-icon svg").cloneNode(true),
-  );
-  $("remoteOpen").href = card.dataset.url;
-  $("remoteOpen").querySelector("span").textContent = "Open channel";
-  $("remoteOpen").setAttribute("aria-label", `Open ${label} in a new tab`);
-}
-function stepRemote(direction) {
-  remoteIndex =
-    (remoteIndex + direction + remoteCatalog.length) % remoteCatalog.length;
-  renderRemote();
-  animateRemote();
-}
-$("remotePrev").addEventListener("click", () => stepRemote(-1));
-$("remoteNext").addEventListener("click", () => stepRemote(1));
-$("remoteOpen").addEventListener("click", () =>
-  remember(remoteCatalog[remoteIndex].dataset.url),
-);
-document
-  .querySelector(".studio-remote")
-  .addEventListener("keydown", (event) => {
-    if (
-      (event.key === "ArrowLeft" || event.key === "ArrowRight") &&
-      !event.altKey &&
-      !event.metaKey &&
-      !event.ctrlKey
-    ) {
-      event.preventDefault();
-      stepRemote(event.key === "ArrowLeft" ? -1 : 1);
-    }
-  });
-document.querySelectorAll(".primary-button").forEach((link) =>
-  link.addEventListener("click", () => {
-    if (catalog.has(link.href)) remember(link.href);
-  }),
-);
 applySettings();
-renderRemote();
 document
-  .querySelectorAll(".studio-remote, .console-settings, .remote-dock")
+  .querySelectorAll(".appearance-settings, .console-settings, .remote-dock")
   .forEach((element) => {
     element.hidden = false;
   });

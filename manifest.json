@@ -1,8 +1,8 @@
 {
-  "name": "Heartstrings Studio",
-  "short_name": "Heartstrings",
+  "name": "Heartstrings Links",
+  "short_name": "Links",
   "id": "/dashboard/",
-  "description": "Heartstrings Studio concierge for songs, client resources, and guided story intake",
+  "description": "Personal link sharing: copy, share, QR codes, and saved links.",
   "start_url": "/dashboard/",
   "scope": "/dashboard/",
   "display": "standalone",
