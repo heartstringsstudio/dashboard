@@ -11,18 +11,18 @@
       name="apple-mobile-web-app-status-bar-style"
       content="black-translucent"
     />
-    <meta name="apple-mobile-web-app-title" content="Heartstrings" />
+    <meta name="apple-mobile-web-app-title" content="Heartstrings Studio Dashboard" />
     <meta name="theme-color" content="#141110" />
     <link rel="manifest" href="manifest.json" />
     <link rel="icon" href="logo.png" type="image/png" />
     <link rel="apple-touch-icon" href="apple-touch-icon.png" />
-    <title>Link Sharing · Heartstrings Studio</title>
+    <title>Heartstrings Studio Dashboard</title>
     <meta
       name="description"
       content="A personal link-sharing desk for Heartstrings Studio. Open, share, and save links."
     />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Heartstrings Links" />
+    <meta property="og:title" content="Heartstrings Studio Dashboard" />
     <meta
       property="og:description"
       content="A personal link-sharing desk for Heartstrings Studio. Open, share, and save links."
@@ -36,7 +36,7 @@
       content="https://heartstringsstudio.github.io/dashboard/"
     />
     <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="Heartstrings Links" />
+    <meta name="twitter:title" content="Heartstrings Studio Dashboard" />
     <meta
       name="twitter:description"
       content="A personal link-sharing desk for Heartstrings Studio. Open, share, and save links."
@@ -45,7 +45,7 @@
       name="twitter:image"
       content="https://heartstringsstudio.github.io/dashboard/logo.png"
     />
-    <link rel="stylesheet" href="studio.css?v=11" />
+    <link rel="stylesheet" href="studio.css?v=12" />
   </head>
   <body>
     <svg
@@ -159,8 +159,7 @@
         <div class="brand">
           <img src="logo.png" alt="" width="36" height="36" />
           <div>
-            <h1>Link sharing</h1>
-            <span class="brand-small">HEARTSTRINGS STUDIO</span>
+            <h1>Heartstrings Studio <span class="dashboard-label">Dashboard</span></h1>
           </div>
         </div>
         <span class="utility-label">Your link desk</span>
@@ -168,7 +167,13 @@
       <main id="mainContent">
         <div class="directory-toolbar" id="directory">
           <div class="toolbar-top">
-            <h2>Your links</h2>
+            <h2>Share Links</h2>
+          </div>
+          <div class="studio-scene" aria-hidden="true">
+            <div class="studio-signature">
+              <img src="logo.png" alt="" width="80" height="80" />
+              <span>Heartstrings <span>Studio</span></span>
+            </div>
           </div>
           <div class="filter-row">
             <div
@@ -632,4 +637,3 @@
     <script src="studio.js?v=11"></script>
   </body>
 </html>
-

@@ -1,8 +1,8 @@
 {
-  "name": "Heartstrings Links",
-  "short_name": "Links",
+  "name": "Heartstrings Studio Dashboard",
+  "short_name": "Dashboard",
   "id": "/dashboard/",
-  "description": "Personal link sharing: copy, share, QR codes, and saved links.",
+  "description": "Heartstrings Studio Dashboard: share links, create QR codes, and save favorites.",
   "start_url": "/dashboard/",
   "scope": "/dashboard/",
   "display": "standalone",

@@ -1,12 +1,13 @@
 const CACHE_PREFIX = "heartstrings-dashboard-";
-const CACHE = `${CACHE_PREFIX}v11`;
+const CACHE = `${CACHE_PREFIX}v12`;
 const SHELL = [
   "./",
   "./index.html",
-  "./studio.css?v=11",
+  "./studio.css?v=12",
   "./studio.js?v=11",
   "./manifest.json",
   "./logo.png",
+  "./assets/control-room.webp",
   "./icon-192.png",
   "./icon-maskable-512.png",
   "./apple-touch-icon.png",
@@ -73,4 +74,3 @@ self.addEventListener("fetch", (e) => {
     }
   }
 });
-
