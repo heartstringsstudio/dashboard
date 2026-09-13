@@ -1,10 +1,10 @@
 const CACHE_PREFIX = 'heartstrings-dashboard-';
-const CACHE = `${CACHE_PREFIX}v8`;
+const CACHE = `${CACHE_PREFIX}v9`;
 const SHELL = [
   './',
   './index.html',
-  './studio.css',
-  './studio.js',
+  './studio.css?v=9',
+  './studio.js?v=9',
   './assets/control-room.webp',
   './assets/vocal-booth.webp',
   './assets/console-detail.webp',
