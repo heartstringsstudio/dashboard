@@ -9,10 +9,14 @@ const CARD_TITLE = "Heartstrings Studio";
 const CONTACT = {
   name: "Heartstrings Studio",
   role: "Custom Songwriting & Recording",
+  phone: "304-677-1113",
+  // Phones dial the international form reliably; the card shows the local one.
+  phoneDial: "+13046771113",
   email: "heartstringsstudiowv@gmail.com",
   site: "https://heartstringsstudio.github.io/heartstringsstudio/",
+  city: "Lumberport",
   region: "WV",
-  note: "Custom songs for memorials, weddings, birthdays, and milestones.",
+  note: "Your story, turned into a song you'll never forget. Custom songs for memorials, weddings, birthdays, and milestones.",
 };
 
 let toastTimer;
@@ -77,9 +81,10 @@ function buildVCard() {
     `FN:${vcardEscape(CONTACT.name)}`,
     `ORG:${vcardEscape(CONTACT.name)}`,
     `TITLE:${vcardEscape(CONTACT.role)}`,
+    `TEL;TYPE=WORK,VOICE:${vcardEscape(CONTACT.phoneDial)}`,
     `EMAIL;TYPE=INTERNET,WORK:${vcardEscape(CONTACT.email)}`,
     `URL:${vcardEscape(CONTACT.site)}`,
-    `ADR;TYPE=WORK:;;;;${vcardEscape(CONTACT.region)};;USA`,
+    `ADR;TYPE=WORK:;;;${vcardEscape(CONTACT.city)};${vcardEscape(CONTACT.region)};;USA`,
     `NOTE:${vcardEscape(CONTACT.note)}`,
     "END:VCARD",
     "",

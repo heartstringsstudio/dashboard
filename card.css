@@ -104,7 +104,8 @@ svg {
 /* The card itself */
 .calling-card {
   position: relative;
-  padding: clamp(22px, 5vw, 32px);
+  --pad: clamp(22px, 5vw, 32px);
+  padding: var(--pad);
   border: 1px solid #dca67b52;
   border-radius: 20px;
   background: linear-gradient(140deg, #3a2c21, #211b17 55%, #33261c);
@@ -121,17 +122,19 @@ svg {
   height: 3px;
   background: var(--metal);
 }
-.calling-card-top {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  padding-top: 6px;
+/* The banner bleeds to the card's edges, so it cancels the card padding. */
+.card-banner {
+  display: block;
+  width: calc(100% + var(--pad) * 2);
+  height: auto;
+  margin: calc(var(--pad) * -1) calc(var(--pad) * -1) 0;
+  aspect-ratio: 1672 / 941;
+  object-fit: cover;
+  border-bottom: 1px solid #dca67b45;
+  background: #f1ece6;
 }
-.calling-card-top img {
-  width: 84px;
-  height: 84px;
-  object-fit: contain;
-  flex-shrink: 0;
+.calling-card-top {
+  padding-top: 22px;
 }
 .calling-card-top h1 {
   font: 400 clamp(1.3rem, 4.4vw, 1.6rem) / 1.25 "Libre Caslon", Georgia, serif;
@@ -386,9 +389,9 @@ svg {
 }
 
 @media (max-width: 460px) {
-  .calling-card-top img {
-    width: 64px;
-    height: 64px;
+  /* Keeps the email address on one line instead of breaking mid-word. */
+  .contact-value {
+    font-size: 0.75rem;
   }
   .card-qr {
     flex-direction: column;

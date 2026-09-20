@@ -12,33 +12,33 @@
     <title>Heartstrings Studio — Digital Business Card</title>
     <meta
       name="description"
-      content="Heartstrings Studio of West Virginia: custom songs for memorials, weddings, and milestones. Contact, links, and QR code."
+      content="Heartstrings Studio, rooted in Lumberport, West Virginia. Your story, turned into a song you'll never forget. Call, email, listen, and scan."
     />
     <meta property="og:type" content="profile" />
     <meta property="og:title" content="Heartstrings Studio" />
     <meta
       property="og:description"
-      content="Custom songs from West Virginia — memorials, weddings, and the stories in between."
+      content="Your story, turned into a song you'll never forget. Rooted in Lumberport, West Virginia."
     />
     <meta
       property="og:image"
-      content="https://heartstringsstudio.github.io/dashboard/logo.png"
+      content="https://heartstringsstudio.github.io/dashboard/assets/studio-card-banner.jpg"
     />
     <meta
       property="og:url"
       content="https://heartstringsstudio.github.io/dashboard/card.html"
     />
-    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Heartstrings Studio" />
     <meta
       name="twitter:description"
-      content="Custom songs from West Virginia — memorials, weddings, and the stories in between."
+      content="Your story, turned into a song you'll never forget. Rooted in Lumberport, West Virginia."
     />
     <meta
       name="twitter:image"
-      content="https://heartstringsstudio.github.io/dashboard/logo.png"
+      content="https://heartstringsstudio.github.io/dashboard/assets/studio-card-banner.jpg"
     />
-    <link rel="stylesheet" href="card.css?v=1" />
+    <link rel="stylesheet" href="card.css?v=2" />
   </head>
   <body>
     <svg
@@ -47,6 +47,11 @@
       aria-hidden="true"
     >
       <defs>
+        <symbol id="i-phone" viewBox="0 0 24 24">
+          <path
+            d="M6.6 3h-2A1.6 1.6 0 0 0 3 4.7 16.6 16.6 0 0 0 19.3 21a1.6 1.6 0 0 0 1.7-1.6v-2a1.6 1.6 0 0 0-1.4-1.6l-2.3-.3a1.6 1.6 0 0 0-1.5.7l-.8 1.2a13 13 0 0 1-5.4-5.4l1.2-.8a1.6 1.6 0 0 0 .7-1.5l-.3-2.3A1.6 1.6 0 0 0 9.6 3z"
+          />
+        </symbol>
         <symbol id="i-mail" viewBox="0 0 24 24">
           <rect x="2.5" y="5" width="19" height="14" rx="2.5" />
           <path d="m3 7 9 6 9-6" />
@@ -65,11 +70,6 @@
           <path
             d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"
           />
-        </symbol>
-        <symbol id="i-columns" viewBox="0 0 24 24">
-          <path d="M3 21h18" />
-          <path d="M4 21V10M20 21V10M8 21v-8M12 21v-8M16 21v-8" />
-          <path d="M2 10l10-6 10 6" />
         </symbol>
         <symbol id="i-arrow" viewBox="0 0 24 24">
           <path d="M5 12h14m-6-6 6 6-6 6" />
@@ -98,13 +98,17 @@
 
     <main class="card-page">
       <article class="calling-card" id="callingCard">
+        <img
+          class="card-banner"
+          src="assets/studio-card-banner.webp"
+          alt="Heartstrings Studio: the studio logo and Tim, standing in the studio with a guitar on the wall behind him."
+          width="1672"
+          height="941"
+        />
         <div class="calling-card-top">
-          <img src="logo.png" alt="" width="84" height="84" />
-          <div>
-            <p class="eyebrow">HEARTSTRINGS STUDIO</p>
-            <h1>Custom songs, written from your story.</h1>
-            <p class="locale">West Virginia · By appointment</p>
-          </div>
+          <p class="eyebrow">HEARTSTRINGS STUDIO</p>
+          <h1>Your story, turned into a song you&rsquo;ll never forget.</h1>
+          <p class="locale">Rooted in Lumberport, West Virginia</p>
         </div>
 
         <p class="pitch">
@@ -114,6 +118,20 @@
         </p>
 
         <ul class="contact-list">
+          <li>
+            <a href="tel:+13046771113">
+              <span class="contact-icon"
+                ><svg aria-hidden="true"><use href="#i-phone" /></svg
+              ></span>
+              <span class="contact-text">
+                <span class="contact-label">Call the studio</span>
+                <span class="contact-value">304-677-1113</span>
+              </span>
+              <svg class="row-arrow" aria-hidden="true">
+                <use href="#i-arrow" />
+              </svg>
+            </a>
+          </li>
           <li>
             <a href="mailto:heartstringsstudiowv@gmail.com">
               <span class="contact-icon"
@@ -182,24 +200,6 @@
               </svg>
             </a>
           </li>
-          <li>
-            <a
-              href="https://tinyurl.com/heartstringsfh"
-              target="_blank"
-              rel="noopener"
-            >
-              <span class="contact-icon"
-                ><svg aria-hidden="true"><use href="#i-columns" /></svg
-              ></span>
-              <span class="contact-text">
-                <span class="contact-label">Funeral home partners</span>
-                <span class="contact-value">Partner information</span>
-              </span>
-              <svg class="row-arrow" aria-hidden="true">
-                <use href="#i-arrow" />
-              </svg>
-            </a>
-          </li>
         </ul>
 
         <div class="card-cta">
@@ -243,6 +243,6 @@
 
     <div id="toast" role="status" aria-live="polite"></div>
     <script src="qrcode.min.js"></script>
-    <script src="card.js?v=1"></script>
+    <script src="card.js?v=2"></script>
   </body>
 </html>
