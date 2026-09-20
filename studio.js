@@ -2,6 +2,13 @@
 const $ = (id) => document.getElementById(id);
 const cards = [...document.querySelectorAll(".card[data-url]")];
 const catalog = new Map(cards.map((card) => [card.dataset.url, card]));
+// Destinations that changed address, so saved links and recents survive the move.
+const MOVED = new Map([
+  [
+    "https://heartstringsstudio.github.io/heartstringsstudio/",
+    "https://tinyurl.com/heartstringswv",
+  ],
+]);
 const RECENT_KEY = "heartstrings_dashboard_recent_links";
 const SAVED_KEY = "heartstrings_dashboard_saved_links";
 const INSTALL_KEY = "heartstrings_dashboard_install_dismissed";
@@ -25,7 +32,10 @@ function knownURLs(value) {
   return Array.isArray(value)
     ? [
         ...new Set(
-          value.filter((url) => typeof url === "string" && catalog.has(url)),
+          value
+            .filter((url) => typeof url === "string")
+            .map((url) => MOVED.get(url) ?? url)
+            .filter((url) => catalog.has(url)),
         ),
       ]
     : [];
