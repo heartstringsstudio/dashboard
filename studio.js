@@ -180,13 +180,13 @@ function closeDialog(dialog) {
   if (history.state?.studioDialog === dialog.id) history.back();
   else dialog.close();
 }
-function showQR(card, trigger) {
+function showQR(url, label, trigger) {
   if (typeof QRCode === "undefined") {
     showToast("QR tool unavailable. Use Share to send this link.");
     return;
   }
-  qrURL = card.dataset.url;
-  qrLabel = labelFor(card);
+  qrURL = url;
+  qrLabel = label;
   $("qrCode").replaceChildren();
   try {
     new QRCode($("qrCode"), {
@@ -243,7 +243,7 @@ cards.forEach((card) => {
       } else {
         remember(url);
         if (action === "share") shareLink(url, card.dataset.title);
-        if (action === "qr") showQR(card, button);
+        if (action === "qr") showQR(url, labelFor(card), button);
       }
     });
     actions.append(button);
@@ -328,6 +328,17 @@ $("qrDownload").addEventListener("click", () => {
   link.remove();
   showToast("QR image download started");
 });
+// The digital business card shares like any other link, but it sits above
+// the directory and is never filtered away.
+const SITE_BASE =
+  document.querySelector('meta[property="og:url"]')?.content || location.href;
+const CARD_PAGE = new URL("card.html", SITE_BASE).href;
+const CARD_TITLE = "Heartstrings Studio \u2014 Digital Business Card";
+$("cardCopy").addEventListener("click", () => copyLink(CARD_PAGE));
+$("cardShare").addEventListener("click", () => shareLink(CARD_PAGE, CARD_TITLE));
+$("cardQR").addEventListener("click", (event) =>
+  showQR(CARD_PAGE, "Digital Business Card", event.currentTarget),
+);
 let installPrompt;
 const standalone =
   window.matchMedia("(display-mode: standalone)").matches ||
