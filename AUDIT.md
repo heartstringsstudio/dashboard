@@ -20,17 +20,25 @@ Share uses the native share sheet when supported. Unsupported or failed native s
 
 ## Digital business card
 
-The standalone card remains at `card.html`, with its existing banner, contact details, vCard download, QR and sharing behavior. `card.html`, `card.css` and `card.js` are unchanged. Dashboard sharing uses the canonical URL from `og:url`, so previews still share the production card address.
+The standalone card remains at `card.html`, with its existing banner, contact details, vCard download, QR and sharing behavior. Dashboard sharing uses the canonical URL from `og:url`, so previews still share the production card address.
+
+The phone row did not dial on iPhones. Three causes, all fixed in markup and CSS; `card.js` is unchanged:
+
+- The card did not opt out of iOS telephone detection, so Safari auto-linked the displayed `304-677-1113` into its own `<a href="tel:">` nested inside the row's link. A nested anchor is invalid, and the injected one absorbed the tap instead of dialing. `<meta name="format-detection" content="telephone=no" />` stops the detection; the row's own `tel:+13046771113` link is untouched and still dials.
+- Inline SVG icons inside links could take the touch on iOS rather than activating the link. Every icon on the card is decoration, so `a svg` and `button svg` are now `pointer-events: none`.
+- Contact rows had a hover state only, and the tap highlight is disabled, so a tap on a touch device produced no visible response. `.contact-list a:active` gives the press feedback that hover gives a pointer.
+
+`card.css` is now `?v=3` in both `card.html` and the service-worker shell, and the cache generation is v18, so phones holding the previous stylesheet pick up the fix.
 
 ## Validation for this change
 
 Run `npm ci && npm test` with a current Node.js version supported by jsdom. Dependencies are development-only; deployment remains plain HTML, CSS and JavaScript with no build step.
 
-11 jsdom behavior tests cover retained destinations/assets, valid IDs and ARIA references, filtering and navigation synchronization, favorites migration/order/persistence, cross-tab updates, copying and modal feedback, share/QR history and focus, recent-link focus retention, native-share cancellation and errors, blocked/corrupt storage, reduced motion, appearance persistence, and service-worker asset versions.
+12 tests cover retained destinations/assets, valid IDs and ARIA references, filtering and navigation synchronization, favorites migration/order/persistence, cross-tab updates, copying and modal feedback, share/QR history and focus, recent-link focus retention, native-share cancellation and errors, blocked/corrupt storage, reduced motion, appearance persistence, and service-worker asset versions. The last of these reads `card.html` and `card.css` directly and fails if the telephone-detection opt-out, the `tel:` href, the icon `pointer-events` rule, the row press state, or the stylesheet version bump is missing.
 
 JavaScript syntax and `git diff --check` also pass. Responsive CSS was reviewed for one navigation per breakpoint, a single-column mobile grid, 44px controls, safe-area dock clearance, and mobile sheet sizing.
 
-**Visual validation remains pending:** the available cloud browser denied access to localhost and shared local files. No rendered preview, physical-phone verification, real native-share/QR scan, or offline browser test is claimed for this revision. jsdom models dialogs and browser APIs; it does not validate layout or native browser rendering.
+**Visual validation remains pending:** the available cloud browser denied access to localhost and shared local files. No rendered preview, physical-phone verification, real native-share/QR scan, or offline browser test is claimed for this revision. The iPhone dialing fix in particular is unverified on a device: iOS telephone detection is WebKit-only behavior that neither jsdom nor the available Chromium reproduces, so the fix rests on the cause analysis above and should be confirmed by tapping the row on an iPhone. jsdom models dialogs and browser APIs; it does not validate layout or native browser rendering.
 
 ## Maintenance
 
@@ -38,6 +46,6 @@ Source: `index.html`, `studio.css`, `studio.js`, `sw.js`. New links are `.card` 
 
 Existing storage keys remain unchanged. Favorites order is insertion order in the existing saved-links array. Unknown destinations are ignored. Add moved addresses to MOVED to preserve favorites/history.
 
-The service-worker cache is v17; dashboard CSS and JS use query version 14. Update cache and asset references together. Preserve the `heartstrings-dashboard-` cache prefix, `/dashboard/` manifest scope, and separate navigation cache keys for the dashboard and business card.
+The service-worker cache is v18; dashboard CSS and JS use query version 14, and card CSS uses version 3. Update cache and asset references together. Preserve the `heartstrings-dashboard-` cache prefix, `/dashboard/` manifest scope, and separate navigation cache keys for the dashboard and business card.
 
 Business-card contacts live in `card.js`'s CONTACT object and `card.html`'s contact rows. Its JPEG and WebP banner assets should stay in sync when changed.

@@ -6,6 +6,9 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     />
+    <!-- iOS auto-links bare phone numbers, nesting its own <a href="tel:">
+         inside the row's link; the nested link swallows the tap. -->
+    <meta name="format-detection" content="telephone=no" />
     <meta name="theme-color" content="#141110" />
     <link rel="icon" href="logo.png" type="image/png" />
     <link rel="apple-touch-icon" href="apple-touch-icon.png" />
@@ -38,7 +41,7 @@
       name="twitter:image"
       content="https://heartstringsstudio.github.io/dashboard/assets/studio-card-banner.jpg"
     />
-    <link rel="stylesheet" href="card.css?v=2" />
+    <link rel="stylesheet" href="card.css?v=3" />
   </head>
   <body>
     <svg

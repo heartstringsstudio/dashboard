@@ -281,8 +281,27 @@ test("cache manifest includes versioned assets and retained business card files"
     "studio.css?v=14",
     "studio.js?v=14",
     "card.html",
-    "card.css?v=2",
+    "card.css?v=3",
     "card.js?v=3",
   ])
     assert.ok(sw.includes(asset), asset);
+});
+
+test("business card dials on iOS: no nested auto-link, no icon stealing the tap", () => {
+  const cardHtml = readFileSync(resolve(root, "card.html"), "utf8");
+  const cardCss = readFileSync(resolve(root, "card.css"), "utf8");
+  // iOS auto-links a bare number into an <a href="tel:"> nested inside the
+  // row's own link, and the nested link eats the tap.
+  assert.match(
+    cardHtml,
+    /<meta name="format-detection" content="telephone=no"/,
+    "card opts out of iOS telephone detection",
+  );
+  assert.match(cardHtml, /href="tel:\+13046771113"/, "phone row dials E.164");
+  // Decorative icons must not absorb the touch instead of the link.
+  assert.match(cardCss, /a svg,\s*button svg \{\s*pointer-events: none;/);
+  // Rows had a hover state only: a tap looked like nothing happened.
+  assert.match(cardCss, /\.contact-list a:active \{/);
+  // The stylesheet fix only reaches iPhones if the cached copy is superseded.
+  assert.match(cardHtml, /card\.css\?v=3/);
 });
