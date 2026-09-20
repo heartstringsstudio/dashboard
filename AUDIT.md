@@ -1,45 +1,43 @@
-# Heartstrings personal link-sharing dashboard
+# Heartstrings Studio Dashboard
 
 Updated September 20, 2026.
 
-## Purpose
+## Purpose and design
 
-This app is Tim's personal utility for sharing existing links. It is not a sales page. The public GitHub Pages hosting and access settings are unchanged; "personal" describes the intended use, not authentication or private hosting.
+Tim's personal link-sharing utility. All 12 destination URLs are retained, including the current Main Studio Site short link. There is no search, pricing, intake CTA, or Story Room destination.
 
-The interface opens directly to search and category filters. Removed the promotional hero, destination-selector panel, pricing dialog, sales copy, song-intake CTAs, and Story Room destination. The remaining 12 destinations retain their metadata. Main Studio Site now points at tinyurl.com/heartstringswv, matching the business card and its banner; the other 11 URLs are unchanged.
+The dashboard uses charcoal surfaces, warm ivory text and restrained copper accents. A compact digital business-card strip provides Open, Share and QR actions. The existing control-room photograph remains immediately below Share Links in a shallower crop. A single category navigation is visible at a time: a sticky toolbar above 680px, or bottom navigation with safe-area spacing at 680px and below.
 
-Copy is the first and most prominent action on every card, followed by Share, QR, and Save. Ordinary card links still open the destination in a new tab.
+Link cards have one primary Share action, quieter QR and favorite controls, and readable descriptions. Compact mode keeps a one-line description. Appearance controls live in a header-accessible dialog. Filter transitions, dialog entry and button feedback respect system reduced motion and the saved motion preference.
+
+## Favorites, recent links and sharing
+
+Saved links appear in an ordered shortlist above the directory. The shortlist is hidden until at least one link is saved. Reorder opens accessible up/down controls; changes persist on this device using the existing saved-links array. Legacy saved addresses migrate through the MOVED map. Storage events update favorites in other tabs. Storage failure retains changes for the visit and reports the limitation.
+
+Recent links appear below the directory and have direct Share controls. A reserved empty state avoids introducing a new section above working links on first use. Recent link nodes are reused so focus can return to the share trigger after a dialog closes.
+
+Share uses the native share sheet when supported. Unsupported or failed native sharing opens a fallback panel containing the destination URL, Copy link and Show QR. Cancellation is quiet. Copy/download status is placed inside an open dialog rather than underneath the modal backdrop. Transitions between share and QR replace one dialog/history entry; Back closes the panel and focus returns to the original control.
 
 ## Digital business card
 
-`card.html` is a standalone, shareable business card for the studio at `/dashboard/card.html`. The studio's brand banner (`assets/studio-card-banner.webp`) runs full-bleed across the top, cancelling the card padding with negative margins and holding its 1672x941 ratio. Below it sit the studio name, the tagline "Your story, turned into a song you'll never forget.", "Rooted in Lumberport, West Virginia", five contact rows (phone, email, main site via tinyurl.com/heartstringswv to match the banner, jukebox, YouTube), an always-visible QR code of the card's own address, and buttons for Save contact (a vCard 3.0 `.vcf` built in the browser), Share card, Copy link, and Save QR image. It has its own `card.css` and `card.js` so the page loads without the dashboard's stylesheet or directory script.
+The standalone card remains at `card.html`, with its existing banner, contact details, vCard download, QR and sharing behavior. `card.html`, `card.css` and `card.js` are unchanged. Dashboard sharing uses the canonical URL from `og:url`, so previews still share the production card address.
 
-The phone row is first and links to `tel:+13046771113` while displaying 304-677-1113. The banner's baked-in text is repeated as real text below it, so nothing on the card depends on reading the image.
+## Validation for this change
 
-The card carries no funeral home partner row; that destination remains in the dashboard directory, which still holds 12 links.
+Run `npm ci && npm test` with a current Node.js version supported by jsdom. Dependencies are development-only; deployment remains plain HTML, CSS and JavaScript with no build step.
 
-Link previews use `assets/studio-card-banner.jpg`, a JPEG copy of the banner, with `twitter:card` set to `summary_large_image`. The JPEG exists because WebP previews are unreliable across social platforms; both copies must be updated together if the banner changes.
+11 jsdom behavior tests cover retained destinations/assets, valid IDs and ARIA references, filtering and navigation synchronization, favorites migration/order/persistence, cross-tab updates, copying and modal feedback, share/QR history and focus, recent-link focus retention, native-share cancellation and errors, blocked/corrupt storage, reduced motion, appearance persistence, and service-worker asset versions.
 
-A `.card-band` section sits first inside `<main>`, above the directory, with a copper metal edge and a warmer surface so it reads as separate from the link cards. Its Copy, Share, and QR actions reuse the dashboard's existing `copyLink`, `shareLink`, and `showQR` helpers; `showQR` now takes a URL and label instead of a card element. The band is not a `.card[data-url]`, so it is never filtered, counted, saved, or added to recents, and the directory still holds exactly 12 links.
+JavaScript syntax and `git diff --check` also pass. Responsive CSS was reviewed for one navigation per breakpoint, a single-column mobile grid, 44px controls, safe-area dock clearance, and mobile sheet sizing.
 
-Shared addresses come from each page's `og:url` meta rather than `location`, so a local preview still copies and encodes the published URL. Recently used links, favorites, QR downloads, native sharing/copy fallback, install support, and the synchronized floating category dock remain available.
-
-Copper surfaces and tactile feedback remain. Appearance controls are inside a collapsed native details panel. Control glow affects the navigation dock and focused cards. Compact view is the default for new settings; explicit existing preferences are respected. Motion respects the device's reduced-motion preference. Removed all obsolete hero/remote/pricing JavaScript and styles. Studio artwork is no longer loaded or precached.
-
-## Validation
-
-JavaScript syntax and whitespace checks pass. An isolated jsdom harness verifies 12 retained URLs, absence of promotional and Story Room UI, copy-first controls, search/filter intersections, dock synchronization, saving/unsaving, clipboard and recent-link tracking, QR opening, appearance controls, removal of obsolete Story Room favorites/history, unavailable storage, reduced motion, unique IDs, SVG references, and local assets.
-
-The business card was verified in headless Chromium against a local server: 37 checks covering band placement above the directory, distinct band styling, the unchanged 12-link count, clipboard contents, QR dialog contents for both the band and an ordinary card, band visibility under every filter, contact rows and `rel=noopener`, vCard structure and CRLF line endings, both downloads, and the absence of console errors or horizontal overflow at 390px. A separate service-worker run confirms that `card.html` and `index.html` each serve their own page offline.
-
-A further 31 checks cover the banner: that it decodes at full resolution, bleeds to the card's padding box, sits above the contact rows, and carries alt text; that the tagline and Lumberport line match the brand reference; that the phone row is first and dials the right number; that no funeral home URL, wording, or icon remains on the page or in the vCard; that the vCard carries `TEL` and the Lumberport address; and that the JPEG preview image is served. Contact values were checked for mid-word wrapping at 390px, 360px, and 320px.
-
-No real-device verification is claimed.
+**Visual validation remains pending:** the available cloud browser denied access to localhost and shared local files. No rendered preview, physical-phone verification, real native-share/QR scan, or offline browser test is claimed for this revision. jsdom models dialogs and browser APIs; it does not validate layout or native browser rendering.
 
 ## Maintenance
 
-Source: index.html, studio.css, studio.js, card.html, card.css, card.js. No build step or runtime package dependency. Add .card elements with data-url, data-title, data-category, .card-main, .card-title, .card-sub, and a .card-icon SVG. Category must match the containing data-section.
+Source: `index.html`, `studio.css`, `studio.js`, `sw.js`. New links are `.card` elements with `data-url`, `data-title`, `data-category`, `.card-main`, `.card-title`, `.card-sub`, and a `.card-icon` SVG. Category must match the containing `data-section`.
 
-Storage keys remain unchanged. Unknown/removed destinations are ignored when reading favorites and recents. When a destination changes address, add the old URL to the `MOVED` map in studio.js so existing favorites and recents carry over instead of being silently dropped; `knownURLs` rewrites through that map before filtering, and the next save writes the new URL back to storage. The v16 service-worker cache and CSS/JS query versions move together. Preserve the heartstrings-dashboard- cache prefix and /dashboard/ manifest scope; do not clear other apps' caches. Navigations are cached under their own request URL; caching every navigation under index.html would let the card page overwrite the dashboard's offline shell.
+Existing storage keys remain unchanged. Favorites order is insertion order in the existing saved-links array. Unknown destinations are ignored. Add moved addresses to MOVED to preserve favorites/history.
 
-Business-card contact details live in one place per file: the `CONTACT` object in card.js for the vCard, and the `.contact-list` rows in card.html for the visible card. Changing the phone number means editing both, and the number appears in `tel:` link form as well as display form.
+The service-worker cache is v17; dashboard CSS and JS use query version 14. Update cache and asset references together. Preserve the `heartstrings-dashboard-` cache prefix, `/dashboard/` manifest scope, and separate navigation cache keys for the dashboard and business card.
+
+Business-card contacts live in `card.js`'s CONTACT object and `card.html`'s contact rows. Its JPEG and WebP banner assets should stay in sync when changed.

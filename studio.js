@@ -50,6 +50,11 @@ recent = Array.isArray(recent)
 let activeFilter = "all";
 let toastTimer;
 function showToast(message) {
+  const dialogStatus = document.querySelector("dialog[open] .dialog-status");
+  if (dialogStatus) {
+    dialogStatus.textContent = message;
+    return;
+  }
   $("toast").textContent = message;
   $("toast").classList.add("show");
   clearTimeout(toastTimer);
@@ -59,21 +64,121 @@ const icon = (name) => `<svg aria-hidden="true"><use href="#i-${name}"/></svg>`;
 function labelFor(card) {
   return card.querySelector(".card-title").textContent.trim();
 }
-function renderRecent() {
-  $("recentCards").replaceChildren();
-  recent.forEach((url) => {
-    const card = catalog.get(url);
-    const link = document.createElement("a");
-    link.href = url;
-    link.target = "_blank";
-    link.rel = "noopener";
-    link.innerHTML = icon("clock");
-    link.append(document.createTextNode(labelFor(card)));
-    link.addEventListener("click", () => remember(url));
-    $("recentCards").append(link);
+function quickLink(url, kind) {
+  const card = catalog.get(url);
+  const item = document.createElement("div");
+  item.className = "quick-card";
+  const link = document.createElement("a");
+  link.href = url;
+  link.target = "_blank";
+  link.rel = "noopener";
+  link.innerHTML = icon(kind);
+  const label = document.createElement("span");
+  label.textContent = labelFor(card);
+  link.append(label);
+  link.addEventListener("click", () => remember(url));
+  const share = document.createElement("button");
+  share.type = "button";
+  share.className = "quiet-button";
+  share.innerHTML = icon("share") + "Share";
+  share.setAttribute(
+    "aria-label",
+    `Share ${labelFor(card)} from ${kind === "star" ? "favorites" : "recent links"}`,
+  );
+  share.addEventListener("click", () => {
+    shareLink(url, card.dataset.title, share);
+    remember(url);
   });
-  $("recentSection").hidden =
-    !recent.length || activeFilter !== "all";
+  item.append(link, share);
+  return item;
+}
+function renderRecent() {
+  // Keep nodes stable while the share sheet is open, so focus can return.
+  const existing = [...$("recentCards").children];
+  recent.forEach((url) => {
+    const item =
+      existing.find((node) => node.dataset.url === url) ||
+      quickLink(url, "clock");
+    item.dataset.url = url;
+    $("recentCards").append(item);
+  });
+  existing
+    .filter((node) => !recent.includes(node.dataset.url))
+    .forEach((node) => node.remove());
+  if (!recent.length) {
+    const note = document.createElement("p");
+    note.className = "recent-placeholder";
+    note.textContent = "The links you open and share will appear here.";
+    $("recentCards").replaceChildren(note);
+  }
+  $("recentSection").hidden = activeFilter !== "all";
+}
+function renderFavorites() {
+  const existing = [...$("favoriteCards").children];
+  [...saved].forEach((url) => {
+    const item =
+      existing.find((node) => node.dataset.url === url) ||
+      quickLink(url, "star");
+    item.dataset.url = url;
+    $("favoriteCards").append(item);
+  });
+  existing
+    .filter((node) => !saved.has(node.dataset.url))
+    .forEach((node) => node.remove());
+  $("favoritesHint").hidden = saved.size > 0;
+  $("orderFavorites").hidden = saved.size < 2;
+  $("favoritesSection").hidden = activeFilter !== "all" || saved.size === 0;
+}
+function renderFavoriteOrder(focusURL, direction) {
+  $("favoritesOrder").replaceChildren();
+  const urls = [...saved];
+  urls.forEach((url, index) => {
+    const row = document.createElement("li");
+    const name = document.createElement("span");
+    name.textContent = labelFor(catalog.get(url));
+    row.append(name);
+    [-1, 1].forEach((offset) => {
+      const button = document.createElement("button");
+      button.className = "icon-button";
+      button.type = "button";
+      button.textContent = offset < 0 ? "↑" : "↓";
+      button.dataset.url = url;
+      button.dataset.direction = offset;
+      button.setAttribute(
+        "aria-label",
+        `Move ${name.textContent} ${offset < 0 ? "up" : "down"}`,
+      );
+      button.disabled = index + offset < 0 || index + offset >= urls.length;
+      button.addEventListener("click", () => {
+        const next = [...saved];
+        [next[index], next[index + offset]] = [
+          next[index + offset],
+          next[index],
+        ];
+        saved = new Set(next);
+        const persisted = writeStore(SAVED_KEY, next);
+        renderFavorites();
+        renderFavoriteOrder(url, offset);
+        showToast(
+          persisted
+            ? `${name.textContent} moved ${offset < 0 ? "up" : "down"}.`
+            : "Order changed for this visit. Device storage is unavailable.",
+        );
+      });
+      row.append(button);
+    });
+    $("favoritesOrder").append(row);
+  });
+  if (focusURL) {
+    const candidates = [
+      ...$("favoritesOrder").querySelectorAll("button"),
+    ].filter((button) => button.dataset.url === focusURL && !button.disabled);
+    (
+      candidates.find(
+        (button) => button.dataset.direction === String(direction),
+      ) || candidates[0]
+    )?.focus();
+  }
 }
 function remember(url) {
   recent = [url, ...recent.filter((item) => item !== url)].slice(0, 3);
@@ -112,6 +217,8 @@ function applyFilters() {
   });
   $("resultCount").textContent = `${count} ${count === 1 ? "link" : "links"}`;
   $("savedCount").textContent = saved.size;
+  $("dockSavedCount").textContent = saved.size || "";
+  $("favoritesSection").hidden = activeFilter !== "all" || saved.size === 0;
   $("emptyState").hidden = count > 0;
   const noSaved = activeFilter === "saved" && saved.size === 0;
   $("emptyTitle").textContent = noSaved
@@ -120,8 +227,7 @@ function applyFilters() {
   $("emptyCopy").textContent = noSaved
     ? "Tap the star on any link to save it on this device."
     : "Choose another category or show all links.";
-  $("recentSection").hidden =
-    !recent.length || activeFilter !== "all";
+  $("recentSection").hidden = activeFilter !== "all";
 }
 function syncSaved() {
   cards.forEach((card) => {
@@ -134,6 +240,7 @@ function syncSaved() {
     );
     button.title = isSaved ? "Remove from saved" : "Save on this device";
   });
+  renderFavorites();
   applyFilters();
 }
 async function copyLink(url) {
@@ -164,25 +271,45 @@ async function copyLink(url) {
     return success;
   }
 }
-async function shareLink(url, title) {
+let shareURL = "";
+let shareTitle = "";
+function showShareOptions(url, title, trigger) {
+  shareURL = url;
+  shareTitle = title;
+  $("shareTitle").textContent = title.replace(/^Heartstrings Studio — /, "");
+  $("shareUrl").value = url;
+  openDialog($("shareDialog"), trigger);
+}
+async function shareLink(url, title, trigger) {
+  const origin = trigger || document.activeElement;
   if (!navigator.share) {
-    await copyLink(url);
+    showShareOptions(url, title, origin);
     return;
   }
   try {
     await navigator.share({ title, url });
   } catch (error) {
-    if (error.name !== "AbortError") await copyLink(url);
+    if (error.name !== "AbortError") showShareOptions(url, title, origin);
   }
 }
 let qrURL = "";
 let qrLabel = "";
 let dialogTrigger = null;
 function openDialog(dialog, trigger) {
-  dialogTrigger = trigger || document.activeElement;
+  const current = document.querySelector("dialog[open]");
+  const rootTrigger = dialogTrigger || trigger || document.activeElement;
+  if (current && current !== dialog) {
+    // A replacement shares one history entry and one focus-return target.
+    current._replacing = true;
+    current.close();
+  }
+  dialogTrigger = rootTrigger;
+  dialog.querySelector(".dialog-status")?.replaceChildren();
   dialog.showModal();
   document.body.style.overflow = "hidden";
-  history.pushState({ studioDialog: dialog.id }, "");
+  if (history.state?.studioDialog)
+    history.replaceState({ studioDialog: dialog.id }, "");
+  else history.pushState({ studioDialog: dialog.id }, "");
   dialog.querySelector("[data-close]")?.focus();
 }
 function closeDialog(dialog) {
@@ -242,7 +369,9 @@ cards.forEach((card) => {
         card.classList.remove("saving");
         requestAnimationFrame(() => card.classList.add("saving"));
         if (card.hidden)
-          document.querySelector('[data-filter="saved"]').focus();
+          [...document.querySelectorAll('[data-filter="saved"]')]
+            .find((button) => button.getClientRects().length)
+            ?.focus();
         showToast(
           persisted
             ? wasSaved
@@ -252,7 +381,7 @@ cards.forEach((card) => {
         );
       } else {
         remember(url);
-        if (action === "share") shareLink(url, card.dataset.title);
+        if (action === "share") shareLink(url, card.dataset.title, button);
         if (action === "qr") showQR(url, labelFor(card), button);
       }
     });
@@ -271,16 +400,43 @@ document.querySelectorAll("[data-filter]").forEach((button) =>
       item.classList.toggle("active", selected);
       item.setAttribute("aria-pressed", String(selected));
     });
+    document
+      .querySelectorAll(".directory-grid .card")
+      .forEach((card) =>
+        (card.getAnimations?.() || []).forEach((animation) =>
+          animation.cancel(),
+        ),
+      );
     applyFilters();
+    if (motionAllowed() && Element.prototype.animate) {
+      cards
+        .filter((card) => !card.hidden)
+        .forEach((card, index) =>
+          card.animate(
+            [
+              { opacity: 0, transform: "translateY(6px)" },
+              { opacity: 1, transform: "translateY(0)" },
+            ],
+            {
+              duration: 180,
+              delay: Math.min(index * 15, 75),
+              easing: "ease-out",
+            },
+          ),
+        );
+    }
     if (button.closest(".remote-dock"))
-      $("directory").scrollIntoView({
+      $("filterBar").scrollIntoView({
         behavior: motionAllowed() ? "smooth" : "instant",
         block: "start",
       });
   }),
 );
 $("resetFilters").addEventListener("click", () => {
-  const allFilter = document.querySelector('[data-filter="all"]');
+  const allFilter =
+    [...document.querySelectorAll('[data-filter="all"]')].find(
+      (button) => button.getClientRects().length,
+    ) || document.querySelector('[data-filter="all"]');
   allFilter.click();
   allFilter.focus();
 });
@@ -308,6 +464,10 @@ document.querySelectorAll("dialog").forEach((dialog) => {
       closeDialog(dialog);
   });
   dialog.addEventListener("close", () => {
+    if (dialog._replacing) {
+      dialog._replacing = false;
+      return;
+    }
     document.body.style.overflow = "";
     if (dialogTrigger?.isConnected) dialogTrigger.focus();
     dialogTrigger = null;
@@ -344,8 +504,9 @@ const SITE_BASE =
   document.querySelector('meta[property="og:url"]')?.content || location.href;
 const CARD_PAGE = new URL("card.html", SITE_BASE).href;
 const CARD_TITLE = "Heartstrings Studio \u2014 Digital Business Card";
-$("cardCopy").addEventListener("click", () => copyLink(CARD_PAGE));
-$("cardShare").addEventListener("click", () => shareLink(CARD_PAGE, CARD_TITLE));
+$("cardShare").addEventListener("click", (event) =>
+  shareLink(CARD_PAGE, CARD_TITLE, event.currentTarget),
+);
 $("cardQR").addEventListener("click", (event) =>
   showQR(CARD_PAGE, "Digital Business Card", event.currentTarget),
 );
@@ -386,9 +547,10 @@ window.addEventListener("appinstalled", () => {
   writeStore(INSTALL_KEY, true);
 });
 window.addEventListener("storage", (event) => {
-  if (event.key === SAVED_KEY) {
+  if (event.key === SAVED_KEY || event.key === null) {
     saved = new Set(knownURLs(readStore(SAVED_KEY, [])));
     syncSaved();
+    if ($("favoritesDialog").open) renderFavoriteOrder();
   }
 });
 // Local preferences enhance the ordinary links without requiring an account.
@@ -461,10 +623,22 @@ window.addEventListener("storage", (event) => {
 });
 applySettings();
 document
-  .querySelectorAll(".appearance-settings, .console-settings, .remote-dock")
+  .querySelectorAll("#appearanceButton, .console-settings, .remote-dock")
   .forEach((element) => {
     element.hidden = false;
   });
+$("appearanceButton").addEventListener("click", (event) =>
+  openDialog($("appearanceDialog"), event.currentTarget),
+);
+$("orderFavorites").addEventListener("click", (event) => {
+  renderFavoriteOrder();
+  openDialog($("favoritesDialog"), event.currentTarget);
+});
+$("shareCopy").addEventListener("click", () => copyLink(shareURL));
+$("shareQR").addEventListener("click", () => showQR(shareURL, shareTitle));
+$("shareUrl").addEventListener("click", (event) =>
+  event.currentTarget.select(),
+);
 renderRecent();
 syncSaved();
 if ("serviceWorker" in navigator)
@@ -473,4 +647,3 @@ if ("serviceWorker" in navigator)
       /* Links and tools still work without offline installation. */
     });
   });
-
