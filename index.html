@@ -45,7 +45,7 @@
       name="twitter:image"
       content="https://heartstringsstudio.github.io/dashboard/logo.png"
     />
-    <link rel="stylesheet" href="studio.css?v=12" />
+    <link rel="stylesheet" href="studio.css?v=13" />
   </head>
   <body>
     <svg
@@ -130,6 +130,10 @@
           <line x1="12" y1="2" x2="12" y2="22" />
           <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
         </symbol>
+        <symbol id="i-copy" viewBox="0 0 24 24">
+          <rect x="9" y="9" width="12" height="12" rx="2.5" />
+          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+        </symbol>
         <symbol id="i-share" viewBox="0 0 24 24">
           <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
           <polyline points="16 6 12 2 8 6" />
@@ -165,6 +169,33 @@
         <span class="utility-label">Your link desk</span>
       </header>
       <main id="mainContent">
+        <section class="card-band" aria-labelledby="cardBandHeading">
+          <div class="card-band-brand">
+            <img src="logo.png" alt="" width="60" height="60" />
+            <div>
+              <p class="eyebrow">MY DIGITAL BUSINESS CARD</p>
+              <h2 id="cardBandHeading">Heartstrings Studio, in one link</h2>
+              <p class="card-band-sub">
+                Contact, songs, and a scannable code &mdash; hand it to anyone.
+              </p>
+            </div>
+          </div>
+          <div class="card-band-actions">
+            <a class="primary-button" href="card.html"
+              >Open card<svg aria-hidden="true"><use href="#i-arrow" /></svg
+            ></a>
+            <button class="quiet-button" id="cardCopy" type="button">
+              <svg aria-hidden="true"><use href="#i-copy" /></svg
+              ><span>Copy</span></button
+            ><button class="quiet-button" id="cardShare" type="button">
+              <svg aria-hidden="true"><use href="#i-share" /></svg
+              ><span>Share</span></button
+            ><button class="quiet-button" id="cardQR" type="button">
+              <svg aria-hidden="true"><use href="#i-qr" /></svg
+              ><span>QR</span>
+            </button>
+          </div>
+        </section>
         <div class="directory-toolbar" id="directory">
           <div class="toolbar-top">
             <h2>Share Links</h2>
@@ -634,6 +665,6 @@
     </dialog>
     <div id="toast" role="status" aria-live="polite"></div>
     <script src="qrcode.min.js"></script>
-    <script src="studio.js?v=11"></script>
+    <script src="studio.js?v=12"></script>
   </body>
 </html>

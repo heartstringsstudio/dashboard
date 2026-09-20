@@ -1,10 +1,13 @@
 const CACHE_PREFIX = "heartstrings-dashboard-";
-const CACHE = `${CACHE_PREFIX}v12`;
+const CACHE = `${CACHE_PREFIX}v13`;
 const SHELL = [
   "./",
   "./index.html",
-  "./studio.css?v=12",
-  "./studio.js?v=11",
+  "./studio.css?v=13",
+  "./studio.js?v=12",
+  "./card.html",
+  "./card.css?v=1",
+  "./card.js?v=1",
   "./manifest.json",
   "./logo.png",
   "./assets/control-room.webp",
@@ -13,6 +16,7 @@ const SHELL = [
   "./apple-touch-icon.png",
   "./qrcode.min.js",
   "./fonts/dm-sans-latin.woff2",
+  "./fonts/libre-caslon-display-400-latin.woff2",
 ];
 
 self.addEventListener("install", (e) => {
@@ -53,10 +57,14 @@ self.addEventListener("fetch", (e) => {
             const copy = res.clone();
             return caches
               .open(CACHE)
-              .then((c) => c.put("./index.html", copy))
+              .then((c) => c.put(e.request, copy))
               .then(() => res);
           })
-          .catch(() => caches.match("./index.html")),
+          .catch(() =>
+            caches
+              .match(e.request)
+              .then((hit) => hit || caches.match("./index.html")),
+          ),
       );
     } else {
       // Show cached assets immediately, then refresh them for the next request.

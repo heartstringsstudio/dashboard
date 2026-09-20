@@ -1,0 +1,408 @@
+/* Standalone digital business card. Shares the dashboard's copper palette
+   but stays independent of studio.css so the card loads on its own. */
+@font-face {
+  font-family: "DM Sans";
+  src: url("fonts/dm-sans-latin.woff2") format("woff2");
+  font-weight: 400 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Libre Caslon";
+  src: url("fonts/libre-caslon-display-400-latin.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+:root {
+  color-scheme: dark;
+  --bg: #141110;
+  --ink: #f7eee6;
+  --muted: #bfb0a4;
+  --line: #dca67b29;
+  --copper: #e8b38d;
+  --font: "DM Sans", system-ui, sans-serif;
+  --metal: linear-gradient(
+    115deg,
+    #995b3e 0%,
+    #d49a70 28%,
+    #f8dbba 49%,
+    #d39970 66%,
+    #ad6b47 100%
+  );
+}
+* {
+  box-sizing: border-box;
+}
+body,
+h1,
+h2,
+p,
+ul {
+  margin: 0;
+}
+ul {
+  padding: 0;
+  list-style: none;
+}
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font: 400 1rem/1.5 var(--font);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100dvh;
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at 50% 0%, #b567392b, transparent 65%);
+  z-index: -1;
+}
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+button {
+  font: inherit;
+  cursor: pointer;
+  color: inherit;
+}
+a {
+  color: inherit;
+}
+svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  display: block;
+  flex-shrink: 0;
+}
+:focus-visible {
+  outline: 3px solid #ffd5ac;
+  outline-offset: 4px;
+}
+.card-page {
+  width: min(560px, 100%);
+  margin: auto;
+  padding: clamp(20px, 5vw, 48px) 20px calc(40px + env(safe-area-inset-bottom));
+}
+.eyebrow {
+  font-size: 0.6875rem;
+  letter-spacing: 0.16em;
+  font-weight: 500;
+  color: var(--copper);
+  line-height: 1.5;
+}
+
+/* The card itself */
+.calling-card {
+  position: relative;
+  padding: clamp(22px, 5vw, 32px);
+  border: 1px solid #dca67b52;
+  border-radius: 20px;
+  background: linear-gradient(140deg, #3a2c21, #211b17 55%, #33261c);
+  box-shadow:
+    inset 0 1px #ffe4c226,
+    0 10px 0 #0d0a0866,
+    0 26px 60px #0007;
+  overflow: hidden;
+}
+.calling-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  background: var(--metal);
+}
+.calling-card-top {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding-top: 6px;
+}
+.calling-card-top img {
+  width: 84px;
+  height: 84px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+.calling-card-top h1 {
+  font: 400 clamp(1.3rem, 4.4vw, 1.6rem) / 1.25 "Libre Caslon", Georgia, serif;
+  letter-spacing: -0.01em;
+  margin-top: 6px;
+  color: #ffe6ca;
+}
+.locale {
+  margin-top: 8px;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+.pitch {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: #e4d5c7;
+}
+
+/* Contact rows */
+.contact-list {
+  margin-top: 20px;
+  display: grid;
+  gap: 8px;
+}
+.contact-list a {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 60px;
+  padding: 10px 14px;
+  border: 1px solid #c59b7833;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #322920, #221d19 65%);
+  text-decoration: none;
+  transition:
+    transform 0.18s,
+    border-color 0.18s;
+}
+.contact-icon {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: linear-gradient(145deg, #957357, #49382b 50%, #5f4532);
+  border: 1px solid #d5b68c4f;
+  color: #f3cfaa;
+  box-shadow:
+    inset 0 1px #ffe5c747,
+    0 3px #100a0770;
+  flex-shrink: 0;
+}
+.contact-icon svg {
+  width: 19px;
+  height: 19px;
+}
+.contact-text {
+  flex: 1;
+  min-width: 0;
+}
+.contact-label {
+  display: block;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  line-height: 1.35;
+}
+.contact-value {
+  display: block;
+  margin-top: 3px;
+  font-size: 0.8125rem;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+.row-arrow {
+  width: 16px;
+  height: 16px;
+  color: #b6a392;
+  transform: rotate(-40deg);
+  transition: transform 0.2s;
+}
+
+/* Actions */
+.card-cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 24px;
+}
+.primary-button,
+.quiet-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 12px 20px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-size: 0.8125rem;
+  transition:
+    filter 0.18s,
+    transform 0.18s,
+    box-shadow 0.18s;
+}
+.primary-button {
+  flex: 1 1 100%;
+  border: 1px solid #f9cfac;
+  background: var(--metal);
+  color: #28170d;
+  font-weight: 600;
+  font-size: 0.875rem;
+  box-shadow:
+    inset 0 1px #fff5e2b3,
+    0 4px #74432c,
+    0 8px 24px #0005;
+}
+.quiet-button {
+  flex: 1 1 0;
+  min-width: 140px;
+  background: linear-gradient(160deg, #3d342e, #251f1b);
+  border: 1px solid #d5b89c36;
+  color: #e7d8c9;
+  box-shadow:
+    inset 0 1px #f8dfc52b,
+    0 3px #090706,
+    0 5px 10px #0003;
+}
+.primary-button svg,
+.quiet-button svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* QR block */
+.card-qr {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+}
+.qr-code {
+  background: #fff;
+  padding: 10px;
+  border-radius: 12px;
+  width: max-content;
+  flex-shrink: 0;
+  box-shadow: 0 6px 20px #0006;
+}
+.qr-code canvas,
+.qr-code img {
+  display: block;
+  width: 124px;
+  height: auto;
+}
+.qr-note p:not(.eyebrow) {
+  margin-top: 8px;
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  color: var(--muted);
+}
+.qr-note strong {
+  color: #e4d5c7;
+  font-weight: 500;
+}
+.qr-note .quiet-button {
+  margin-top: 12px;
+  min-height: 44px;
+  min-width: 0;
+  padding: 10px 16px;
+  font-size: 0.75rem;
+}
+
+.back-link {
+  margin-top: 26px;
+  text-align: center;
+  font-size: 0.8125rem;
+}
+.back-link a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 10px 18px;
+  color: var(--muted);
+  text-decoration: none;
+  border-radius: 10px;
+  border: 1px solid transparent;
+}
+.back-link svg {
+  width: 16px;
+  height: 16px;
+}
+
+#toast {
+  position: fixed;
+  bottom: calc(env(safe-area-inset-bottom) + 24px);
+  left: 50%;
+  transform: translate(-50%, 16px);
+  padding: 12px 22px;
+  max-width: calc(100% - 32px);
+  width: max-content;
+  border: 1px solid #dcb18570;
+  background: #3d2b1e;
+  color: #ffe1c1;
+  border-radius: 12px;
+  box-shadow: 0 8px 40px #0009;
+  z-index: 2000;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 0.2s,
+    transform 0.2s;
+  font-size: 0.875rem;
+  text-align: center;
+}
+#toast.show {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+@media (hover: hover) {
+  .contact-list a:hover {
+    border-color: #d5a5768c;
+    transform: translateY(-2px);
+  }
+  .contact-list a:hover .row-arrow {
+    color: var(--copper);
+    transform: rotate(-40deg) translateX(3px);
+  }
+  .primary-button:hover {
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+  }
+  .quiet-button:hover {
+    filter: brightness(1.2);
+  }
+  .back-link a:hover {
+    color: var(--ink);
+    border-color: var(--line);
+  }
+}
+.primary-button:active,
+.quiet-button:active {
+  transform: translateY(3px);
+  box-shadow: inset 0 1px #ffffff20;
+}
+
+@media (max-width: 460px) {
+  .calling-card-top img {
+    width: 64px;
+    height: 64px;
+  }
+  .card-qr {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .quiet-button {
+    min-width: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
