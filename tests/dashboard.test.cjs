@@ -1,0 +1,288 @@
+const { test } = require("node:test");
+const assert = require("node:assert/strict");
+const { readFileSync, existsSync } = require("node:fs");
+const { resolve } = require("node:path");
+const { JSDOM } = require("jsdom");
+const root = resolve(__dirname, "..");
+const html = readFileSync(resolve(root, "index.html"), "utf8");
+const js = readFileSync(resolve(root, "studio.js"), "utf8");
+const savedKey = "heartstrings_dashboard_saved_links";
+const settingsKey = "heartstrings_dashboard_console_settings";
+const main = "https://tinyurl.com/heartstringswv";
+const jukebox = "https://tinyurl.com/hsjukebox";
+const partner = "https://tinyurl.com/heartstringsfh";
+const tick = () => new Promise((resolve) => setTimeout(resolve, 20));
+function setup(t, options = {}) {
+  const dom = new JSDOM(html, {
+    url: "https://heartstringsstudio.github.io/dashboard/",
+    runScripts: "outside-only",
+    pretendToBeVisual: true,
+  });
+  t.after(() => dom.window.close());
+  const w = dom.window,
+    d = w.document;
+  const errors = [];
+  w.addEventListener("error", (e) => errors.push(e.error));
+  t.after(() => assert.deepEqual(errors, [], "No application errors"));
+  w.matchMedia = (query) => ({
+    matches: query.includes("reduced-motion") && !!options.reduced,
+    addEventListener() {},
+  });
+  w.HTMLElement.prototype.scrollIntoView = function () {};
+  w.HTMLElement.prototype.getClientRects = function () {
+    return [1];
+  };
+  let animations = 0;
+  w.Element.prototype.getAnimations = () => [];
+  w.Element.prototype.animate = () => {
+    animations++;
+    return { cancel() {} };
+  };
+  // jsdom has no dialog renderer: model only lifecycle, history and focus.
+  w.HTMLDialogElement.prototype.showModal = function () {
+    this.open = true;
+  };
+  w.HTMLDialogElement.prototype.close = function () {
+    this.open = false;
+    w.setTimeout(() => this.dispatchEvent(new w.Event("close")), 0);
+  };
+  const qrCalls = [];
+  w.QRCode = function (element, data) {
+    qrCalls.push(data.text);
+    element.append(d.createElement("canvas"));
+  };
+  w.QRCode.CorrectLevel = { M: 0 };
+  let copied;
+  Object.defineProperty(w.navigator, "clipboard", {
+    value: {
+      writeText: async (text) => {
+        copied = text;
+      },
+    },
+  });
+  if (options.share) w.navigator.share = options.share;
+  for (const [key, value] of Object.entries(options.storage || {}))
+    w.localStorage.setItem(key, value);
+  if (options.storageBlocked)
+    Object.defineProperty(w, "localStorage", {
+      get() {
+        throw Error("Blocked");
+      },
+    });
+  w.eval(js);
+  return {
+    w,
+    d,
+    qrCalls,
+    copied: () => copied,
+    animations: () => animations,
+    click: (selector) => {
+      const el = d.querySelector(selector);
+      assert.ok(el, selector);
+      el.click();
+    },
+    visible: () =>
+      [...d.querySelectorAll(".card[data-url]")].filter((c) => !c.hidden),
+  };
+}
+test("retains 12 working destinations and valid local assets, labels and unique IDs", (t) => {
+  const { d, visible } = setup(t);
+  assert.equal(visible().length, 12);
+  const ids = [...d.querySelectorAll("[id]")].map((n) => n.id);
+  assert.equal(new Set(ids).size, ids.length);
+  for (const el of d.querySelectorAll("[aria-labelledby],[aria-describedby]")) {
+    for (const key of ["aria-labelledby", "aria-describedby"])
+      for (const id of (el.getAttribute(key) || "").split(" ").filter(Boolean))
+        assert.ok(d.getElementById(id), id);
+  }
+  for (const el of d.querySelectorAll("script[src],img[src],link[href]")) {
+    const src = el.getAttribute("src") || el.getAttribute("href");
+    if (!/^https?:/.test(src))
+      assert.ok(existsSync(resolve(root, src.split("?")[0])), src);
+  }
+  for (const a of d.querySelectorAll(".card-main")) {
+    assert.ok(a.href.startsWith("https://"));
+    assert.equal(a.rel, "noopener");
+  }
+  assert.equal(d.querySelectorAll(".card .share-btn").length, 12);
+  assert.equal(d.querySelector("#favoritesSection").hidden, true);
+});
+test("desktop and dock filters synchronize, including empty saved state and reset", (t) => {
+  const app = setup(t);
+  for (const [filter, count] of [
+    ["listen", 7],
+    ["studio", 2],
+    ["extras", 3],
+    ["saved", 0],
+    ["all", 12],
+  ]) {
+    app.click(`.remote-dock [data-filter="${filter}"]`);
+    assert.equal(app.visible().length, count);
+    assert.equal(
+      app.d
+        .querySelector(`.directory-filters [data-filter="${filter}"]`)
+        .getAttribute("aria-pressed"),
+      "true",
+    );
+    assert.equal(
+      app.d.querySelector("#resultCount").textContent,
+      `${count} links`,
+    );
+  }
+  app.click('[data-filter="saved"]');
+  assert.equal(app.d.querySelector("#emptyState").hidden, false);
+  app.click("#resetFilters");
+  assert.equal(app.visible().length, 12);
+});
+test("favorites migrate old addresses, reorder, persist and synchronize between tabs", (t) => {
+  const app = setup(t, {
+    storage: {
+      [savedKey]: JSON.stringify([
+        "https://heartstringsstudio.github.io/heartstringsstudio/",
+        jukebox,
+        "https://invalid.test",
+      ]),
+    },
+  });
+  const order = () =>
+    [...app.d.querySelectorAll("#favoriteCards .quick-card")].map(
+      (n) => n.dataset.url,
+    );
+  assert.deepEqual(order(), [main, jukebox]);
+  app.click("#orderFavorites");
+  app.click("#favoritesOrder li:first-child button:last-child");
+  assert.deepEqual(order(), [jukebox, main]);
+  assert.deepEqual(JSON.parse(app.w.localStorage.getItem(savedKey)), [
+    jukebox,
+    main,
+  ]);
+  assert.equal(
+    app.d.activeElement.getAttribute("aria-label"),
+    "Move Main Studio Site up",
+  );
+  assert.match(
+    app.d.querySelector("#favoritesDialog .dialog-status").textContent,
+    /moved down/,
+  );
+  app.w.localStorage.setItem(savedKey, JSON.stringify([partner]));
+  app.w.dispatchEvent(new app.w.StorageEvent("storage", { key: savedKey }));
+  assert.deepEqual(order(), [partner]);
+  assert.equal(app.d.querySelector("#dockSavedCount").textContent, "1");
+});
+test("share fallback copies correct URL and keeps feedback inside the modal", async (t) => {
+  const app = setup(t);
+  app.click(".card .share-btn");
+  assert.equal(app.d.querySelector("#shareDialog").open, true);
+  assert.equal(app.d.querySelector("#shareUrl").value, main);
+  app.click("#shareCopy");
+  await tick();
+  assert.equal(app.copied(), main);
+  assert.equal(
+    app.d.querySelector("#shareDialog .dialog-status").textContent,
+    "Link copied",
+  );
+  assert.equal(app.d.querySelector("#recentCards a").href, main);
+  assert.ok(app.d.querySelector("#recentCards button"));
+});
+test("share → QR → share uses one history entry, closes on Back and restores focus", async (t) => {
+  const app = setup(t);
+  const trigger = app.d.querySelector(".card .share-btn");
+  trigger.focus();
+  trigger.click();
+  const length = app.w.history.length;
+  app.click("#shareQR");
+  await tick();
+  assert.equal(app.d.querySelectorAll("dialog[open]").length, 1);
+  assert.equal(app.d.querySelector("#qrDialog").open, true);
+  assert.equal(app.qrCalls.at(-1), main);
+  assert.equal(app.w.history.length, length);
+  app.click("#qrShare");
+  await tick();
+  assert.equal(app.d.querySelector("#shareDialog").open, true);
+  app.click('[data-close="shareDialog"]');
+  await tick();
+  await tick();
+  assert.equal(app.d.querySelectorAll("dialog[open]").length, 0);
+  assert.equal(app.d.activeElement, trigger);
+  assert.equal(app.d.body.style.overflow, "");
+});
+test("recent share retains its focus-return target when recency changes", async (t) => {
+  const app = setup(t, {
+    storage: {
+      heartstrings_dashboard_recent_links: JSON.stringify([main, jukebox]),
+    },
+  });
+  const trigger = app.d.querySelectorAll("#recentCards button")[1];
+  trigger.focus();
+  trigger.click();
+  assert.equal(
+    app.d.querySelector("#recentCards .quick-card").dataset.url,
+    jukebox,
+  );
+  app.click('[data-close="shareDialog"]');
+  await tick();
+  await tick();
+  assert.equal(app.d.activeElement, trigger);
+});
+test("native share receives canonical business-card URL; cancellation is quiet", async (t) => {
+  const calls = [];
+  const app = setup(t, {
+    share: async (data) => {
+      calls.push(data);
+      throw Object.assign(Error("cancel"), { name: "AbortError" });
+    },
+  });
+  app.click("#cardShare");
+  await tick();
+  assert.equal(
+    calls[0].url,
+    "https://heartstringsstudio.github.io/dashboard/card.html",
+  );
+  assert.equal(app.d.querySelectorAll("dialog[open]").length, 0);
+});
+test("native share failure opens fallback rather than silently copying", async (t) => {
+  const app = setup(t, {
+    share: async () => {
+      throw Error("Unavailable");
+    },
+  });
+  app.click("#cardShare");
+  await tick();
+  assert.equal(app.d.querySelector("#shareDialog").open, true);
+  assert.equal(app.copied(), undefined);
+});
+test("blocked storage and corrupt preferences preserve usable links", (t) => {
+  const app = setup(t, { storageBlocked: true });
+  app.click(".save-btn");
+  assert.equal(app.d.querySelector("#favoritesSection").hidden, false);
+  assert.match(app.d.querySelector("#toast").textContent, /this visit/);
+  assert.equal(app.visible().length, 12);
+  const corrupt = setup(t, {
+    storage: { [savedKey]: "bad-json", [settingsKey]: "null" },
+  });
+  assert.equal(corrupt.visible().length, 12);
+});
+test("reduced motion disables filter animation and appearance setting persists", (t) => {
+  const app = setup(t, { reduced: true });
+  app.click('[data-filter="listen"]');
+  assert.equal(app.animations(), 0);
+  assert.ok(app.d.body.classList.contains("motion-off"));
+  app.click("#appearanceButton");
+  app.click("#compactToggle");
+  assert.equal(
+    JSON.parse(app.w.localStorage.getItem(settingsKey)).compact,
+    false,
+  );
+  assert.equal(app.d.querySelector("#appearanceDialog").open, true);
+});
+test("cache manifest includes versioned assets and retained business card files", () => {
+  const sw = readFileSync(resolve(root, "sw.js"), "utf8");
+  for (const asset of [
+    "studio.css?v=14",
+    "studio.js?v=14",
+    "card.html",
+    "card.css?v=2",
+    "card.js?v=3",
+  ])
+    assert.ok(sw.includes(asset), asset);
+});

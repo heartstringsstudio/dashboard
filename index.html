@@ -11,7 +11,10 @@
       name="apple-mobile-web-app-status-bar-style"
       content="black-translucent"
     />
-    <meta name="apple-mobile-web-app-title" content="Heartstrings Studio Dashboard" />
+    <meta
+      name="apple-mobile-web-app-title"
+      content="Heartstrings Studio Dashboard"
+    />
     <meta name="theme-color" content="#141110" />
     <link rel="manifest" href="manifest.json" />
     <link rel="icon" href="logo.png" type="image/png" />
@@ -45,7 +48,7 @@
       name="twitter:image"
       content="https://heartstringsstudio.github.io/dashboard/logo.png"
     />
-    <link rel="stylesheet" href="studio.css?v=13" />
+    <link rel="stylesheet" href="studio.css?v=14" />
   </head>
   <body>
     <svg
@@ -163,42 +166,60 @@
         <div class="brand">
           <img src="logo.png" alt="" width="36" height="36" />
           <div>
-            <h1>Heartstrings Studio <span class="dashboard-label">Dashboard</span></h1>
+            <h1>
+              Heartstrings Studio <span class="dashboard-label">Dashboard</span>
+            </h1>
           </div>
         </div>
-        <span class="utility-label">Your link desk</span>
+        <div class="header-tools">
+          <span class="utility-label">Your link desk</span
+          ><button
+            class="icon-button"
+            id="appearanceButton"
+            aria-label="Appearance settings"
+            hidden
+          >
+            <svg aria-hidden="true"><use href="#i-sliders" /></svg>
+          </button>
+        </div>
       </header>
       <main id="mainContent">
         <section class="card-band" aria-labelledby="cardBandHeading">
           <div class="card-band-brand">
-            <img src="logo.png" alt="" width="60" height="60" />
+            <span class="card-icon"
+              ><svg aria-hidden="true"><use href="#i-share" /></svg
+            ></span>
             <div>
-              <p class="eyebrow">MY DIGITAL BUSINESS CARD</p>
-              <h2 id="cardBandHeading">Heartstrings Studio, in one link</h2>
-              <p class="card-band-sub">
-                Contact, songs, and a scannable code &mdash; hand it to anyone.
-              </p>
+              <h2 id="cardBandHeading">My digital business card</h2>
+              <p class="card-band-sub">The studio, ready to share.</p>
             </div>
           </div>
           <div class="card-band-actions">
-            <a class="primary-button" href="card.html"
+            <a class="quiet-button" href="card.html"
               >Open card<svg aria-hidden="true"><use href="#i-arrow" /></svg
             ></a>
-            <button class="quiet-button" id="cardCopy" type="button">
-              <svg aria-hidden="true"><use href="#i-copy" /></svg
-              ><span>Copy</span></button
-            ><button class="quiet-button" id="cardShare" type="button">
-              <svg aria-hidden="true"><use href="#i-share" /></svg
-              ><span>Share</span></button
-            ><button class="quiet-button" id="cardQR" type="button">
-              <svg aria-hidden="true"><use href="#i-qr" /></svg
-              ><span>QR</span>
+            <button class="primary-button" id="cardShare" type="button">
+              <svg aria-hidden="true"><use href="#i-share" /></svg>Share card
+            </button>
+            <button
+              class="icon-button"
+              id="cardQR"
+              type="button"
+              aria-label="Show QR code for Digital Business Card"
+            >
+              <svg aria-hidden="true"><use href="#i-qr" /></svg>
             </button>
           </div>
         </section>
         <div class="directory-toolbar" id="directory">
           <div class="toolbar-top">
-            <h2>Share Links</h2>
+            <div>
+              <p class="eyebrow">YOUR STUDIO. WITHIN REACH.</p>
+              <h2>Share Links</h2>
+            </div>
+            <span class="toolbar-note"
+              >Star your go-to links to keep them close.</span
+            >
           </div>
           <div class="studio-scene" aria-hidden="true">
             <div class="studio-signature">
@@ -206,83 +227,53 @@
               <span>Heartstrings <span>Studio</span></span>
             </div>
           </div>
-          <div class="filter-row">
-            <div
-              class="filters directory-filters"
-              role="group"
-              aria-label="Filter studio links"
-            >
-              <button
-                class="filter active"
-                data-filter="all"
-                aria-pressed="true"
-              >
-                All links</button
-              ><button class="filter" data-filter="listen" aria-pressed="false">
-                Listen</button
-              ><button class="filter" data-filter="studio" aria-pressed="false">
-                Studio</button
-              ><button class="filter" data-filter="extras" aria-pressed="false">
-                Extras</button
-              ><button class="filter" data-filter="saved" aria-pressed="false">
-                <svg aria-hidden="true"><use href="#i-star" /></svg> Saved
-                <span id="savedCount">0</span>
-              </button>
-            </div>
-            <span
-              id="resultCount"
-              class="result-count"
-              role="status"
-              aria-live="polite"
-              >12 links</span
-            >
-          </div>
         </div>
-        <details class="appearance-settings" hidden>
-          <summary>
-            <svg aria-hidden="true"><use href="#i-sliders" /></svg>Appearance
-          </summary>
-          <section
-            class="console-settings"
-            aria-label="Dashboard controls"
-            hidden
+        <div class="filter-row" id="filterBar">
+          <div
+            class="filters directory-filters"
+            role="group"
+            aria-label="Filter studio links"
           >
-            <label class="glow-control" for="glowRange"
-              >Control glow
-              <input
-                id="glowRange"
-                type="range"
-                min="0"
-                max="100"
-                step="5"
-                value="35"
-              /><output id="glowValue" for="glowRange">35%</output></label
-            >
-            <button
-              class="setting-toggle"
-              id="motionToggle"
-              aria-pressed="true"
-            >
-              <span class="toggle-track" aria-hidden="true"></span>Motion
+            <button class="filter active" data-filter="all" aria-pressed="true">
+              All links</button
+            ><button class="filter" data-filter="listen" aria-pressed="false">
+              Listen</button
+            ><button class="filter" data-filter="studio" aria-pressed="false">
+              Studio</button
+            ><button class="filter" data-filter="extras" aria-pressed="false">
+              Extras</button
+            ><button class="filter" data-filter="saved" aria-pressed="false">
+              <svg aria-hidden="true"><use href="#i-star" /></svg> Saved
+              <span id="savedCount">0</span>
             </button>
-            <button
-              class="setting-toggle"
-              id="compactToggle"
-              aria-pressed="false"
-            >
-              <svg aria-hidden="true"><use href="#i-columns" /></svg>Compact
-              view
-            </button>
-          </section>
-        </details>
+          </div>
+          <span
+            id="resultCount"
+            class="result-count"
+            role="status"
+            aria-live="polite"
+            >12 links</span
+          >
+        </div>
         <section
-          id="recentSection"
-          class="recent-section"
-          aria-labelledby="recentHeading"
+          id="favoritesSection"
+          class="favorites-section"
+          aria-labelledby="favoritesHeading"
           hidden
         >
-          <h2 id="recentHeading">Recently used</h2>
-          <div id="recentCards" class="recent-links"></div>
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">ALWAYS CLOSE</p>
+              <h2 id="favoritesHeading">Your favorites</h2>
+            </div>
+            <button id="orderFavorites" class="text-button" type="button">
+              Reorder
+            </button>
+          </div>
+          <div id="favoriteCards" class="favorite-cards"></div>
+          <p id="favoritesHint" class="favorites-hint">
+            Star a link below to keep it here for next time.
+          </p>
         </section>
         <div id="emptyState" class="empty-state" hidden>
           <svg aria-hidden="true"><use href="#i-star" /></svg>
@@ -590,6 +581,15 @@
             </div>
           </section>
         </div>
+        <section
+          id="recentSection"
+          class="recent-section"
+          aria-labelledby="recentHeading"
+          hidden
+        >
+          <h2 id="recentHeading">Recently used</h2>
+          <div id="recentCards" class="recent-links"></div>
+        </section>
         <aside id="pwa-hint" aria-label="Install this dashboard" hidden>
           <div>
             <strong>Keep your links one tap away.</strong>
@@ -609,7 +609,8 @@
         </aside>
         <noscript
           ><p class="noscript-note">
-            All links work without JavaScript. Enable JavaScript for sharing, QR codes, and saved links.
+            All links work without JavaScript. Enable JavaScript for sharing, QR
+            codes, and saved links.
           </p></noscript
         >
       </main>
@@ -636,11 +637,106 @@
           <svg aria-hidden="true"><use href="#i-zap" /></svg><span>Extras</span>
         </button>
         <button class="dock-button" data-filter="saved" aria-pressed="false">
-          <svg aria-hidden="true"><use href="#i-star" /></svg><span>Saved</span>
+          <svg aria-hidden="true"><use href="#i-star" /></svg
+          ><span>Saved <span id="dockSavedCount">0</span></span>
         </button>
       </nav>
     </div>
 
+    <dialog id="appearanceDialog" aria-labelledby="appearanceTitle">
+      <div class="dialog-header">
+        <div>
+          <p class="eyebrow">MAKE IT YOURS</p>
+          <h2 id="appearanceTitle">Appearance</h2>
+        </div>
+        <button
+          class="icon-button"
+          data-close="appearanceDialog"
+          aria-label="Close appearance settings"
+        >
+          ×
+        </button>
+      </div>
+      <section class="console-settings" aria-label="Dashboard controls" hidden>
+        <label class="glow-control" for="glowRange"
+          >Control glow
+          <input
+            id="glowRange"
+            type="range"
+            min="0"
+            max="100"
+            step="5"
+            value="35"
+          /><output id="glowValue" for="glowRange">35%</output></label
+        >
+        <button class="setting-toggle" id="motionToggle" aria-pressed="true">
+          <span class="toggle-track" aria-hidden="true"></span>Motion
+        </button>
+        <button class="setting-toggle" id="compactToggle" aria-pressed="false">
+          <svg aria-hidden="true"><use href="#i-columns" /></svg>Compact view
+        </button>
+      </section>
+      <p class="dialog-status" role="status" aria-live="polite"></p>
+    </dialog>
+    <dialog
+      id="favoritesDialog"
+      aria-labelledby="favoritesTitle"
+      aria-describedby="favoritesInstructions"
+    >
+      <div class="dialog-header">
+        <div>
+          <p class="eyebrow">YOUR SHORTLIST</p>
+          <h2 id="favoritesTitle">Arrange favorites</h2>
+        </div>
+        <button
+          class="icon-button"
+          data-close="favoritesDialog"
+          aria-label="Close favorites"
+        >
+          ×
+        </button>
+      </div>
+      <p id="favoritesInstructions" class="dialog-hint">
+        Move your most-used links to the top. Changes save automatically on this
+        device.
+      </p>
+      <ol id="favoritesOrder" class="favorites-order"></ol>
+      <p class="dialog-status" role="status" aria-live="polite"></p>
+    </dialog>
+    <dialog
+      id="shareDialog"
+      aria-labelledby="shareTitle"
+      aria-describedby="shareHint"
+    >
+      <div class="dialog-header">
+        <p class="eyebrow">READY TO SEND</p>
+        <button
+          class="icon-button"
+          data-close="shareDialog"
+          aria-label="Close sharing"
+        >
+          ×
+        </button>
+      </div>
+      <h2 id="shareTitle"></h2>
+      <p id="shareHint" class="dialog-hint">
+        Copy the link to paste into a message, or show its QR code.
+      </p>
+      <input
+        id="shareUrl"
+        class="share-url"
+        aria-label="Link to share"
+        readonly
+      />
+      <div class="dialog-actions">
+        <button class="primary-button" id="shareCopy">
+          <svg aria-hidden="true"><use href="#i-copy" /></svg>Copy link</button
+        ><button class="quiet-button" id="shareQR">
+          <svg aria-hidden="true"><use href="#i-qr" /></svg>Show QR
+        </button>
+      </div>
+      <p class="dialog-status" role="status" aria-live="polite"></p>
+    </dialog>
     <dialog id="qrDialog" aria-labelledby="qrTitle" aria-describedby="qrHint">
       <div class="dialog-header">
         <p class="eyebrow">SHARE LINK</p>
@@ -658,6 +754,7 @@
       <p class="dialog-hint" id="qrHint">
         Scan with a phone camera to open this link.
       </p>
+      <p class="dialog-status" role="status" aria-live="polite"></p>
       <div class="dialog-actions">
         <button class="quiet-button" id="qrShare">Share link</button
         ><button class="primary-button" id="qrDownload">Save QR image</button>
@@ -665,6 +762,6 @@
     </dialog>
     <div id="toast" role="status" aria-live="polite"></div>
     <script src="qrcode.min.js"></script>
-    <script src="studio.js?v=13"></script>
+    <script src="studio.js?v=14"></script>
   </body>
 </html>
