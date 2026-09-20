@@ -6,7 +6,7 @@ Updated September 20, 2026.
 
 This app is Tim's personal utility for sharing existing links. It is not a sales page. The public GitHub Pages hosting and access settings are unchanged; "personal" describes the intended use, not authentication or private hosting.
 
-The interface opens directly to search and category filters. Removed the promotional hero, destination-selector panel, pricing dialog, sales copy, song-intake CTAs, and Story Room destination. The remaining 12 destinations retain their original URLs and metadata.
+The interface opens directly to search and category filters. Removed the promotional hero, destination-selector panel, pricing dialog, sales copy, song-intake CTAs, and Story Room destination. The remaining 12 destinations retain their metadata. Main Studio Site now points at tinyurl.com/heartstringswv, matching the business card and its banner; the other 11 URLs are unchanged.
 
 Copy is the first and most prominent action on every card, followed by Share, QR, and Save. Ordinary card links still open the destination in a new tab.
 
@@ -40,6 +40,6 @@ No real-device verification is claimed.
 
 Source: index.html, studio.css, studio.js, card.html, card.css, card.js. No build step or runtime package dependency. Add .card elements with data-url, data-title, data-category, .card-main, .card-title, .card-sub, and a .card-icon SVG. Category must match the containing data-section.
 
-Storage keys remain unchanged. Unknown/removed destinations are ignored when reading favorites and recents. The v15 service-worker cache and CSS/JS query versions move together. Preserve the heartstrings-dashboard- cache prefix and /dashboard/ manifest scope; do not clear other apps' caches. Navigations are cached under their own request URL; caching every navigation under index.html would let the card page overwrite the dashboard's offline shell.
+Storage keys remain unchanged. Unknown/removed destinations are ignored when reading favorites and recents. When a destination changes address, add the old URL to the `MOVED` map in studio.js so existing favorites and recents carry over instead of being silently dropped; `knownURLs` rewrites through that map before filtering, and the next save writes the new URL back to storage. The v16 service-worker cache and CSS/JS query versions move together. Preserve the heartstrings-dashboard- cache prefix and /dashboard/ manifest scope; do not clear other apps' caches. Navigations are cached under their own request URL; caching every navigation under index.html would let the card page overwrite the dashboard's offline shell.
 
 Business-card contact details live in one place per file: the `CONTACT` object in card.js for the vCard, and the `.contact-list` rows in card.html for the visible card. Changing the phone number means editing both, and the number appears in `tel:` link form as well as display form.
