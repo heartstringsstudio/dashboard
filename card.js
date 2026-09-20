@@ -13,7 +13,7 @@ const CONTACT = {
   // Phones dial the international form reliably; the card shows the local one.
   phoneDial: "+13046771113",
   email: "heartstringsstudiowv@gmail.com",
-  site: "https://heartstringsstudio.github.io/heartstringsstudio/",
+  site: "https://tinyurl.com/heartstringswv",
   city: "Lumberport",
   region: "WV",
   note: "Your story, turned into a song you'll never forget. Custom songs for memorials, weddings, birthdays, and milestones.",
