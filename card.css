@@ -65,6 +65,12 @@ a {
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
 }
+/* Every icon here is decoration. Without this, an inline SVG inside a link
+   can take the touch on iOS instead of letting the link activate. */
+a svg,
+button svg {
+  pointer-events: none;
+}
 button {
   font: inherit;
   cursor: pointer;
@@ -386,6 +392,13 @@ svg {
 .quiet-button:active {
   transform: translateY(3px);
   box-shadow: inset 0 1px #ffffff20;
+}
+/* Touch devices get no hover, and the tap highlight is off, so the press
+   state is the only sign a row registered the tap. */
+.contact-list a:active {
+  border-color: #d5a5768c;
+  background: linear-gradient(135deg, #3d3226, #2a231d 65%);
+  transform: translateY(1px);
 }
 
 @media (max-width: 460px) {
