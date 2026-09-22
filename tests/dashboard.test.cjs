@@ -14,7 +14,7 @@ const jukebox = "https://tinyurl.com/hsjukebox";
 const partner = "https://tinyurl.com/heartstringsfh";
 const tick = () => new Promise((resolve) => setTimeout(resolve, 20));
 function setup(t, options = {}) {
-  const dom = new JSDOM(html, {
+  const dom = new JSDOM(options.html || html, {
     url: options.url || "https://heartstringsstudio.github.io/dashboard/",
     runScripts: "outside-only",
     pretendToBeVisual: true,
@@ -363,4 +363,55 @@ test("?filter= opens a category for home-screen shortcuts; unknown values are ig
   );
   for (const shortcut of manifest.shortcuts)
     assert.ok(shortcut.url.startsWith(manifest.scope), shortcut.url);
+});
+
+function withSpotlight(week, note = "For Mom, from all of us") {
+  return html.replace(
+    /data-url=""\s+data-song=""\s+data-note=""\s+data-week=""/,
+    `data-url="https://youtu.be/example" data-song="Porch Light" data-note="${note}" data-week="${week}"`,
+  );
+}
+function isoDaysAgo(days) {
+  const d = new Date();
+  d.setDate(d.getDate() - days);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+}
+test("song of the week stays hidden until a song is set", (t) => {
+  const app = setup(t);
+  assert.equal(app.d.querySelector("#spotlight").hidden, true);
+});
+test("song of the week shows, shares with a message and makes a QR", async (t) => {
+  const calls = [];
+  const app = setup(t, {
+    html: withSpotlight(isoDaysAgo(1)),
+    share: async (data) => {
+      calls.push(data);
+    },
+  });
+  const d = app.d;
+  assert.equal(d.querySelector("#spotlight").hidden, false);
+  assert.equal(d.querySelector("#spotlightSong").textContent, "Porch Light");
+  assert.match(
+    d.querySelector("#spotlightLabel").textContent,
+    /^SONG OF THE WEEK · /,
+  );
+  assert.equal(
+    d.querySelector("#spotlightListen").href,
+    "https://youtu.be/example",
+  );
+  app.click("#spotlightShare");
+  await tick();
+  assert.equal(calls[0].url, "https://youtu.be/example");
+  assert.match(calls[0].text, /New this week.*Porch Light/);
+  app.click("#spotlightQR");
+  assert.equal(app.qrCalls.at(-1), "https://youtu.be/example");
+  assert.equal(app.visible().length, 12, "directory is unchanged");
+});
+test("a stale spotlight stops claiming this week", (t) => {
+  const app = setup(t, { html: withSpotlight(isoDaysAgo(30), "") });
+  assert.equal(
+    app.d.querySelector("#spotlightLabel").textContent,
+    "FEATURED SONG",
+  );
+  assert.equal(app.d.querySelector("#spotlightNote").hidden, true);
 });

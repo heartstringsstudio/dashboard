@@ -217,6 +217,48 @@
             </button>
           </div>
         </section>
+        <!-- Song of the Week: update data-url, data-song, data-note and
+             data-week (the Monday it goes live). Empty data-url hides it. -->
+        <section
+          id="spotlight"
+          class="spotlight"
+          aria-labelledby="spotlightSong"
+          data-url=""
+          data-song=""
+          data-note=""
+          data-week=""
+          hidden
+        >
+          <div class="spotlight-art" aria-hidden="true">
+            <img src="logo.png" alt="" width="64" height="64" />
+            <span class="eq"><i></i><i></i><i></i><i></i></span>
+          </div>
+          <div class="spotlight-text">
+            <p class="eyebrow" id="spotlightLabel">SONG OF THE WEEK</p>
+            <h2 id="spotlightSong"></h2>
+            <p id="spotlightNote" class="spotlight-note"></p>
+          </div>
+          <div class="spotlight-actions">
+            <a
+              class="primary-button"
+              id="spotlightListen"
+              target="_blank"
+              rel="noopener"
+              ><svg aria-hidden="true"><use href="#i-headphones" /></svg
+              >Listen</a
+            ><button class="quiet-button" id="spotlightShare" type="button">
+              <svg aria-hidden="true"><use href="#i-share" /></svg>Share
+            </button>
+            <button
+              class="icon-button"
+              id="spotlightQR"
+              type="button"
+              aria-label="Show QR code for the song of the week"
+            >
+              <svg aria-hidden="true"><use href="#i-qr" /></svg>
+            </button>
+          </div>
+        </section>
         <div class="directory-toolbar" id="directory">
           <div class="toolbar-top">
             <div>

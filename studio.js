@@ -278,6 +278,7 @@ const SHARE_TEXT = {
   card: "Save my card: Heartstrings Studio, custom songs from Lumberport, WV.",
 };
 function shareTextFor(url) {
+  if (spotlight && url === spotlight.url) return spotlight.text;
   const card = catalog.get(url);
   return (
     card?.dataset.shareText ||
@@ -511,6 +512,46 @@ $("cardShare").addEventListener("click", (event) =>
 );
 $("cardQR").addEventListener("click", (event) =>
   showQR(CARD_PAGE, "Digital Business Card", event.currentTarget),
+);
+// Song of the Week lives in the #spotlight element's data attributes so a
+// weekly update is one edit. After two weeks it stops claiming "this week".
+const SPOTLIGHT_FRESH_DAYS = 13;
+let spotlight = null;
+function setupSpotlight(now = new Date()) {
+  const section = $("spotlight");
+  const { url, song, note, week } = section.dataset;
+  if (!url || !song || !/^https:\/\//.test(url)) return;
+  const [year, month, day] = (week || "").split("-").map(Number);
+  const start = year ? new Date(year, month - 1, day) : null;
+  const age = start ? (now - start) / 86400000 : Infinity;
+  const fresh = age >= 0 && age <= SPOTLIGHT_FRESH_DAYS;
+  spotlight = {
+    url,
+    title: `${song} \u2014 Heartstrings Studio`,
+    text: fresh
+      ? `New this week from Heartstrings Studio: ${song}. Take a listen.`
+      : `${song}, from Heartstrings Studio. Take a listen.`,
+  };
+  $("spotlightLabel").textContent = fresh
+    ? `SONG OF THE WEEK \u00b7 ${start
+        .toLocaleDateString("en-US", { month: "short", day: "numeric" })
+        .toUpperCase()}`
+    : "FEATURED SONG";
+  $("spotlightSong").textContent = song;
+  $("spotlightNote").textContent = note || "";
+  $("spotlightNote").hidden = !note;
+  $("spotlightListen").href = url;
+  $("spotlightListen").setAttribute("aria-label", `Listen to ${song}`);
+  $("spotlightShare").setAttribute("aria-label", `Share ${song}`);
+  $("spotlightQR").setAttribute("aria-label", `Show QR code for ${song}`);
+  section.hidden = false;
+}
+setupSpotlight();
+$("spotlightShare").addEventListener("click", (event) =>
+  shareLink(spotlight.url, spotlight.title, event.currentTarget),
+);
+$("spotlightQR").addEventListener("click", (event) =>
+  showQR(spotlight.url, $("spotlightSong").textContent, event.currentTarget),
 );
 let installPrompt;
 const standalone =

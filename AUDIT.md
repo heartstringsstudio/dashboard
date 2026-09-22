@@ -25,6 +25,10 @@ Share uses the native share sheet when supported. Unsupported or failed native s
 - **Home-screen shortcuts:** `manifest.json` shortcuts open the card, `?filter=saved` or `?filter=listen`. Any valid `?filter=` value selects that category when the page loads. Unknown values are ignored.
 - **Link previews:** the dashboard's `og:image` and Twitter card now use the studio banner at large size instead of the small logo.
 
+## Song of the Week
+
+A spotlight card sits between the business-card strip and Share Links. It has Listen, Share (with a "New this week…" message) and QR buttons, plus a small copper equalizer that stops when motion is off. **Weekly update:** in `index.html`, edit the `#spotlight` element's `data-url`, `data-song`, `data-note` (optional) and `data-week` (`YYYY-MM-DD`, the day it goes live). No version bump is needed because pages are fetched network-first. If `data-url` is empty or not `https://`, the card stays hidden. For the first 13 days after `data-week`, the label reads "SONG OF THE WEEK · SEP 21". After that it switches to "FEATURED SONG", so a missed week never shows an outdated "this week" claim.
+
 ## Digital business card
 
 The standalone card remains at `card.html`, with its existing banner, contact details, vCard download, QR and sharing behavior. Dashboard sharing uses the canonical URL from `og:url`, so previews still share the production card address.
@@ -41,7 +45,7 @@ The version bump (now `?v=4`, cache v19) ensures phones pick up the fix.
 
 Run `npm ci && npm test` with a current Node.js version supported by jsdom. Dependencies are development-only; deployment remains plain HTML, CSS and JavaScript with no build step.
 
-15 tests cover retained destinations/assets, valid IDs and ARIA references, filtering and navigation synchronization, favorites migration/order/persistence, cross-tab updates, copying and modal feedback, share/QR history and focus, recent-link focus retention, native-share cancellation and errors, blocked/corrupt storage, reduced motion, appearance persistence, service-worker asset versions, category share messages and Copy message, high-error-correction QR, and `?filter=` shortcuts. The last of these reads `card.html` and `card.css` directly and fails if the telephone-detection opt-out, the `tel:` href, the icon `pointer-events` rule, the row press state, or the stylesheet version bump is missing.
+18 tests cover retained destinations/assets, valid IDs and ARIA references, filtering and navigation synchronization, favorites migration/order/persistence, cross-tab updates, copying and modal feedback, share/QR history and focus, recent-link focus retention, native-share cancellation and errors, blocked/corrupt storage, reduced motion, appearance persistence, service-worker asset versions, category share messages and Copy message, high-error-correction QR, `?filter=` shortcuts, and the Song of the Week (hidden when empty, share/QR, stale label). The last of these reads `card.html` and `card.css` directly and fails if the telephone-detection opt-out, the `tel:` href, the icon `pointer-events` rule, the row press state, or the stylesheet version bump is missing.
 
 JavaScript syntax and `git diff --check` also pass. Responsive CSS was reviewed for one navigation per breakpoint, a single-column mobile grid, 44px controls, safe-area dock clearance, and mobile sheet sizing.
 
