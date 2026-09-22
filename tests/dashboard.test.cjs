@@ -367,7 +367,7 @@ test("?filter= opens a category for home-screen shortcuts; unknown values are ig
 
 function withSpotlight(week, note = "For Mom, from all of us") {
   return html.replace(
-    /data-url=""\s+data-song=""\s+data-note=""\s+data-week=""/,
+    /data-url="[^"]*"\s+data-song="[^"]*"\s+data-note="[^"]*"\s+data-week="[^"]*"/,
     `data-url="https://youtu.be/example" data-song="Porch Light" data-note="${note}" data-week="${week}"`,
   );
 }
@@ -377,8 +377,21 @@ function isoDaysAgo(days) {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 }
 test("song of the week stays hidden until a song is set", (t) => {
-  const app = setup(t);
+  const app = setup(t, {
+    html: html.replace(
+      /(id="spotlight"[\s\S]*?)data-url="[^"]*"/,
+      '$1data-url=""',
+    ),
+  });
   assert.equal(app.d.querySelector("#spotlight").hidden, true);
+});
+test("the published song of the week is complete and dated", (t) => {
+  const app = setup(t);
+  const { url, song, week } = app.d.querySelector("#spotlight").dataset;
+  assert.match(url, /^https:\/\//);
+  assert.ok(song.trim());
+  assert.match(week, /^\d{4}-\d{2}-\d{2}$/);
+  assert.equal(app.d.querySelector("#spotlightSong").textContent, song);
 });
 test("song of the week shows, shares with a message and makes a QR", async (t) => {
   const calls = [];
