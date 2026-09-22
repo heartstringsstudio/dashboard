@@ -9,6 +9,26 @@
   "background_color": "#141110",
   "theme_color": "#141110",
   "orientation": "any",
+  "shortcuts": [
+    {
+      "name": "Share business card",
+      "short_name": "Card",
+      "url": "/dashboard/card.html",
+      "icons": [{ "src": "icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Saved links",
+      "short_name": "Saved",
+      "url": "/dashboard/?filter=saved",
+      "icons": [{ "src": "icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Listen",
+      "short_name": "Listen",
+      "url": "/dashboard/?filter=listen",
+      "icons": [{ "src": "icon-192.png", "sizes": "192x192" }]
+    }
+  ],
   "icons": [
     {
       "src": "icon-192.png",

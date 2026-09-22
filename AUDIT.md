@@ -1,6 +1,6 @@
 # Heartstrings Studio Dashboard
 
-Updated September 20, 2026.
+Updated September 22, 2026.
 
 ## Purpose and design
 
@@ -18,6 +18,13 @@ Recent links appear below the directory and have direct Share controls. A reserv
 
 Share uses the native share sheet when supported. Unsupported or failed native sharing opens a fallback panel containing the destination URL, Copy link and Show QR. Cancellation is quiet. Copy/download status is placed inside an open dialog rather than underneath the modal backdrop. Transitions between share and QR replace one dialog/history entry; Back closes the panel and focus returns to the original control.
 
+## Branded QR, share messages and shortcuts
+
+- **QR codes** (dashboard and card) now go through `qr-brand.js`. They use error-correction level H, and a CSS badge puts the heart logo in the middle. **Save QR poster** downloads a 1080×1350 PNG with a charcoal and copper frame, the link title, the short URL and the studio tagline, ready to print or post. In headless Chromium, both the Jukebox and card posters decoded to the correct URL with jsQR.
+- **Share messages:** native share now sends a one-line message with the link (`SHARE_TEXT` by category; override per link with `data-share-text`). The fallback dialog adds **Copy message**. The card's own Share sends a "Save my card" line.
+- **Home-screen shortcuts:** `manifest.json` shortcuts open the card, `?filter=saved` or `?filter=listen`. Any valid `?filter=` value selects that category when the page loads. Unknown values are ignored.
+- **Link previews:** the dashboard's `og:image` and Twitter card now use the studio banner at large size instead of the small logo.
+
 ## Digital business card
 
 The standalone card remains at `card.html`, with its existing banner, contact details, vCard download, QR and sharing behavior. Dashboard sharing uses the canonical URL from `og:url`, so previews still share the production card address.
@@ -28,13 +35,13 @@ The phone row did not dial on iPhones. Three causes, all fixed in markup and CSS
 - Inline SVG icons inside links could take the touch on iOS rather than activating the link. Every icon on the card is decoration, so `a svg` and `button svg` are now `pointer-events: none`.
 - Contact rows had a hover state only, and the tap highlight is disabled, so a tap on a touch device produced no visible response. `.contact-list a:active` gives the press feedback that hover gives a pointer.
 
-`card.css` is now `?v=3` in both `card.html` and the service-worker shell, and the cache generation is v18, so phones holding the previous stylesheet pick up the fix.
+The version bump (now `?v=4`, cache v19) ensures phones pick up the fix.
 
 ## Validation for this change
 
 Run `npm ci && npm test` with a current Node.js version supported by jsdom. Dependencies are development-only; deployment remains plain HTML, CSS and JavaScript with no build step.
 
-12 tests cover retained destinations/assets, valid IDs and ARIA references, filtering and navigation synchronization, favorites migration/order/persistence, cross-tab updates, copying and modal feedback, share/QR history and focus, recent-link focus retention, native-share cancellation and errors, blocked/corrupt storage, reduced motion, appearance persistence, and service-worker asset versions. The last of these reads `card.html` and `card.css` directly and fails if the telephone-detection opt-out, the `tel:` href, the icon `pointer-events` rule, the row press state, or the stylesheet version bump is missing.
+15 tests cover retained destinations/assets, valid IDs and ARIA references, filtering and navigation synchronization, favorites migration/order/persistence, cross-tab updates, copying and modal feedback, share/QR history and focus, recent-link focus retention, native-share cancellation and errors, blocked/corrupt storage, reduced motion, appearance persistence, service-worker asset versions, category share messages and Copy message, high-error-correction QR, and `?filter=` shortcuts. The last of these reads `card.html` and `card.css` directly and fails if the telephone-detection opt-out, the `tel:` href, the icon `pointer-events` rule, the row press state, or the stylesheet version bump is missing.
 
 JavaScript syntax and `git diff --check` also pass. Responsive CSS was reviewed for one navigation per breakpoint, a single-column mobile grid, 44px controls, safe-area dock clearance, and mobile sheet sizing.
 
@@ -42,10 +49,10 @@ JavaScript syntax and `git diff --check` also pass. Responsive CSS was reviewed 
 
 ## Maintenance
 
-Source: `index.html`, `studio.css`, `studio.js`, `sw.js`. New links are `.card` elements with `data-url`, `data-title`, `data-category`, `.card-main`, `.card-title`, `.card-sub`, and a `.card-icon` SVG. Category must match the containing `data-section`.
+Source: `index.html`, `studio.css`, `studio.js`, `qr-brand.js`, `sw.js`. New links are `.card` elements with `data-url`, `data-title`, `data-category`, `.card-main`, `.card-title`, `.card-sub`, and a `.card-icon` SVG. Category must match the containing `data-section`.
 
 Existing storage keys remain unchanged. Favorites order is insertion order in the existing saved-links array. Unknown destinations are ignored. Add moved addresses to MOVED to preserve favorites/history.
 
-The service-worker cache is v18; dashboard CSS and JS use query version 14, and card CSS uses version 3. Update cache and asset references together. Preserve the `heartstrings-dashboard-` cache prefix, `/dashboard/` manifest scope, and separate navigation cache keys for the dashboard and business card.
+The service-worker cache is v19; dashboard CSS and JS use query version 15, card CSS and JS use version 4, and `qr-brand.js` uses version 1. Update cache and asset references together. Preserve the `heartstrings-dashboard-` cache prefix, `/dashboard/` manifest scope, and separate navigation cache keys for the dashboard and business card.
 
 Business-card contacts live in `card.js`'s CONTACT object and `card.html`'s contact rows. Its JPEG and WebP banner assets should stay in sync when changed.

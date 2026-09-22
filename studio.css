@@ -761,6 +761,21 @@ dialog::backdrop {
   height: auto;
   max-width: 100%;
 }
+/* High error correction leaves room for the heart in the middle. */
+.qr-branded {
+  position: relative;
+}
+.qr-branded::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 22%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  background: #fff url("logo.png") center / 112% no-repeat;
+  border-radius: 18%;
+}
 #qrTitle {
   font-size: 1.25rem;
   font-weight: 500;
