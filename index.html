@@ -32,13 +32,19 @@
     />
     <meta
       property="og:image"
-      content="https://heartstringsstudio.github.io/dashboard/logo.png"
+      content="https://heartstringsstudio.github.io/dashboard/assets/studio-card-banner.jpg"
+    />
+    <meta property="og:image:width" content="1672" />
+    <meta property="og:image:height" content="941" />
+    <meta
+      property="og:image:alt"
+      content="Heartstrings Studio banner: copper heart logo, tagline, and the studio owner in the recording room"
     />
     <meta
       property="og:url"
       content="https://heartstringsstudio.github.io/dashboard/"
     />
-    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Heartstrings Studio Dashboard" />
     <meta
       name="twitter:description"
@@ -46,9 +52,9 @@
     />
     <meta
       name="twitter:image"
-      content="https://heartstringsstudio.github.io/dashboard/logo.png"
+      content="https://heartstringsstudio.github.io/dashboard/assets/studio-card-banner.jpg"
     />
-    <link rel="stylesheet" href="studio.css?v=14" />
+    <link rel="stylesheet" href="studio.css?v=15" />
   </head>
   <body>
     <svg
@@ -206,6 +212,48 @@
               id="cardQR"
               type="button"
               aria-label="Show QR code for Digital Business Card"
+            >
+              <svg aria-hidden="true"><use href="#i-qr" /></svg>
+            </button>
+          </div>
+        </section>
+        <!-- Song of the Week: update data-url, data-song, data-note and
+             data-week (the Monday it goes live). Empty data-url hides it. -->
+        <section
+          id="spotlight"
+          class="spotlight"
+          aria-labelledby="spotlightSong"
+          data-url="https://youtu.be/76tbW9GcAV4"
+          data-song="Long Before You Loved Me"
+          data-note=""
+          data-week="2026-09-21"
+          hidden
+        >
+          <div class="spotlight-art" aria-hidden="true">
+            <img src="logo.png" alt="" width="64" height="64" />
+            <span class="eq"><i></i><i></i><i></i><i></i></span>
+          </div>
+          <div class="spotlight-text">
+            <p class="eyebrow" id="spotlightLabel">SONG OF THE WEEK</p>
+            <h2 id="spotlightSong"></h2>
+            <p id="spotlightNote" class="spotlight-note"></p>
+          </div>
+          <div class="spotlight-actions">
+            <a
+              class="primary-button"
+              id="spotlightListen"
+              target="_blank"
+              rel="noopener"
+              ><svg aria-hidden="true"><use href="#i-headphones" /></svg
+              >Listen</a
+            ><button class="quiet-button" id="spotlightShare" type="button">
+              <svg aria-hidden="true"><use href="#i-share" /></svg>Share
+            </button>
+            <button
+              class="icon-button"
+              id="spotlightQR"
+              type="button"
+              aria-label="Show QR code for the song of the week"
             >
               <svg aria-hidden="true"><use href="#i-qr" /></svg>
             </button>
@@ -720,7 +768,7 @@
       </div>
       <h2 id="shareTitle"></h2>
       <p id="shareHint" class="dialog-hint">
-        Copy the link to paste into a message, or show its QR code.
+        Copy the link or a ready-to-send message, or show its QR code.
       </p>
       <input
         id="shareUrl"
@@ -731,6 +779,7 @@
       <div class="dialog-actions">
         <button class="primary-button" id="shareCopy">
           <svg aria-hidden="true"><use href="#i-copy" /></svg>Copy link</button
+        ><button class="quiet-button" id="shareMessage">Copy message</button
         ><button class="quiet-button" id="shareQR">
           <svg aria-hidden="true"><use href="#i-qr" /></svg>Show QR
         </button>
@@ -757,11 +806,12 @@
       <p class="dialog-status" role="status" aria-live="polite"></p>
       <div class="dialog-actions">
         <button class="quiet-button" id="qrShare">Share link</button
-        ><button class="primary-button" id="qrDownload">Save QR image</button>
+        ><button class="primary-button" id="qrDownload">Save QR poster</button>
       </div>
     </dialog>
     <div id="toast" role="status" aria-live="polite"></div>
     <script src="qrcode.min.js"></script>
-    <script src="studio.js?v=14"></script>
+    <script src="qr-brand.js?v=1"></script>
+    <script src="studio.js?v=15"></script>
   </body>
 </html>

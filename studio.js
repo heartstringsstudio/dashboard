@@ -243,11 +243,11 @@ function syncSaved() {
   renderFavorites();
   applyFilters();
 }
-async function copyLink(url) {
+async function copyLink(url, done = "Link copied") {
   try {
     if (!navigator.clipboard?.writeText) throw new Error("Unavailable");
     await navigator.clipboard.writeText(url);
-    showToast("Link copied");
+    showToast(done);
     return true;
   } catch {
     const field = document.createElement("textarea");
@@ -264,12 +264,27 @@ async function copyLink(url) {
     field.remove();
     focused?.focus();
     showToast(
-      success
-        ? "Link copied"
-        : "Could not copy. Open the link to copy its address.",
+      success ? done : "Could not copy. Open the link to copy its address.",
     );
     return success;
   }
+}
+// A warm line travels with every share so the link never arrives bare.
+const SHARE_TEXT = {
+  listen: "Take a listen. Heartstrings Studio turns real stories into songs.",
+  studio:
+    "Heartstrings Studio: your story, turned into a song you'll never forget.",
+  extras: "Something good from Heartstrings Studio in Lumberport, WV.",
+  card: "Save my card: Heartstrings Studio, custom songs from Lumberport, WV.",
+};
+function shareTextFor(url) {
+  if (spotlight && url === spotlight.url) return spotlight.text;
+  const card = catalog.get(url);
+  return (
+    card?.dataset.shareText ||
+    SHARE_TEXT[card?.dataset.category] ||
+    SHARE_TEXT.card
+  );
 }
 let shareURL = "";
 let shareTitle = "";
@@ -287,7 +302,7 @@ async function shareLink(url, title, trigger) {
     return;
   }
   try {
-    await navigator.share({ title, url });
+    await navigator.share({ title, text: shareTextFor(url), url });
   } catch (error) {
     if (error.name !== "AbortError") showShareOptions(url, title, origin);
   }
@@ -324,16 +339,8 @@ function showQR(url, label, trigger) {
   }
   qrURL = url;
   qrLabel = label;
-  $("qrCode").replaceChildren();
   try {
-    new QRCode($("qrCode"), {
-      text: qrURL,
-      width: 464,
-      height: 464,
-      colorDark: "#21170f",
-      colorLight: "#ffffff",
-      correctLevel: QRCode.CorrectLevel.M,
-    });
+    QRBrand.render($("qrCode"), qrURL);
   } catch {
     showToast("Could not create QR code. Use Share to send this link.");
     return;
@@ -477,26 +484,22 @@ window.addEventListener("popstate", () =>
   document.querySelectorAll("dialog[open]").forEach((dialog) => dialog.close()),
 );
 $("qrShare").addEventListener("click", () => shareLink(qrURL, qrLabel));
-$("qrDownload").addEventListener("click", () => {
+$("qrDownload").addEventListener("click", async () => {
   const canvas = $("qrCode").querySelector("canvas");
   if (!canvas) {
     showToast("QR image is unavailable. Use Share link instead.");
     return;
   }
-  // Include a white quiet zone in the downloaded PNG for reliable scanning.
-  const output = document.createElement("canvas");
-  output.width = output.height = 528;
-  const context = output.getContext("2d");
-  context.fillStyle = "#ffffff";
-  context.fillRect(0, 0, 528, 528);
-  context.drawImage(canvas, 32, 32);
-  const link = document.createElement("a");
-  link.href = output.toDataURL("image/png");
-  link.download = `heartstrings-${qrLabel.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-qr.png`;
-  document.body.append(link);
-  link.click();
-  link.remove();
-  showToast("QR image download started");
+  try {
+    await QRBrand.download(
+      canvas,
+      { title: qrLabel, url: qrURL },
+      `heartstrings-${qrLabel.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-qr.png`,
+    );
+    showToast("QR poster download started");
+  } catch {
+    showToast("Could not save the QR image. Use Share link instead.");
+  }
 });
 // The digital business card shares like any other link, but it sits above
 // the directory and is never filtered away.
@@ -509,6 +512,46 @@ $("cardShare").addEventListener("click", (event) =>
 );
 $("cardQR").addEventListener("click", (event) =>
   showQR(CARD_PAGE, "Digital Business Card", event.currentTarget),
+);
+// Song of the Week lives in the #spotlight element's data attributes so a
+// weekly update is one edit. After two weeks it stops claiming "this week".
+const SPOTLIGHT_FRESH_DAYS = 13;
+let spotlight = null;
+function setupSpotlight(now = new Date()) {
+  const section = $("spotlight");
+  const { url, song, note, week } = section.dataset;
+  if (!url || !song || !/^https:\/\//.test(url)) return;
+  const [year, month, day] = (week || "").split("-").map(Number);
+  const start = year ? new Date(year, month - 1, day) : null;
+  const age = start ? (now - start) / 86400000 : Infinity;
+  const fresh = age >= 0 && age <= SPOTLIGHT_FRESH_DAYS;
+  spotlight = {
+    url,
+    title: `${song} \u2014 Heartstrings Studio`,
+    text: fresh
+      ? `New this week from Heartstrings Studio: ${song}. Take a listen.`
+      : `${song}, from Heartstrings Studio. Take a listen.`,
+  };
+  $("spotlightLabel").textContent = fresh
+    ? `SONG OF THE WEEK \u00b7 ${start
+        .toLocaleDateString("en-US", { month: "short", day: "numeric" })
+        .toUpperCase()}`
+    : "FEATURED SONG";
+  $("spotlightSong").textContent = song;
+  $("spotlightNote").textContent = note || "";
+  $("spotlightNote").hidden = !note;
+  $("spotlightListen").href = url;
+  $("spotlightListen").setAttribute("aria-label", `Listen to ${song}`);
+  $("spotlightShare").setAttribute("aria-label", `Share ${song}`);
+  $("spotlightQR").setAttribute("aria-label", `Show QR code for ${song}`);
+  section.hidden = false;
+}
+setupSpotlight();
+$("spotlightShare").addEventListener("click", (event) =>
+  shareLink(spotlight.url, spotlight.title, event.currentTarget),
+);
+$("spotlightQR").addEventListener("click", (event) =>
+  showQR(spotlight.url, $("spotlightSong").textContent, event.currentTarget),
 );
 let installPrompt;
 const standalone =
@@ -635,12 +678,23 @@ $("orderFavorites").addEventListener("click", (event) => {
   openDialog($("favoritesDialog"), event.currentTarget);
 });
 $("shareCopy").addEventListener("click", () => copyLink(shareURL));
+$("shareMessage").addEventListener("click", () =>
+  copyLink(`${shareTextFor(shareURL)} ${shareURL}`, "Message copied"),
+);
 $("shareQR").addEventListener("click", () => showQR(shareURL, shareTitle));
 $("shareUrl").addEventListener("click", (event) =>
   event.currentTarget.select(),
 );
 renderRecent();
 syncSaved();
+// Home-screen shortcuts open straight to a category, e.g. ?filter=saved.
+const startFilter = new URLSearchParams(location.search).get("filter");
+if (startFilter && startFilter !== "all")
+  document
+    .querySelector(
+      `.directory-filters [data-filter="${CSS.escape(startFilter)}"]`,
+    )
+    ?.click();
 if ("serviceWorker" in navigator)
   window.addEventListener("load", () => {
     navigator.serviceWorker.register("./sw.js").catch(() => {

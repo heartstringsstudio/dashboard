@@ -6,6 +6,7 @@ const { JSDOM } = require("jsdom");
 const root = resolve(__dirname, "..");
 const html = readFileSync(resolve(root, "index.html"), "utf8");
 const js = readFileSync(resolve(root, "studio.js"), "utf8");
+const qrBrand = readFileSync(resolve(root, "qr-brand.js"), "utf8");
 const savedKey = "heartstrings_dashboard_saved_links";
 const settingsKey = "heartstrings_dashboard_console_settings";
 const main = "https://tinyurl.com/heartstringswv";
@@ -13,8 +14,8 @@ const jukebox = "https://tinyurl.com/hsjukebox";
 const partner = "https://tinyurl.com/heartstringsfh";
 const tick = () => new Promise((resolve) => setTimeout(resolve, 20));
 function setup(t, options = {}) {
-  const dom = new JSDOM(html, {
-    url: "https://heartstringsstudio.github.io/dashboard/",
+  const dom = new JSDOM(options.html || html, {
+    url: options.url || "https://heartstringsstudio.github.io/dashboard/",
     runScripts: "outside-only",
     pretendToBeVisual: true,
   });
@@ -47,11 +48,13 @@ function setup(t, options = {}) {
     w.setTimeout(() => this.dispatchEvent(new w.Event("close")), 0);
   };
   const qrCalls = [];
+  const qrLevels = [];
   w.QRCode = function (element, data) {
     qrCalls.push(data.text);
+    qrLevels.push(data.correctLevel);
     element.append(d.createElement("canvas"));
   };
-  w.QRCode.CorrectLevel = { M: 0 };
+  w.QRCode.CorrectLevel = { M: 0, H: 2 };
   let copied;
   Object.defineProperty(w.navigator, "clipboard", {
     value: {
@@ -69,11 +72,13 @@ function setup(t, options = {}) {
         throw Error("Blocked");
       },
     });
-  w.eval(js);
+  // Separate <script> tags share one global scope; one eval models that.
+  w.eval(`${qrBrand}\n${js}`);
   return {
     w,
     d,
     qrCalls,
+    qrLevels,
     copied: () => copied,
     animations: () => animations,
     click: (selector) => {
@@ -238,6 +243,7 @@ test("native share receives canonical business-card URL; cancellation is quiet",
     calls[0].url,
     "https://heartstringsstudio.github.io/dashboard/card.html",
   );
+  assert.match(calls[0].text, /Save my card/);
   assert.equal(app.d.querySelectorAll("dialog[open]").length, 0);
 });
 test("native share failure opens fallback rather than silently copying", async (t) => {
@@ -278,11 +284,12 @@ test("reduced motion disables filter animation and appearance setting persists",
 test("cache manifest includes versioned assets and retained business card files", () => {
   const sw = readFileSync(resolve(root, "sw.js"), "utf8");
   for (const asset of [
-    "studio.css?v=14",
-    "studio.js?v=14",
+    "studio.css?v=15",
+    "studio.js?v=15",
+    "qr-brand.js?v=1",
     "card.html",
-    "card.css?v=3",
-    "card.js?v=3",
+    "card.css?v=4",
+    "card.js?v=4",
   ])
     assert.ok(sw.includes(asset), asset);
 });
@@ -303,5 +310,121 @@ test("business card dials on iOS: no nested auto-link, no icon stealing the tap"
   // Rows had a hover state only: a tap looked like nothing happened.
   assert.match(cardCss, /\.contact-list a:active \{/);
   // The stylesheet fix only reaches iPhones if the cached copy is superseded.
-  assert.match(cardHtml, /card\.css\?v=3/);
+  assert.match(cardHtml, /card\.css\?v=4/);
+});
+
+test("shares carry a category message, and the fallback copies it with the link", async (t) => {
+  const calls = [];
+  const native = setup(t, {
+    share: async (data) => {
+      calls.push(data);
+    },
+  });
+  native.click('[data-url="https://tinyurl.com/hsjukebox"] .share-btn');
+  await tick();
+  assert.equal(calls[0].url, jukebox);
+  assert.match(calls[0].text, /Take a listen/);
+
+  const app = setup(t);
+  app.click(".card .share-btn");
+  app.click("#shareMessage");
+  await tick();
+  assert.match(app.copied(), /your story, turned into a song/);
+  assert.ok(app.copied().endsWith(` ${main}`));
+  assert.equal(
+    app.d.querySelector("#shareDialog .dialog-status").textContent,
+    "Message copied",
+  );
+});
+test("QR codes use high error correction so the logo badge still scans", (t) => {
+  const app = setup(t);
+  app.click(".card .qr-btn");
+  assert.equal(app.qrCalls.at(-1), main);
+  assert.equal(app.qrLevels.at(-1), app.w.QRCode.CorrectLevel.H);
+  assert.ok(app.d.querySelector("#qrCode").classList.contains("qr-branded"));
+});
+test("?filter= opens a category for home-screen shortcuts; unknown values are ignored", (t) => {
+  const app = setup(t, {
+    url: "https://heartstringsstudio.github.io/dashboard/?filter=listen",
+  });
+  assert.equal(app.visible().length, 7);
+  assert.equal(
+    app.d
+      .querySelector('.directory-filters [data-filter="listen"]')
+      .getAttribute("aria-pressed"),
+    "true",
+  );
+  const junk = setup(t, {
+    url: "https://heartstringsstudio.github.io/dashboard/?filter=%22%5D",
+  });
+  assert.equal(junk.visible().length, 12);
+  const manifest = JSON.parse(
+    readFileSync(resolve(root, "manifest.json"), "utf8"),
+  );
+  for (const shortcut of manifest.shortcuts)
+    assert.ok(shortcut.url.startsWith(manifest.scope), shortcut.url);
+});
+
+function withSpotlight(week, note = "For Mom, from all of us") {
+  return html.replace(
+    /data-url="[^"]*"\s+data-song="[^"]*"\s+data-note="[^"]*"\s+data-week="[^"]*"/,
+    `data-url="https://youtu.be/example" data-song="Porch Light" data-note="${note}" data-week="${week}"`,
+  );
+}
+function isoDaysAgo(days) {
+  const d = new Date();
+  d.setDate(d.getDate() - days);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+}
+test("song of the week stays hidden until a song is set", (t) => {
+  const app = setup(t, {
+    html: html.replace(
+      /(id="spotlight"[\s\S]*?)data-url="[^"]*"/,
+      '$1data-url=""',
+    ),
+  });
+  assert.equal(app.d.querySelector("#spotlight").hidden, true);
+});
+test("the published song of the week is complete and dated", (t) => {
+  const app = setup(t);
+  const { url, song, week } = app.d.querySelector("#spotlight").dataset;
+  assert.match(url, /^https:\/\//);
+  assert.ok(song.trim());
+  assert.match(week, /^\d{4}-\d{2}-\d{2}$/);
+  assert.equal(app.d.querySelector("#spotlightSong").textContent, song);
+});
+test("song of the week shows, shares with a message and makes a QR", async (t) => {
+  const calls = [];
+  const app = setup(t, {
+    html: withSpotlight(isoDaysAgo(1)),
+    share: async (data) => {
+      calls.push(data);
+    },
+  });
+  const d = app.d;
+  assert.equal(d.querySelector("#spotlight").hidden, false);
+  assert.equal(d.querySelector("#spotlightSong").textContent, "Porch Light");
+  assert.match(
+    d.querySelector("#spotlightLabel").textContent,
+    /^SONG OF THE WEEK · /,
+  );
+  assert.equal(
+    d.querySelector("#spotlightListen").href,
+    "https://youtu.be/example",
+  );
+  app.click("#spotlightShare");
+  await tick();
+  assert.equal(calls[0].url, "https://youtu.be/example");
+  assert.match(calls[0].text, /New this week.*Porch Light/);
+  app.click("#spotlightQR");
+  assert.equal(app.qrCalls.at(-1), "https://youtu.be/example");
+  assert.equal(app.visible().length, 12, "directory is unchanged");
+});
+test("a stale spotlight stops claiming this week", (t) => {
+  const app = setup(t, { html: withSpotlight(isoDaysAgo(30), "") });
+  assert.equal(
+    app.d.querySelector("#spotlightLabel").textContent,
+    "FEATURED SONG",
+  );
+  assert.equal(app.d.querySelector("#spotlightNote").hidden, true);
 });

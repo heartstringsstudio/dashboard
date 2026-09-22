@@ -60,7 +60,11 @@ $("shareCard").addEventListener("click", async () => {
     return;
   }
   try {
-    await navigator.share({ title: CARD_TITLE, url: CARD_URL });
+    await navigator.share({
+      title: CARD_TITLE,
+      text: "Save my card: Heartstrings Studio, custom songs from Lumberport, WV.",
+      url: CARD_URL,
+    });
   } catch (error) {
     if (error.name !== "AbortError") await copyLink(CARD_URL);
   }
@@ -117,34 +121,28 @@ if (typeof QRCode === "undefined") {
   $("downloadQR").hidden = true;
 } else {
   try {
-    new QRCode($("qrCode"), {
-      text: CARD_URL,
-      width: 464,
-      height: 464,
-      colorDark: "#21170f",
-      colorLight: "#ffffff",
-      correctLevel: QRCode.CorrectLevel.M,
-    });
+    QRBrand.render($("qrCode"), CARD_URL);
   } catch {
     $("qrCode").hidden = true;
     $("downloadQR").hidden = true;
   }
 }
-$("downloadQR").addEventListener("click", () => {
+$("downloadQR").addEventListener("click", async () => {
   const canvas = $("qrCode").querySelector("canvas");
   if (!canvas) {
     showToast("QR image is unavailable. Use Share card instead.");
     return;
   }
-  // Include a white quiet zone in the downloaded PNG for reliable scanning.
-  const output = document.createElement("canvas");
-  output.width = output.height = 528;
-  const context = output.getContext("2d");
-  context.fillStyle = "#ffffff";
-  context.fillRect(0, 0, 528, 528);
-  context.drawImage(canvas, 32, 32);
-  downloadFile(output.toDataURL("image/png"), "heartstrings-studio-card-qr.png");
-  showToast("QR image download started");
+  try {
+    await QRBrand.download(
+      canvas,
+      { title: "Digital Business Card", url: CARD_URL },
+      "heartstrings-studio-card-qr.png",
+    );
+    showToast("QR poster download started");
+  } catch {
+    showToast("Could not save the QR image. Use Share card instead.");
+  }
 });
 
 if ("serviceWorker" in navigator)

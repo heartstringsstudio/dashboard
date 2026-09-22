@@ -1,13 +1,14 @@
 const CACHE_PREFIX = "heartstrings-dashboard-";
-const CACHE = `${CACHE_PREFIX}v18`;
+const CACHE = `${CACHE_PREFIX}v19`;
 const SHELL = [
   "./",
   "./index.html",
-  "./studio.css?v=14",
-  "./studio.js?v=14",
+  "./studio.css?v=15",
+  "./studio.js?v=15",
   "./card.html",
-  "./card.css?v=3",
-  "./card.js?v=3",
+  "./card.css?v=4",
+  "./card.js?v=4",
+  "./qr-brand.js?v=1",
   "./manifest.json",
   "./logo.png",
   "./assets/control-room.webp",
