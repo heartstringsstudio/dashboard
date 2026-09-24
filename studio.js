@@ -279,7 +279,11 @@ const SHARE_TEXT = {
 };
 function shareTextFor(url) {
   if (spotlight && url === spotlight.url) return spotlight.text;
-  const card = catalog.get(url);
+  const card =
+    catalog.get(url) ||
+    [...document.querySelectorAll(".variant-share")]
+      .find((button) => button.dataset.url === url)
+      ?.closest(".card");
   return (
     card?.dataset.shareText ||
     SHARE_TEXT[card?.dataset.category] ||
@@ -398,6 +402,19 @@ cards.forEach((card) => {
   card
     .querySelector(".card-main")
     .addEventListener("click", () => remember(card.dataset.url));
+});
+// Cards with several versions (the studio ads) play or share each one;
+// recents and favorites still track the card by its own link.
+document.querySelectorAll(".card-variants li").forEach((row) => {
+  const card = row.closest(".card");
+  const share = row.querySelector(".variant-share");
+  row
+    .querySelector("a")
+    .addEventListener("click", () => remember(card.dataset.url));
+  share.addEventListener("click", () => {
+    remember(card.dataset.url);
+    shareLink(share.dataset.url, share.dataset.title, share);
+  });
 });
 document.querySelectorAll("[data-filter]").forEach((button) =>
   button.addEventListener("click", () => {
