@@ -515,33 +515,45 @@ $("cardQR").addEventListener("click", (event) =>
 );
 // Song of the Week lives in the #spotlight element's data attributes so a
 // weekly update is one edit. After two weeks it stops claiming "this week".
+// data-kind="ad" turns it into a studio-ad spotlight: Watch instead of Listen.
 const SPOTLIGHT_FRESH_DAYS = 13;
 let spotlight = null;
 function setupSpotlight(now = new Date()) {
   const section = $("spotlight");
-  const { url, song, note, week } = section.dataset;
+  const { url, song, note, week, kind } = section.dataset;
   if (!url || !song || !/^https:\/\//.test(url)) return;
+  const ad = kind === "ad";
   const [year, month, day] = (week || "").split("-").map(Number);
   const start = year ? new Date(year, month - 1, day) : null;
   const age = start ? (now - start) / 86400000 : Infinity;
   const fresh = age >= 0 && age <= SPOTLIGHT_FRESH_DAYS;
+  const verb = ad ? "Watch" : "Listen";
   spotlight = {
     url,
     title: `${song} \u2014 Heartstrings Studio`,
-    text: fresh
-      ? `New this week from Heartstrings Studio: ${song}. Take a listen.`
-      : `${song}, from Heartstrings Studio. Take a listen.`,
+    text: ad
+      ? `${fresh ? "New from" : "From"} Heartstrings Studio: real stories, turned into songs. Give it a watch.`
+      : fresh
+        ? `New this week from Heartstrings Studio: ${song}. Take a listen.`
+        : `${song}, from Heartstrings Studio. Take a listen.`,
   };
-  $("spotlightLabel").textContent = fresh
-    ? `SONG OF THE WEEK \u00b7 ${start
-        .toLocaleDateString("en-US", { month: "short", day: "numeric" })
-        .toUpperCase()}`
-    : "FEATURED SONG";
+  const date = start
+    ?.toLocaleDateString("en-US", { month: "short", day: "numeric" })
+    .toUpperCase();
+  $("spotlightLabel").textContent = ad
+    ? fresh
+      ? `NEW STUDIO AD \u00b7 ${date}`
+      : "FEATURED AD"
+    : fresh
+      ? `SONG OF THE WEEK \u00b7 ${date}`
+      : "FEATURED SONG";
   $("spotlightSong").textContent = song;
   $("spotlightNote").textContent = note || "";
   $("spotlightNote").hidden = !note;
   $("spotlightListen").href = url;
-  $("spotlightListen").setAttribute("aria-label", `Listen to ${song}`);
+  $("spotlightAction").textContent = verb;
+  $("spotlightIcon").setAttribute("href", ad ? "#i-play" : "#i-headphones");
+  $("spotlightListen").setAttribute("aria-label", `${verb} ${song}`);
   $("spotlightShare").setAttribute("aria-label", `Share ${song}`);
   $("spotlightQR").setAttribute("aria-label", `Show QR code for ${song}`);
   section.hidden = false;

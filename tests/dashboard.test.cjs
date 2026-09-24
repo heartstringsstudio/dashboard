@@ -365,10 +365,10 @@ test("?filter= opens a category for home-screen shortcuts; unknown values are ig
     assert.ok(shortcut.url.startsWith(manifest.scope), shortcut.url);
 });
 
-function withSpotlight(week, note = "For Mom, from all of us") {
+function withSpotlight(week, note = "For Mom, from all of us", kind = "") {
   return html.replace(
-    /data-url="[^"]*"\s+data-song="[^"]*"\s+data-note="[^"]*"\s+data-week="[^"]*"/,
-    `data-url="https://youtu.be/example" data-song="Porch Light" data-note="${note}" data-week="${week}"`,
+    /data-url="[^"]*"\s+data-song="[^"]*"\s+data-note="[^"]*"\s+data-week="[^"]*"(\s+data-kind="[^"]*")?/,
+    `data-url="https://youtu.be/example" data-song="Porch Light" data-note="${note}" data-week="${week}" data-kind="${kind}"`,
   );
 }
 function isoDaysAgo(days) {
@@ -419,6 +419,30 @@ test("song of the week shows, shares with a message and makes a QR", async (t) =
   app.click("#spotlightQR");
   assert.equal(app.qrCalls.at(-1), "https://youtu.be/example");
   assert.equal(app.visible().length, 13, "directory is unchanged");
+});
+test("an ad spotlight says Watch and shares as an ad", async (t) => {
+  const calls = [];
+  const app = setup(t, {
+    html: withSpotlight(isoDaysAgo(1), "", "ad"),
+    share: async (data) => {
+      calls.push(data);
+    },
+  });
+  const d = app.d;
+  assert.match(d.querySelector("#spotlightLabel").textContent, /^NEW STUDIO AD · /);
+  assert.equal(d.querySelector("#spotlightAction").textContent, "Watch");
+  assert.equal(d.querySelector("#spotlightIcon").getAttribute("href"), "#i-play");
+  app.click("#spotlightShare");
+  await tick();
+  assert.equal(calls[0].url, "https://youtu.be/example");
+  assert.match(calls[0].text, /Give it a watch/);
+});
+test("a stale ad spotlight becomes a featured ad", (t) => {
+  const app = setup(t, { html: withSpotlight(isoDaysAgo(30), "", "ad") });
+  assert.equal(
+    app.d.querySelector("#spotlightLabel").textContent,
+    "FEATURED AD",
+  );
 });
 test("a stale spotlight stops claiming this week", (t) => {
   const app = setup(t, { html: withSpotlight(isoDaysAgo(30), "") });
