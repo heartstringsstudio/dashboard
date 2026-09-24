@@ -54,7 +54,7 @@
       name="twitter:image"
       content="https://heartstringsstudio.github.io/dashboard/assets/studio-card-banner.jpg"
     />
-    <link rel="stylesheet" href="studio.css?v=15" />
+    <link rel="stylesheet" href="studio.css?v=16" />
   </head>
   <body>
     <svg
@@ -220,14 +220,15 @@
         <!-- Spotlight: update data-url, data-song (the headline), data-note
              and data-week (the day it goes live). data-kind="ad" features a
              studio ad (Watch); leave it out for Song of the Week (Listen).
-             Empty data-url hides it. Last song of the week:
+             Empty data-url hides it. Previous ad: https://youtube.com/shorts/4qPVyfE48rU
+             Last song of the week:
              "Long Before You Loved Me", https://youtu.be/76tbW9GcAV4 -->
         <section
           id="spotlight"
           class="spotlight"
           aria-labelledby="spotlightSong"
-          data-url="https://youtube.com/shorts/4qPVyfE48rU"
-          data-song="Our Latest Studio Ad"
+          data-url="https://youtube.com/shorts/p45UxTHVa3k"
+          data-song="Our Newest Studio Ad"
           data-note="Real stories, turned into songs. See how we do it."
           data-week="2026-09-24"
           data-kind="ad"
@@ -431,27 +432,70 @@
                     <use href="#i-arrow" /></svg
                 ></a>
               </article>
+              <!-- Studio ads: the card's own link, Share, QR and star use the
+                   newest ad (data-url). Each row below plays or shares one ad;
+                   add a row per new spot and point data-url at the newest. -->
               <article
                 class="card"
-                data-url="https://youtube.com/shorts/4qPVyfE48rU"
-                data-title="Heartstrings Studio — Latest Studio Ad"
+                data-url="https://youtube.com/shorts/p45UxTHVa3k"
+                data-title="Heartstrings Studio — Studio Ads"
                 data-category="listen"
               >
                 <a
                   class="card-main"
-                  href="https://youtube.com/shorts/4qPVyfE48rU"
+                  href="https://youtube.com/shorts/p45UxTHVa3k"
                   target="_blank"
                   rel="noopener"
                   ><span class="card-icon"
                     ><svg aria-hidden="true"><use href="#i-play" /></svg></span
                   ><span class="card-text"
-                    ><span class="card-title">Latest Studio Ad</span
+                    ><span class="card-title">Studio Ads</span
                     ><span class="card-sub"
-                      >Watch the newest Heartstrings spot</span
+                      >Two spots. Play or share either one</span
                     ></span
                   ><svg class="open-arrow" aria-hidden="true">
                     <use href="#i-arrow" /></svg
                 ></a>
+                <ul class="card-variants" aria-label="Studio ads">
+                  <li>
+                    <a
+                      href="https://youtube.com/shorts/4qPVyfE48rU"
+                      target="_blank"
+                      rel="noopener"
+                      ><svg aria-hidden="true"><use href="#i-play" /></svg
+                      ><span>Ad 1</span
+                      ><span class="variant-sub">Original</span></a
+                    ><button
+                      type="button"
+                      class="quiet-button variant-share"
+                      data-url="https://youtube.com/shorts/4qPVyfE48rU"
+                      data-title="Heartstrings Studio — Studio Ad 1"
+                      aria-label="Share Studio Ad 1"
+                    >
+                      <svg aria-hidden="true"><use href="#i-share" /></svg
+                      ><span>Share</span>
+                    </button>
+                  </li>
+                  <li>
+                    <a
+                      href="https://youtube.com/shorts/p45UxTHVa3k"
+                      target="_blank"
+                      rel="noopener"
+                      ><svg aria-hidden="true"><use href="#i-play" /></svg
+                      ><span>Ad 2</span
+                      ><span class="variant-sub">Newest</span></a
+                    ><button
+                      type="button"
+                      class="quiet-button variant-share"
+                      data-url="https://youtube.com/shorts/p45UxTHVa3k"
+                      data-title="Heartstrings Studio — Studio Ad 2"
+                      aria-label="Share Studio Ad 2"
+                    >
+                      <svg aria-hidden="true"><use href="#i-share" /></svg
+                      ><span>Share</span>
+                    </button>
+                  </li>
+                </ul>
               </article>
               <article
                 class="card"
@@ -839,6 +883,6 @@
     <div id="toast" role="status" aria-live="polite"></div>
     <script src="qrcode.min.js"></script>
     <script src="qr-brand.js?v=1"></script>
-    <script src="studio.js?v=15"></script>
+    <script src="studio.js?v=16"></script>
   </body>
 </html>

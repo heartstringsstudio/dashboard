@@ -284,14 +284,46 @@ test("reduced motion disables filter animation and appearance setting persists",
 test("cache manifest includes versioned assets and retained business card files", () => {
   const sw = readFileSync(resolve(root, "sw.js"), "utf8");
   for (const asset of [
-    "studio.css?v=15",
-    "studio.js?v=15",
+    "studio.css?v=16",
+    "studio.js?v=16",
     "qr-brand.js?v=1",
     "card.html",
     "card.css?v=4",
     "card.js?v=4",
   ])
     assert.ok(sw.includes(asset), asset);
+});
+
+test("studio ads card plays and shares each ad separately", async (t) => {
+  const calls = [];
+  const app = setup(t, {
+    share: async (data) => {
+      calls.push(data);
+    },
+  });
+  const ad1 = "https://youtube.com/shorts/4qPVyfE48rU";
+  const ad2 = "https://youtube.com/shorts/p45UxTHVa3k";
+  const card = app.d.querySelector(`.card[data-url="${ad2}"]`);
+  assert.ok(card);
+  const rows = [...card.querySelectorAll(".card-variants li")];
+  assert.deepEqual(
+    rows.map((row) => row.querySelector("a").href),
+    [ad1, ad2],
+  );
+  for (const row of rows) {
+    assert.equal(row.querySelector("a").rel, "noopener");
+    row.querySelector(".variant-share").click();
+    await tick();
+  }
+  assert.deepEqual(
+    calls.map((call) => call.url),
+    [ad1, ad2],
+  );
+  assert.match(calls[0].text, /Take a listen/);
+  assert.equal(
+    app.d.querySelector("#recentCards .quick-card").dataset.url,
+    ad2,
+  );
 });
 
 test("business card dials on iOS: no nested auto-link, no icon stealing the tap", () => {
@@ -429,9 +461,15 @@ test("an ad spotlight says Watch and shares as an ad", async (t) => {
     },
   });
   const d = app.d;
-  assert.match(d.querySelector("#spotlightLabel").textContent, /^NEW STUDIO AD · /);
+  assert.match(
+    d.querySelector("#spotlightLabel").textContent,
+    /^NEW STUDIO AD · /,
+  );
   assert.equal(d.querySelector("#spotlightAction").textContent, "Watch");
-  assert.equal(d.querySelector("#spotlightIcon").getAttribute("href"), "#i-play");
+  assert.equal(
+    d.querySelector("#spotlightIcon").getAttribute("href"),
+    "#i-play",
+  );
   app.click("#spotlightShare");
   await tick();
   assert.equal(calls[0].url, "https://youtu.be/example");
