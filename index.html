@@ -217,16 +217,20 @@
             </button>
           </div>
         </section>
-        <!-- Song of the Week: update data-url, data-song, data-note and
-             data-week (the Monday it goes live). Empty data-url hides it. -->
+        <!-- Spotlight: update data-url, data-song (the headline), data-note
+             and data-week (the day it goes live). data-kind="ad" features a
+             studio ad (Watch); leave it out for Song of the Week (Listen).
+             Empty data-url hides it. Last song of the week:
+             "Long Before You Loved Me", https://youtu.be/76tbW9GcAV4 -->
         <section
           id="spotlight"
           class="spotlight"
           aria-labelledby="spotlightSong"
-          data-url="https://youtu.be/76tbW9GcAV4"
-          data-song="Long Before You Loved Me"
-          data-note=""
-          data-week="2026-09-21"
+          data-url="https://youtube.com/shorts/4qPVyfE48rU"
+          data-song="Our Latest Studio Ad"
+          data-note="Real stories, turned into songs. See how we do it."
+          data-week="2026-09-24"
+          data-kind="ad"
           hidden
         >
           <div class="spotlight-art" aria-hidden="true">
@@ -244,8 +248,9 @@
               id="spotlightListen"
               target="_blank"
               rel="noopener"
-              ><svg aria-hidden="true"><use href="#i-headphones" /></svg
-              >Listen</a
+              ><svg aria-hidden="true">
+                <use id="spotlightIcon" href="#i-headphones" /></svg
+              ><span id="spotlightAction">Listen</span></a
             ><button class="quiet-button" id="spotlightShare" type="button">
               <svg aria-hidden="true"><use href="#i-share" /></svg>Share
             </button>
@@ -253,7 +258,7 @@
               class="icon-button"
               id="spotlightQR"
               type="button"
-              aria-label="Show QR code for the song of the week"
+              aria-label="Show QR code for the featured link"
             >
               <svg aria-hidden="true"><use href="#i-qr" /></svg>
             </button>
