@@ -90,9 +90,9 @@ function setup(t, options = {}) {
       [...d.querySelectorAll(".card[data-url]")].filter((c) => !c.hidden),
   };
 }
-test("retains 12 working destinations and valid local assets, labels and unique IDs", (t) => {
+test("retains 13 working destinations and valid local assets, labels and unique IDs", (t) => {
   const { d, visible } = setup(t);
-  assert.equal(visible().length, 12);
+  assert.equal(visible().length, 13);
   const ids = [...d.querySelectorAll("[id]")].map((n) => n.id);
   assert.equal(new Set(ids).size, ids.length);
   for (const el of d.querySelectorAll("[aria-labelledby],[aria-describedby]")) {
@@ -109,17 +109,17 @@ test("retains 12 working destinations and valid local assets, labels and unique 
     assert.ok(a.href.startsWith("https://"));
     assert.equal(a.rel, "noopener");
   }
-  assert.equal(d.querySelectorAll(".card .share-btn").length, 12);
+  assert.equal(d.querySelectorAll(".card .share-btn").length, 13);
   assert.equal(d.querySelector("#favoritesSection").hidden, true);
 });
 test("desktop and dock filters synchronize, including empty saved state and reset", (t) => {
   const app = setup(t);
   for (const [filter, count] of [
-    ["listen", 7],
+    ["listen", 8],
     ["studio", 2],
     ["extras", 3],
     ["saved", 0],
-    ["all", 12],
+    ["all", 13],
   ]) {
     app.click(`.remote-dock [data-filter="${filter}"]`);
     assert.equal(app.visible().length, count);
@@ -137,7 +137,7 @@ test("desktop and dock filters synchronize, including empty saved state and rese
   app.click('[data-filter="saved"]');
   assert.equal(app.d.querySelector("#emptyState").hidden, false);
   app.click("#resetFilters");
-  assert.equal(app.visible().length, 12);
+  assert.equal(app.visible().length, 13);
 });
 test("favorites migrate old addresses, reorder, persist and synchronize between tabs", (t) => {
   const app = setup(t, {
@@ -262,11 +262,11 @@ test("blocked storage and corrupt preferences preserve usable links", (t) => {
   app.click(".save-btn");
   assert.equal(app.d.querySelector("#favoritesSection").hidden, false);
   assert.match(app.d.querySelector("#toast").textContent, /this visit/);
-  assert.equal(app.visible().length, 12);
+  assert.equal(app.visible().length, 13);
   const corrupt = setup(t, {
     storage: { [savedKey]: "bad-json", [settingsKey]: "null" },
   });
-  assert.equal(corrupt.visible().length, 12);
+  assert.equal(corrupt.visible().length, 13);
 });
 test("reduced motion disables filter animation and appearance setting persists", (t) => {
   const app = setup(t, { reduced: true });
@@ -347,7 +347,7 @@ test("?filter= opens a category for home-screen shortcuts; unknown values are ig
   const app = setup(t, {
     url: "https://heartstringsstudio.github.io/dashboard/?filter=listen",
   });
-  assert.equal(app.visible().length, 7);
+  assert.equal(app.visible().length, 8);
   assert.equal(
     app.d
       .querySelector('.directory-filters [data-filter="listen"]')
@@ -357,7 +357,7 @@ test("?filter= opens a category for home-screen shortcuts; unknown values are ig
   const junk = setup(t, {
     url: "https://heartstringsstudio.github.io/dashboard/?filter=%22%5D",
   });
-  assert.equal(junk.visible().length, 12);
+  assert.equal(junk.visible().length, 13);
   const manifest = JSON.parse(
     readFileSync(resolve(root, "manifest.json"), "utf8"),
   );
@@ -418,7 +418,7 @@ test("song of the week shows, shares with a message and makes a QR", async (t) =
   assert.match(calls[0].text, /New this week.*Porch Light/);
   app.click("#spotlightQR");
   assert.equal(app.qrCalls.at(-1), "https://youtu.be/example");
-  assert.equal(app.visible().length, 12, "directory is unchanged");
+  assert.equal(app.visible().length, 13, "directory is unchanged");
 });
 test("a stale spotlight stops claiming this week", (t) => {
   const app = setup(t, { html: withSpotlight(isoDaysAgo(30), "") });
