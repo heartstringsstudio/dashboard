@@ -303,12 +303,13 @@ test("studio ads card plays and shares each ad separately", async (t) => {
   });
   const ad1 = "https://youtube.com/shorts/4qPVyfE48rU";
   const ad2 = "https://youtube.com/shorts/p45UxTHVa3k";
-  const card = app.d.querySelector(`.card[data-url="${ad2}"]`);
+  const ad3 = "https://youtube.com/shorts/kf1z42KVDuY";
+  const card = app.d.querySelector(`.card[data-url="${ad3}"]`);
   assert.ok(card);
   const rows = [...card.querySelectorAll(".card-variants li")];
   assert.deepEqual(
     rows.map((row) => row.querySelector("a").href),
-    [ad1, ad2],
+    [ad1, ad2, ad3],
   );
   for (const row of rows) {
     assert.equal(row.querySelector("a").rel, "noopener");
@@ -317,12 +318,12 @@ test("studio ads card plays and shares each ad separately", async (t) => {
   }
   assert.deepEqual(
     calls.map((call) => call.url),
-    [ad1, ad2],
+    [ad1, ad2, ad3],
   );
   assert.match(calls[0].text, /Take a listen/);
   assert.equal(
     app.d.querySelector("#recentCards .quick-card").dataset.url,
-    ad2,
+    ad3,
   );
 });
 
