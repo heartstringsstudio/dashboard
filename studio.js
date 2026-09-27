@@ -416,6 +416,53 @@ document.querySelectorAll(".card-variants li").forEach((row) => {
     shareLink(share.dataset.url, share.dataset.title, share);
   });
 });
+// A card with several versions shows one at a time: a tab per version,
+// newest selected, so the list never grows the card as ads are added.
+document.querySelectorAll(".card-variants").forEach((list, n) => {
+  const rows = [...list.children];
+  if (rows.length < 2) return;
+  const tabs = document.createElement("div");
+  tabs.className = "variant-tabs";
+  tabs.setAttribute("role", "tablist");
+  tabs.setAttribute("aria-label", list.getAttribute("aria-label") || "Versions");
+  const buttons = rows.map((row, i) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.id = `variant-tab-${n}-${i}`;
+    button.setAttribute("role", "tab");
+    button.textContent = row.querySelector("a span").textContent;
+    row.id = `variant-panel-${n}-${i}`;
+    row.setAttribute("role", "tabpanel");
+    row.setAttribute("aria-labelledby", button.id);
+    button.setAttribute("aria-controls", row.id);
+    button.addEventListener("click", () => select(i));
+    button.addEventListener("keydown", (event) => {
+      const step = { ArrowRight: 1, ArrowLeft: -1 }[event.key];
+      const to =
+        event.key === "Home" ? 0
+        : event.key === "End" ? rows.length - 1
+        : step ? (i + step + rows.length) % rows.length
+        : -1;
+      if (to < 0) return;
+      event.preventDefault();
+      select(to);
+      buttons[to].focus();
+    });
+    return button;
+  });
+  function select(active) {
+    buttons.forEach((button, i) => {
+      const on = i === active;
+      button.setAttribute("aria-selected", String(on));
+      button.tabIndex = on ? 0 : -1;
+      rows[i].hidden = !on;
+    });
+  }
+  tabs.append(...buttons);
+  list.setAttribute("role", "presentation");
+  list.before(tabs);
+  select(rows.length - 1);
+});
 document.querySelectorAll("[data-filter]").forEach((button) =>
   button.addEventListener("click", () => {
     activeFilter = button.dataset.filter;

@@ -541,6 +541,40 @@ svg {
   padding: 0 18px 12px;
   list-style: none;
 }
+.variant-tabs {
+  display: flex;
+  gap: 6px;
+  padding: 0 18px 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.variant-tabs::-webkit-scrollbar {
+  display: none;
+}
+.variant-tabs [role="tab"] {
+  flex: 1 0 auto;
+  min-width: 56px;
+  min-height: 36px;
+  padding: 6px 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.8125rem;
+  cursor: pointer;
+}
+.variant-tabs [role="tab"]:hover,
+.variant-tabs [role="tab"]:focus-visible {
+  border-color: var(--copper);
+  color: var(--ink);
+}
+.variant-tabs [aria-selected="true"] {
+  border-color: var(--copper);
+  background: #dca67b1f;
+  color: var(--ink);
+  font-weight: 600;
+}
 .card-variants li {
   display: flex;
   align-items: center;
