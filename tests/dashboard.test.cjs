@@ -305,12 +305,13 @@ test("studio ads card plays and shares each ad separately", async (t) => {
   const ad2 = "https://youtube.com/shorts/p45UxTHVa3k";
   const ad3 = "https://youtube.com/shorts/kf1z42KVDuY";
   const ad4 = "https://youtube.com/shorts/35M488VyA2k";
-  const card = app.d.querySelector(`.card[data-url="${ad4}"]`);
+  const ad5 = "https://youtube.com/shorts/_dRUNhfLsxY";
+  const card = app.d.querySelector(`.card[data-url="${ad5}"]`);
   assert.ok(card);
   const rows = [...card.querySelectorAll(".card-variants li")];
   assert.deepEqual(
     rows.map((row) => row.querySelector("a").href),
-    [ad1, ad2, ad3, ad4],
+    [ad1, ad2, ad3, ad4, ad5],
   );
   for (const row of rows) {
     assert.equal(row.querySelector("a").rel, "noopener");
@@ -319,39 +320,39 @@ test("studio ads card plays and shares each ad separately", async (t) => {
   }
   assert.deepEqual(
     calls.map((call) => call.url),
-    [ad1, ad2, ad3, ad4],
+    [ad1, ad2, ad3, ad4, ad5],
   );
   assert.match(calls[0].text, /Take a listen/);
   assert.equal(
     app.d.querySelector("#recentCards .quick-card").dataset.url,
-    ad4,
+    ad5,
   );
-  assert.equal(app.d.querySelector("#spotlight").dataset.url, ad4);
+  assert.equal(app.d.querySelector("#spotlight").dataset.url, ad5);
 });
 
 test("studio ads card shows one ad at a time behind tabs, newest first", (t) => {
   const app = setup(t);
   const card = app.d.querySelector(
-    '.card[data-url="https://youtube.com/shorts/35M488VyA2k"]',
+    '.card[data-url="https://youtube.com/shorts/_dRUNhfLsxY"]',
   );
   const tabs = [...card.querySelectorAll('.variant-tabs [role="tab"]')];
   const rows = [...card.querySelectorAll(".card-variants li")];
   assert.deepEqual(
     tabs.map((tab) => tab.textContent),
-    ["Ad 1", "Ad 2", "Ad 3", "Ad 4"],
+    ["Ad 1", "Ad 2", "Ad 3", "Ad 4", "Ad 5"],
   );
   const visible = () => rows.map((row) => !row.hidden);
-  assert.deepEqual(visible(), [false, false, false, true]);
-  assert.equal(tabs[3].getAttribute("aria-selected"), "true");
+  assert.deepEqual(visible(), [false, false, false, false, true]);
+  assert.equal(tabs[4].getAttribute("aria-selected"), "true");
   tabs[0].click();
-  assert.deepEqual(visible(), [true, false, false, false]);
+  assert.deepEqual(visible(), [true, false, false, false, false]);
   assert.equal(tabs[0].tabIndex, 0);
-  assert.equal(tabs[3].tabIndex, -1);
+  assert.equal(tabs[4].tabIndex, -1);
   tabs[0].dispatchEvent(
     new app.w.KeyboardEvent("keydown", { key: "ArrowLeft", bubbles: true }),
   );
-  assert.deepEqual(visible(), [false, false, false, true]);
-  assert.equal(rows[3].getAttribute("aria-labelledby"), tabs[3].id);
+  assert.deepEqual(visible(), [false, false, false, false, true]);
+  assert.equal(rows[4].getAttribute("aria-labelledby"), tabs[4].id);
 });
 
 test("business card dials on iOS: no nested auto-link, no icon stealing the tap", () => {
