@@ -284,8 +284,8 @@ test("reduced motion disables filter animation and appearance setting persists",
 test("cache manifest includes versioned assets and retained business card files", () => {
   const sw = readFileSync(resolve(root, "sw.js"), "utf8");
   for (const asset of [
-    "studio.css?v=17",
-    "studio.js?v=17",
+    "studio.css?v=18",
+    "studio.js?v=18",
     "qr-brand.js?v=1",
     "card.html",
     "card.css?v=4",
@@ -518,4 +518,31 @@ test("a stale spotlight stops claiming this week", (t) => {
     "FEATURED SONG",
   );
   assert.equal(app.d.querySelector("#spotlightNote").hidden, true);
+});
+test("a new ad is one new row: card, Newest tag, spotlight and favorites follow it", (t) => {
+  const ad5 = "https://youtube.com/shorts/_dRUNhfLsxY";
+  const ad6 = "https://youtube.com/shorts/example6";
+  const row = `<li data-week="${isoDaysAgo(1)}"><a href="${ad6}" target="_blank" rel="noopener"><span>Ad 6</span></a><button type="button" class="quiet-button variant-share" data-url="${ad6}" data-title="Heartstrings Studio — Studio Ad 6" aria-label="Share Studio Ad 6">Share</button></li>`;
+  const app = setup(t, {
+    html: html.replace(/(<ul class="card-variants"[\s\S]*?)(\s*<\/ul>)/, `$1${row}$2`),
+    storage: { [savedKey]: JSON.stringify([ad5]) },
+  });
+  const d = app.d;
+  const card = d.querySelector(`.card[data-url="${ad6}"]`);
+  assert.ok(card, "card follows the newest row");
+  assert.equal(card.querySelector(".card-main").href, ad6);
+  const tags = [...card.querySelectorAll(".variant-sub")];
+  assert.equal(tags.length, 1);
+  assert.equal(tags[0].closest("li").querySelector("a").href, ad6);
+  assert.equal(d.querySelector("#spotlight").dataset.url, ad6);
+  assert.equal(d.querySelector("#spotlightSong").textContent, "Studio Ad 6");
+  assert.match(d.querySelector("#spotlightLabel").textContent, /^NEW STUDIO AD · /);
+  assert.equal(card.querySelector(".save-btn").getAttribute("aria-pressed"), "true");
+  assert.equal(app.visible().length, 13);
+});
+test("the ad spotlight is named after the ad, never 'newest'", (t) => {
+  const app = setup(t);
+  const song = app.d.querySelector("#spotlightSong").textContent;
+  assert.equal(song, "Studio Ad 5");
+  assert.doesNotMatch(song, /newest/i);
 });

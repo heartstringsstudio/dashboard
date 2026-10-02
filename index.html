@@ -54,7 +54,7 @@
       name="twitter:image"
       content="https://heartstringsstudio.github.io/dashboard/assets/studio-card-banner.jpg"
     />
-    <link rel="stylesheet" href="studio.css?v=17" />
+    <link rel="stylesheet" href="studio.css?v=18" />
   </head>
   <body>
     <svg
@@ -217,22 +217,23 @@
             </button>
           </div>
         </section>
-        <!-- Spotlight: update data-url, data-song (the headline), data-note
-             and data-week (the day it goes live). data-kind="ad" features a
-             studio ad (Watch); leave it out for Song of the Week (Listen).
-             Empty data-url hides it. Previous ads: https://youtube.com/shorts/35M488VyA2k,
-             https://youtube.com/shorts/kf1z42KVDuY, https://youtube.com/shorts/p45UxTHVa3k,
-             https://youtube.com/shorts/4qPVyfE48rU
+        <!-- Spotlight. data-url="newest" features the newest studio ad and
+             takes its name and go-live date from the last row of the Studio
+             Ads card, so a new ad needs no edit here.
+             For Song of the Week instead: set data-url to the song link,
+             data-song (the headline), data-note (optional), data-week (the
+             day it goes live, YYYY-MM-DD) and remove data-kind="ad".
+             Empty data-url hides the spotlight.
              Last song of the week:
              "Long Before You Loved Me", https://youtu.be/76tbW9GcAV4 -->
         <section
           id="spotlight"
           class="spotlight"
           aria-labelledby="spotlightSong"
-          data-url="https://youtube.com/shorts/_dRUNhfLsxY"
-          data-song="Our Newest Studio Ad"
+          data-url="newest"
+          data-song=""
           data-note="Real stories, turned into songs. See how we do it."
-          data-week="2026-09-28"
+          data-week=""
           data-kind="ad"
           hidden
         >
@@ -434,19 +435,22 @@
                     <use href="#i-arrow" /></svg
                 ></a>
               </article>
-              <!-- Studio ads: the card's own link, Share, QR and star use the
-                   newest ad (data-url). Each row below plays or shares one ad and
-                   gets its own tab (the last row opens first); add a row per
-                   new spot and point data-url at the newest. -->
+              <!-- Studio ads, oldest first. To add an ad, copy the last row,
+                   paste it below, and change its link, share data-url,
+                   "Ad N" numbers and data-week (the day it goes live). That is
+                   the only edit: the card's own link, Share, QR, star, the
+                   "Newest" tag and the spotlight all follow the last row.
+                   The href below is the no-JavaScript fallback. -->
               <article
                 class="card"
-                data-url="https://youtube.com/shorts/_dRUNhfLsxY"
+                data-ads
+                data-url="https://www.youtube.com/@heartstringsstudiowv/shorts"
                 data-title="Heartstrings Studio — Studio Ads"
                 data-category="listen"
               >
                 <a
                   class="card-main"
-                  href="https://youtube.com/shorts/_dRUNhfLsxY"
+                  href="https://www.youtube.com/@heartstringsstudiowv/shorts"
                   target="_blank"
                   rel="noopener"
                   ><span class="card-icon"
@@ -454,7 +458,7 @@
                   ><span class="card-text"
                     ><span class="card-title">Studio Ads</span
                     ><span class="card-sub"
-                      >Five spots. Pick one to play or share</span
+                      >Pick any spot to play or share</span
                     ></span
                   ><svg class="open-arrow" aria-hidden="true">
                     <use href="#i-arrow" /></svg
@@ -466,8 +470,7 @@
                       target="_blank"
                       rel="noopener"
                       ><svg aria-hidden="true"><use href="#i-play" /></svg
-                      ><span>Ad 1</span
-                      ><span class="variant-sub">Original</span></a
+                      ><span>Ad 1</span></a
                     ><button
                       type="button"
                       class="quiet-button variant-share"
@@ -485,8 +488,7 @@
                       target="_blank"
                       rel="noopener"
                       ><svg aria-hidden="true"><use href="#i-play" /></svg
-                      ><span>Ad 2</span
-                      ><span class="variant-sub">Second</span></a
+                      ><span>Ad 2</span></a
                     ><button
                       type="button"
                       class="quiet-button variant-share"
@@ -504,8 +506,7 @@
                       target="_blank"
                       rel="noopener"
                       ><svg aria-hidden="true"><use href="#i-play" /></svg
-                      ><span>Ad 3</span
-                      ><span class="variant-sub">Third</span></a
+                      ><span>Ad 3</span></a
                     ><button
                       type="button"
                       class="quiet-button variant-share"
@@ -523,8 +524,7 @@
                       target="_blank"
                       rel="noopener"
                       ><svg aria-hidden="true"><use href="#i-play" /></svg
-                      ><span>Ad 4</span
-                      ><span class="variant-sub">Fourth</span></a
+                      ><span>Ad 4</span></a
                     ><button
                       type="button"
                       class="quiet-button variant-share"
@@ -536,14 +536,13 @@
                       ><span>Share</span>
                     </button>
                   </li>
-                  <li>
+                  <li data-week="2026-09-28">
                     <a
                       href="https://youtube.com/shorts/_dRUNhfLsxY"
                       target="_blank"
                       rel="noopener"
                       ><svg aria-hidden="true"><use href="#i-play" /></svg
-                      ><span>Ad 5</span
-                      ><span class="variant-sub">Newest</span></a
+                      ><span>Ad 5</span></a
                     ><button
                       type="button"
                       class="quiet-button variant-share"
@@ -943,6 +942,6 @@
     <div id="toast" role="status" aria-live="polite"></div>
     <script src="qrcode.min.js"></script>
     <script src="qr-brand.js?v=1"></script>
-    <script src="studio.js?v=17"></script>
+    <script src="studio.js?v=18"></script>
   </body>
 </html>

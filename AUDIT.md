@@ -1,10 +1,10 @@
 # Heartstrings Studio Dashboard
 
-Updated September 22, 2026.
+Updated October 2, 2026.
 
 ## Purpose and design
 
-Tim's personal link-sharing utility. All 12 destination URLs are retained, including the current Main Studio Site short link. There is no search, pricing, intake CTA, or Story Room destination.
+Tim's personal link-sharing utility. All 13 destination cards are retained, including the current Main Studio Site short link. There is no search, pricing, intake CTA, or Story Room destination.
 
 The dashboard uses charcoal surfaces, warm ivory text and restrained copper accents. A compact digital business-card strip provides Open, Share and QR actions. The existing control-room photograph remains immediately below Share Links in a shallower crop. A single category navigation is visible at a time: a sticky toolbar above 680px, or bottom navigation with safe-area spacing at 680px and below.
 
@@ -25,9 +25,13 @@ Share uses the native share sheet when supported. Unsupported or failed native s
 - **Home-screen shortcuts:** `manifest.json` shortcuts open the card, `?filter=saved` or `?filter=listen`. Any valid `?filter=` value selects that category when the page loads. Unknown values are ignored.
 - **Link previews:** the dashboard's `og:image` and Twitter card now use the studio banner at large size instead of the small logo.
 
-## Song of the Week
+## Spotlight and studio ads
 
-A spotlight card sits between the business-card strip and Share Links. It has Listen, Share (with a "New this week…" message) and QR buttons, plus a small copper equalizer that stops when motion is off. **Weekly update:** in `index.html`, edit the `#spotlight` element's `data-url`, `data-song`, `data-note` (optional) and `data-week` (`YYYY-MM-DD`, the day it goes live). No version bump is needed because pages are fetched network-first. If `data-url` is empty or not `https://`, the card stays hidden. For the first 13 days after `data-week`, the label reads "SONG OF THE WEEK · SEP 21". After that it switches to "FEATURED SONG", so a missed week never shows an outdated "this week" claim.
+A spotlight card sits between the business-card strip and Share Links. It has Listen or Watch, Share and QR buttons, plus a small copper equalizer that stops when motion is off.
+
+**Adding a studio ad is one edit.** In `index.html`, copy the last row of the Studio Ads card (`.card[data-ads]`), paste it below, and change its link, the share button's `data-url`, the "Ad N" numbers and `data-week` (the day it goes live, `YYYY-MM-DD`). The rows are oldest first. Everything else follows the last row: the card's own link, Share, QR and star; the "Newest" tag; and the spotlight, while its `data-url` is `newest`. A favorite saved under an older ad moves to the newest one. The card's static `href` (the YouTube channel's Shorts page) is only the no-JavaScript fallback. Ad tabs sit in even columns that wrap, so a sixth ad starts a second row instead of hiding off-screen.
+
+**Song of the Week instead:** set the `#spotlight` element's `data-url` to the song link, `data-song` (the headline), `data-note` (optional) and `data-week`, and remove `data-kind="ad"`. If `data-url` is empty, or isn't `https://` or `newest`, the card stays hidden. For the first 13 days after `data-week`, the label reads "SONG OF THE WEEK · SEP 21" (or "NEW STUDIO AD · SEP 28"). After that it switches to "FEATURED SONG" or "FEATURED AD", so a missed week never shows an outdated "this week" claim. The ad spotlight's headline, QR title and poster title use the ad's own name ("Studio Ad 5"), never "newest", so saved posters don't go stale.
 
 ## Digital business card
 
@@ -39,13 +43,13 @@ The phone row did not dial on iPhones. Three causes, all fixed in markup and CSS
 - Inline SVG icons inside links could take the touch on iOS rather than activating the link. Every icon on the card is decoration, so `a svg` and `button svg` are now `pointer-events: none`.
 - Contact rows had a hover state only, and the tap highlight is disabled, so a tap on a touch device produced no visible response. `.contact-list a:active` gives the press feedback that hover gives a pointer.
 
-The version bump (now `?v=4`, cache v19) ensures phones pick up the fix.
+The card asset version bump to `?v=4` ensures phones pick up the fix.
 
 ## Validation for this change
 
 Run `npm ci && npm test` with a current Node.js version supported by jsdom. Dependencies are development-only; deployment remains plain HTML, CSS and JavaScript with no build step.
 
-18 tests cover retained destinations/assets, valid IDs and ARIA references, filtering and navigation synchronization, favorites migration/order/persistence, cross-tab updates, copying and modal feedback, share/QR history and focus, recent-link focus retention, native-share cancellation and errors, blocked/corrupt storage, reduced motion, appearance persistence, service-worker asset versions, category share messages and Copy message, high-error-correction QR, `?filter=` shortcuts, and the Song of the Week (hidden when empty, share/QR, stale label). The last of these reads `card.html` and `card.css` directly and fails if the telephone-detection opt-out, the `tel:` href, the icon `pointer-events` rule, the row press state, or the stylesheet version bump is missing.
+25 tests cover retained destinations/assets, valid IDs and ARIA references, filtering and navigation synchronization, favorites migration/order/persistence, cross-tab updates, copying and modal feedback, share/QR history and focus, recent-link focus retention, native-share cancellation and errors, blocked/corrupt storage, reduced motion, appearance persistence, service-worker asset versions, category share messages and Copy message, high-error-correction QR, `?filter=` shortcuts, and the spotlight (hidden when empty, share/QR, stale label, ad mode), the Studio Ads tabs, and the one-row ad workflow (a new last row moves the card, Newest tag, spotlight and favorites). The last of these reads `card.html` and `card.css` directly and fails if the telephone-detection opt-out, the `tel:` href, the icon `pointer-events` rule, the row press state, or the stylesheet version bump is missing.
 
 JavaScript syntax and `git diff --check` also pass. Responsive CSS was reviewed for one navigation per breakpoint, a single-column mobile grid, 44px controls, safe-area dock clearance, and mobile sheet sizing.
 
@@ -57,6 +61,6 @@ Source: `index.html`, `studio.css`, `studio.js`, `qr-brand.js`, `sw.js`. New lin
 
 Existing storage keys remain unchanged. Favorites order is insertion order in the existing saved-links array. Unknown destinations are ignored. Add moved addresses to MOVED to preserve favorites/history.
 
-The service-worker cache is v19; dashboard CSS and JS use query version 15, card CSS and JS use version 4, and `qr-brand.js` uses version 1. Update cache and asset references together. Preserve the `heartstrings-dashboard-` cache prefix, `/dashboard/` manifest scope, and separate navigation cache keys for the dashboard and business card.
+The service-worker cache is v26; dashboard CSS and JS use query version 18, card CSS and JS use version 4, and `qr-brand.js` uses version 1. Update cache and asset references together. Preserve the `heartstrings-dashboard-` cache prefix, `/dashboard/` manifest scope, and separate navigation cache keys for the dashboard and business card.
 
 Business-card contacts live in `card.js`'s CONTACT object and `card.html`'s contact rows. Its JPEG and WebP banner assets should stay in sync when changed.
