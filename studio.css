@@ -14,15 +14,28 @@
 }
 :root {
   color-scheme: dark;
+  /* Surfaces, darkest to lightest. */
+  --bg-deep: #100e0c;
   --bg: #151413;
   --panel: #211f1d;
+  --card: #26221f;
+  --raised: #31271f;
+  /* Text. */
   --ink: #f4eee7;
   --muted: #b5aaa0;
-  --line: #dfb79526;
+  --on-copper: #2b2018;
+  /* One copper, in a few strengths. */
   --copper: #ddb08c;
-  --font: "DM Sans", system-ui, sans-serif;
+  --copper-bright: #f2c9a4;
+  --copper-wash: color-mix(in srgb, var(--copper) 7%, transparent);
+  --line: color-mix(in srgb, var(--copper) 15%, transparent);
+  --copper-tint: color-mix(in srgb, var(--copper) 18%, transparent);
+  --copper-edge: color-mix(in srgb, var(--copper) 35%, transparent);
   --metal: linear-gradient(115deg, #c18c66, #e8bf9a 48%, #cf9b75);
-  --glow: 0.35;
+  --metal-hover: linear-gradient(115deg, #d29b74, #f0caa7 48%, #dca881);
+  --glow: rgb(224 132 65 / 0.35);
+  --ambient: #94603912;
+  --font: "DM Sans", system-ui, sans-serif;
   --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 * {
@@ -52,7 +65,7 @@ body::before {
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  background: radial-gradient(ellipse at 35% 0, #94603912, transparent 60%);
+  background: radial-gradient(ellipse at 35% 0, var(--ambient), transparent 60%);
 }
 button,
 input {
@@ -89,7 +102,7 @@ svg {
   display: none !important;
 }
 :focus-visible {
-  outline: 2px solid #f3c59f;
+  outline: 2px solid var(--copper-bright);
   outline-offset: 4px;
 }
 .app-shell {
@@ -169,8 +182,8 @@ svg {
 .primary-button,
 .share-btn {
   background: var(--metal);
-  border-color: #edc9a659;
-  color: #2b2018;
+  border-color: var(--copper-edge);
+  color: var(--on-copper);
   box-shadow:
     inset 0 1px #fff3,
     0 2px 3px #0003;
@@ -232,7 +245,7 @@ svg {
   background:
     radial-gradient(
       120% 140% at 0% 0%,
-      rgb(221 176 140 / calc(0.08 + var(--glow) * 0.14)),
+      color-mix(in srgb, var(--copper) 13%, transparent),
       transparent 60%
     ),
     var(--panel);
@@ -262,7 +275,7 @@ svg {
   width: 72px;
   height: 72px;
   border-radius: 12px;
-  background: #151413;
+  background: var(--bg);
   border: 1px solid var(--line);
 }
 .spotlight-art img {
@@ -341,7 +354,6 @@ svg {
     Georgia,
     serif;
   letter-spacing: -0.025em;
-  margin-top: 6px;
 }
 .studio-scene {
   position: relative;
@@ -353,7 +365,7 @@ svg {
   border: 1px solid var(--line);
   border-radius: 12px;
   background:
-    linear-gradient(90deg, #151413df, #15141318 80%),
+    linear-gradient(90deg, color-mix(in srgb, var(--bg) 87%, transparent), color-mix(in srgb, var(--bg) 9%, transparent) 80%),
     url("assets/control-room.webp") center 57% / cover;
 }
 .studio-signature {
@@ -391,7 +403,7 @@ svg {
   gap: 16px;
   padding: 16px 0;
   margin: 0 0 16px;
-  background: #151413f5;
+  background: color-mix(in srgb, var(--bg) 96%, transparent);
   backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--line);
 }
@@ -417,9 +429,9 @@ svg {
     color 0.18s;
 }
 .filter.active {
-  color: #efd1b6;
-  background: #ddb08c12;
-  border-color: #ddb08c33;
+  color: var(--copper-bright);
+  background: var(--copper-wash);
+  border-color: var(--copper-tint);
 }
 .filter svg {
   width: 16px;
@@ -450,9 +462,6 @@ svg {
   gap: 16px;
   margin-bottom: 14px;
 }
-.section-head .eyebrow {
-  margin-bottom: 4px;
-}
 .section-head h2 {
   font-size: 1.125rem;
   font-weight: 500;
@@ -479,7 +488,7 @@ svg {
   min-width: 0;
   border: 1px solid var(--line);
   border-radius: 12px;
-  background: linear-gradient(140deg, #26221f, #201e1c 75%);
+  background: linear-gradient(140deg, var(--card), var(--panel) 75%);
   box-shadow: 0 3px 12px #00000015;
   transition:
     border-color 0.2s,
@@ -502,8 +511,8 @@ svg {
   height: 38px;
   flex-shrink: 0;
   border-radius: 10px;
-  background: #dca67b0b;
-  border: 1px solid #dca67b20;
+  background: var(--copper-wash);
+  border: 1px solid var(--copper-tint);
   color: var(--copper);
 }
 .card-icon svg {
@@ -566,7 +575,7 @@ svg {
 }
 .variant-tabs [aria-selected="true"] {
   border-color: var(--copper);
-  background: #dca67b1f;
+  background: var(--copper-tint);
   color: var(--ink);
   font-weight: 600;
 }
@@ -583,9 +592,9 @@ svg {
   min-width: 0;
   min-height: 44px;
   padding: 10px 12px;
-  border: 1px solid #dca67b20;
+  border: 1px solid var(--copper-tint);
   border-radius: 8px;
-  background: #dca67b0b;
+  background: var(--copper-wash);
   color: var(--ink);
   font-size: 0.875rem;
   font-weight: 500;
@@ -641,15 +650,15 @@ svg {
   color: var(--copper);
 }
 .save-btn[aria-pressed="true"] svg {
-  fill: #ddb08c33;
+  fill: var(--copper-tint);
 }
 .featured {
-  border-color: #dca67b4a;
-  background: linear-gradient(140deg, #35291f, #221e1a 75%);
+  border-color: var(--copper-edge);
+  background: linear-gradient(140deg, var(--raised), var(--panel) 75%);
 }
 .card:focus-within {
   border-color: var(--copper);
-  box-shadow: 0 0 calc(16px * var(--glow)) rgb(224 132 65 / var(--glow));
+  box-shadow: 0 0 6px var(--glow);
 }
 .compact .card-main {
   min-height: 82px;
@@ -685,7 +694,7 @@ svg {
   padding: 8px;
   border: 1px solid var(--line);
   border-radius: 10px;
-  background: #ddb08c07;
+  background: var(--copper-wash);
 }
 .quick-card a {
   min-width: 0;
@@ -741,38 +750,20 @@ svg {
   display: grid;
   gap: 16px;
 }
-.glow-control {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
-  font-size: 0.875rem;
-  color: var(--muted);
-}
-.glow-control input {
-  flex: 1;
-  min-width: 100px;
-  min-height: 44px;
-  accent-color: var(--copper);
-}
-.glow-control output {
-  min-width: 36px;
-  color: var(--copper);
-}
 .setting-toggle {
   justify-content: flex-start;
   min-height: 48px;
 }
 .setting-toggle[aria-pressed="true"] {
   color: var(--copper);
-  border-color: #ddb08c66;
-  background: #ddb08c0b;
+  border-color: var(--copper-edge);
+  background: var(--copper-wash);
 }
 .toggle-track {
   position: relative;
   width: 26px;
   height: 16px;
-  background: #100e0c;
+  background: var(--bg-deep);
   border: 1px solid var(--line);
   border-radius: 10px;
 }
@@ -844,8 +835,8 @@ footer {
 }
 dialog {
   color: var(--ink);
-  background: linear-gradient(150deg, #2c2520, #1c1a18);
-  border: 1px solid #ddb08c40;
+  background: linear-gradient(150deg, var(--raised), var(--panel));
+  border: 1px solid var(--copper-edge);
   border-radius: 18px;
   padding: 28px;
   width: min(480px, calc(100% - 32px));
@@ -857,7 +848,7 @@ dialog[open] {
   animation: enter 0.2s var(--ease) both;
 }
 dialog::backdrop {
-  background: #100f0ed9;
+  background: color-mix(in srgb, var(--bg-deep) 85%, transparent);
   backdrop-filter: blur(8px);
 }
 .dialog-header {
@@ -866,6 +857,9 @@ dialog::backdrop {
   justify-content: space-between;
   gap: 16px;
   margin-bottom: 24px;
+}
+.dialog-header > [data-close] {
+  margin-left: auto;
 }
 .dialog-header h2,
 #shareTitle {
@@ -903,7 +897,7 @@ dialog::backdrop {
   padding: 12px;
   border: 1px solid var(--line);
   border-radius: 8px;
-  background: #151413;
+  background: var(--bg);
   color: var(--copper);
   font-size: 0.875rem;
 }
@@ -976,10 +970,10 @@ dialog::backdrop {
   padding: 12px 20px;
   width: max-content;
   max-width: calc(100% - 32px);
-  border: 1px solid #ddb08c55;
+  border: 1px solid var(--copper-edge);
   border-radius: 10px;
-  background: #33271e;
-  color: #ffe0c1;
+  background: var(--raised);
+  color: var(--copper-bright);
   box-shadow: 0 8px 40px #0007;
   z-index: 2000;
   opacity: 0;
@@ -994,13 +988,21 @@ dialog::backdrop {
   opacity: 1;
   transform: translate(-50%, 0);
 }
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
 .skip-link {
   position: fixed;
   top: 12px;
   left: 12px;
   padding: 12px 20px;
   background: var(--copper);
-  color: #21170f;
+  color: var(--on-copper);
   border-radius: 8px;
   z-index: 3000;
   transform: translateY(-200%);
@@ -1011,12 +1013,12 @@ dialog::backdrop {
 @media (hover: hover) {
   .card:hover {
     transform: translateY(-2px);
-    border-color: #ddb08c55;
+    border-color: var(--copper-edge);
     box-shadow: 0 8px 24px #0003;
   }
   .primary-button:hover,
   .share-btn:hover {
-    background: linear-gradient(115deg, #d29b74, #f0caa7 48%, #dca881);
+    background: var(--metal-hover);
   }
   .quiet-button:hover,
   .icon-button:hover,
@@ -1024,8 +1026,8 @@ dialog::backdrop {
   .save-btn:hover,
   .text-button:hover,
   .setting-toggle:hover {
-    background: #ddb08c12;
-    border-color: #ddb08c55;
+    background: var(--copper-wash);
+    border-color: var(--copper-edge);
   }
   .filter:hover {
     color: var(--ink);
@@ -1229,12 +1231,12 @@ html.motion-off {
     display: flex;
     gap: 4px;
     padding: 8px 12px calc(8px + env(safe-area-inset-bottom));
-    border-top: 1px solid #ddb08c33;
-    background: #1b1917f5;
+    border-top: 1px solid var(--copper-tint);
+    background: color-mix(in srgb, var(--panel) 96%, transparent);
     backdrop-filter: blur(18px);
     box-shadow:
       0 -4px 24px #0003,
-      0 0 calc(20px * var(--glow)) rgb(224 132 65 / var(--glow));
+      0 0 7px var(--glow);
   }
   .dock-button {
     display: flex;
@@ -1256,9 +1258,9 @@ html.motion-off {
     height: 19px;
   }
   .dock-button.active {
-    color: #f2c9a4;
-    background: #ddb08c12;
-    border-color: #ddb08c24;
+    color: var(--copper-bright);
+    background: var(--copper-wash);
+    border-color: var(--copper-tint);
   }
   #dockSavedCount:empty {
     display: none;

@@ -284,11 +284,11 @@ test("reduced motion disables filter animation and appearance setting persists",
 test("cache manifest includes versioned assets and retained business card files", () => {
   const sw = readFileSync(resolve(root, "sw.js"), "utf8");
   for (const asset of [
-    "studio.css?v=19",
-    "studio.js?v=19",
+    "studio.css?v=20",
+    "studio.js?v=20",
     "qr-brand.js?v=2",
     "card.html",
-    "card.css?v=5",
+    "card.css?v=6",
     "card.js?v=5",
   ])
     assert.ok(sw.includes(asset), asset);
@@ -371,7 +371,7 @@ test("business card dials on iOS: no nested auto-link, no icon stealing the tap"
   // Rows had a hover state only: a tap looked like nothing happened.
   assert.match(cardCss, /\.contact-list a:active \{/);
   // The stylesheet fix only reaches iPhones if the cached copy is superseded.
-  assert.match(cardHtml, /card\.css\?v=5/);
+  assert.match(cardHtml, /card\.css\?v=6/);
 });
 
 test("shares carry a category message, and the fallback copies it with the link", async (t) => {
@@ -553,4 +553,36 @@ test("save toggles keep one name; pressed state carries saved/unsaved", (t) => {
   button.click();
   assert.equal(button.getAttribute("aria-pressed"), "true");
   assert.equal(button.getAttribute("aria-label"), "Save Song Jukebox");
+});
+test("one quiet label style: no section eyebrows, plain counts, no glow slider", (t) => {
+  const app = setup(t);
+  const d = app.d;
+  assert.deepEqual(
+    [...d.querySelectorAll(".eyebrow")].map((el) => el.id),
+    ["spotlightLabel"],
+  );
+  for (const count of d.querySelectorAll(".section-count"))
+    assert.match(count.textContent, /^[1-9]\d*$/);
+  assert.equal(d.getElementById("glowRange"), null);
+  app.click('[data-filter="saved"]');
+  app.click('[data-filter="all"]');
+  assert.equal(d.querySelector('[data-section="listen"] .section-count').textContent, "8");
+});
+test("external links tell screen readers they open a new tab", (t) => {
+  const app = setup(t);
+  for (const link of app.d.querySelectorAll('a[target="_blank"]'))
+    assert.match(
+      link.getAttribute("aria-label") || link.textContent,
+      /opens in a new tab/,
+    );
+});
+test("one background color across pages, manifest and theme-color", () => {
+  const card = readFileSync(resolve(root, "card.html"), "utf8");
+  const manifest = JSON.parse(readFileSync(resolve(root, "manifest.json"), "utf8"));
+  const css = readFileSync(resolve(root, "studio.css"), "utf8");
+  const bg = css.match(/--bg: (#[0-9a-f]{6});/)[1];
+  assert.match(html, new RegExp(`name="theme-color" content="${bg}"`));
+  assert.match(card, new RegExp(`name="theme-color" content="${bg}"`));
+  assert.equal(manifest.theme_color, bg);
+  assert.equal(manifest.background_color, bg);
 });

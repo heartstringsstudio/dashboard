@@ -34,6 +34,12 @@ document.querySelectorAll(".card[data-ads]").forEach((card) => {
     week: newest.dataset.week || "",
   };
 });
+document.querySelectorAll('a[target="_blank"]').forEach((link) => {
+  const note = document.createElement("span");
+  note.className = "sr-only";
+  note.textContent = " (opens in a new tab)";
+  link.append(note);
+});
 const cards = [...document.querySelectorAll(".card[data-url]")];
 const catalog = new Map(cards.map((card) => [card.dataset.url, card]));
 const RECENT_KEY = "heartstrings_dashboard_recent_links";
@@ -102,7 +108,10 @@ function quickLink(url, kind) {
   link.innerHTML = icon(kind);
   const label = document.createElement("span");
   label.textContent = labelFor(card);
-  link.append(label);
+  const note = document.createElement("span");
+  note.className = "sr-only";
+  note.textContent = " (opens in a new tab)";
+  link.append(label, note);
   link.addEventListener("click", () => remember(url));
   const share = document.createElement("button");
   share.type = "button";
@@ -238,9 +247,7 @@ function applyFilters() {
       (card) => !card.hidden,
     ).length;
     section.hidden = visible === 0;
-    section.querySelector(".section-count").textContent = String(
-      visible,
-    ).padStart(2, "0");
+    section.querySelector(".section-count").textContent = String(visible);
   });
   $("resultCount").textContent = `${count} ${count === 1 ? "link" : "links"}`;
   $("savedCount").textContent = saved.size;
@@ -483,6 +490,7 @@ document.querySelectorAll(".card-variants").forEach((list, n) => {
   }
   tabs.append(...buttons);
   list.setAttribute("role", "presentation");
+  list.removeAttribute("aria-label");
   list.before(tabs);
   select(rows.length - 1);
 });
@@ -650,7 +658,10 @@ function setupSpotlight(now = new Date()) {
   $("spotlightListen").href = url;
   $("spotlightAction").textContent = verb;
   $("spotlightIcon").setAttribute("href", ad ? "#i-play" : "#i-headphones");
-  $("spotlightListen").setAttribute("aria-label", `${verb} ${song}`);
+  $("spotlightListen").setAttribute(
+    "aria-label",
+    `${verb} ${song} (opens in a new tab)`,
+  );
   $("spotlightShare").setAttribute("aria-label", `Share ${song}`);
   $("spotlightQR").setAttribute("aria-label", `Show QR code for ${song}`);
   section.hidden = false;
@@ -711,10 +722,6 @@ const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 function validSettings(value) {
   const settings = value && typeof value === "object" ? value : {};
   return {
-    glow:
-      typeof settings.glow === "number" && Number.isFinite(settings.glow)
-        ? Math.max(0, Math.min(100, settings.glow))
-        : 35,
     motion: typeof settings.motion === "boolean" ? settings.motion : true,
     compact: typeof settings.compact === "boolean" ? settings.compact : true,
   };
@@ -724,15 +731,9 @@ function motionAllowed() {
   return settings.motion && !reducedMotion.matches;
 }
 function applySettings() {
-  document.documentElement.style.setProperty(
-    "--glow",
-    String(settings.glow / 100),
-  );
   document.documentElement.classList.toggle("motion-off", !motionAllowed());
   document.body.classList.toggle("motion-off", !motionAllowed());
   document.body.classList.toggle("compact", settings.compact);
-  $("glowRange").value = settings.glow;
-  $("glowValue").textContent = `${settings.glow}%`;
   $("motionToggle").setAttribute("aria-pressed", String(motionAllowed()));
   $("motionToggle").setAttribute(
     "aria-disabled",
@@ -747,11 +748,6 @@ function saveSettings() {
   if (!writeStore(SETTINGS_KEY, settings))
     showToast("Adjusted for this visit. Device storage is unavailable.");
 }
-$("glowRange").addEventListener("input", () => {
-  settings.glow = Number($("glowRange").value);
-  applySettings();
-});
-$("glowRange").addEventListener("change", saveSettings);
 $("motionToggle").addEventListener("click", () => {
   if (reducedMotion.matches) {
     showToast("Motion is off to match your device accessibility setting.");
