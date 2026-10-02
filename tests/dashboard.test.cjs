@@ -284,12 +284,12 @@ test("reduced motion disables filter animation and appearance setting persists",
 test("cache manifest includes versioned assets and retained business card files", () => {
   const sw = readFileSync(resolve(root, "sw.js"), "utf8");
   for (const asset of [
-    "studio.css?v=18",
-    "studio.js?v=18",
-    "qr-brand.js?v=1",
+    "studio.css?v=19",
+    "studio.js?v=19",
+    "qr-brand.js?v=2",
     "card.html",
-    "card.css?v=4",
-    "card.js?v=4",
+    "card.css?v=5",
+    "card.js?v=5",
   ])
     assert.ok(sw.includes(asset), asset);
 });
@@ -371,7 +371,7 @@ test("business card dials on iOS: no nested auto-link, no icon stealing the tap"
   // Rows had a hover state only: a tap looked like nothing happened.
   assert.match(cardCss, /\.contact-list a:active \{/);
   // The stylesheet fix only reaches iPhones if the cached copy is superseded.
-  assert.match(cardHtml, /card\.css\?v=4/);
+  assert.match(cardHtml, /card\.css\?v=5/);
 });
 
 test("shares carry a category message, and the fallback copies it with the link", async (t) => {
@@ -545,4 +545,12 @@ test("the ad spotlight is named after the ad, never 'newest'", (t) => {
   const song = app.d.querySelector("#spotlightSong").textContent;
   assert.equal(song, "Studio Ad 5");
   assert.doesNotMatch(song, /newest/i);
+});
+test("save toggles keep one name; pressed state carries saved/unsaved", (t) => {
+  const app = setup(t);
+  const button = app.d.querySelector(`.card[data-url="${jukebox}"] .save-btn`);
+  assert.equal(button.getAttribute("aria-label"), "Save Song Jukebox");
+  button.click();
+  assert.equal(button.getAttribute("aria-pressed"), "true");
+  assert.equal(button.getAttribute("aria-label"), "Save Song Jukebox");
 });

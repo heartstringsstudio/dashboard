@@ -313,7 +313,7 @@ svg {
   width: 22%;
   aspect-ratio: 1;
   transform: translate(-50%, -50%);
-  background: #fff url("logo.png") center / 112% no-repeat;
+  background: #fff url("logo-160.png") center / 112% no-repeat;
   border-radius: 18%;
 }
 .qr-note p:not(.eyebrow) {
