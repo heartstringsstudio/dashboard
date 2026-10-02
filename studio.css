@@ -566,12 +566,6 @@ svg {
   flex-shrink: 0;
   color: var(--copper);
 }
-.card-variants .variant-sub {
-  margin-left: auto;
-  color: var(--muted);
-  font-size: 0.75rem;
-  font-weight: 400;
-}
 .card-variants a:hover,
 .card-variants a:focus-visible {
   border-color: var(--copper);

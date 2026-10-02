@@ -7,32 +7,37 @@ const MOVED = new Map([
     "https://tinyurl.com/heartstringswv",
   ],
 ]);
-// The Studio Ads card lists its ads oldest first, so a new ad is one new row.
-// The card's own link, the "Newest" tag and an ad spotlight follow the last
-// row, and a favorite saved under an older ad moves to the newest.
+// Five studio ads are live at a time. The card lists every ad oldest first,
+// so a new ad is one new row: the newest is featured in the spotlight (when
+// its data-url is "newest"), the next four stay on the card to share, and
+// older rows retire. The card's own link follows its newest remaining ad, and
+// a favorite saved under any other ad moves to it.
+const ADS_LIVE = 5;
 let newestAd = null;
 document.querySelectorAll(".card[data-ads]").forEach((card) => {
   const rows = [...card.querySelectorAll(".card-variants li")];
   const newest = rows.at(-1);
   if (!newest) return;
-  const link = newest.querySelector("a");
-  const url = link.getAttribute("href");
-  [card.dataset.url, ...rows.map((row) => row.querySelector("a").href)]
-    .filter((old) => old !== url)
-    .forEach((old) => MOVED.set(old, url));
-  card.dataset.url = url;
-  card.querySelector(".card-main").href = url;
-  const tag = document.createElement("span");
-  tag.className = "variant-sub";
-  tag.textContent = "Newest";
-  link.append(tag);
+  const featured = document.getElementById("spotlight")?.dataset.url === "newest";
   newestAd ||= {
-    url,
+    url: newest.querySelector("a").getAttribute("href"),
     name: newest
       .querySelector(".variant-share")
       .dataset.title.replace(/^Heartstrings Studio — /, ""),
     week: newest.dataset.week || "",
   };
+  const shown = rows.slice(-ADS_LIVE, featured ? -1 : undefined);
+  if (!shown.length) {
+    card.remove();
+    return;
+  }
+  rows.filter((row) => !shown.includes(row)).forEach((row) => row.remove());
+  const url = shown.at(-1).querySelector("a").getAttribute("href");
+  [card.dataset.url, ...rows.map((row) => row.querySelector("a").href)]
+    .filter((old) => old !== url)
+    .forEach((old) => MOVED.set(old, url));
+  card.dataset.url = url;
+  card.querySelector(".card-main").href = url;
 });
 document.querySelectorAll('a[target="_blank"]').forEach((link) => {
   const note = document.createElement("span");

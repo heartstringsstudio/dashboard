@@ -439,12 +439,14 @@
                     <use href="#i-arrow" /></svg
                 ></a>
               </article>
-              <!-- Studio ads, oldest first. To add an ad, copy the last row,
-                   paste it below, and change its link, share data-url,
-                   "Ad N" numbers and data-week (the day it goes live). That is
-                   the only edit: the card's own link, Share, QR, star, the
-                   "Newest" tag and the spotlight all follow the last row.
-                   The href below is the no-JavaScript fallback. -->
+              <!-- Studio ads, oldest first. Five ads are live at a time: the
+                   newest (last row) is featured in the spotlight, the next four
+                   show here as tabs to play or share, and older rows retire
+                   automatically. To add an ad, copy the last row, paste it
+                   below, and change its link, share data-url, "Ad N" numbers
+                   and data-week (the day it goes live). That is the only edit.
+                   Retired rows can be deleted any time. The href below is the
+                   no-JavaScript fallback. -->
               <article
                 class="card"
                 data-ads
@@ -930,6 +932,6 @@
     <div id="toast" role="status" aria-live="polite"></div>
     <script src="qrcode.min.js"></script>
     <script src="qr-brand.js?v=2"></script>
-    <script src="studio.js?v=20"></script>
+    <script src="studio.js?v=21"></script>
   </body>
 </html>

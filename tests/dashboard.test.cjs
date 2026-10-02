@@ -286,7 +286,7 @@ test("cache manifest includes versioned assets and retained business card files"
   for (const asset of [
     "tokens.css?v=1",
     "studio.css?v=21",
-    "studio.js?v=20",
+    "studio.js?v=21",
     "qr-brand.js?v=2",
     "card.html",
     "card.css?v=7",
@@ -295,24 +295,36 @@ test("cache manifest includes versioned assets and retained business card files"
     assert.ok(sw.includes(asset), asset);
 });
 
-test("studio ads card plays and shares each ad separately", async (t) => {
+const ads = [
+  "https://youtube.com/shorts/4qPVyfE48rU",
+  "https://youtube.com/shorts/p45UxTHVa3k",
+  "https://youtube.com/shorts/kf1z42KVDuY",
+  "https://youtube.com/shorts/35M488VyA2k",
+  "https://youtube.com/shorts/_dRUNhfLsxY",
+];
+function adRow(n, url, week = "") {
+  return `<li${week ? ` data-week="${week}"` : ""}><a href="${url}" target="_blank" rel="noopener"><span>Ad ${n}</span></a><button type="button" class="quiet-button variant-share" data-url="${url}" data-title="Heartstrings Studio — Studio Ad ${n}" aria-label="Share Studio Ad ${n}">Share</button></li>`;
+}
+function withAdRows(...rows) {
+  return html.replace(
+    /(<ul class="card-variants"[\s\S]*?)(\s*<\/ul>)/,
+    `$1${rows.join("")}$2`,
+  );
+}
+test("five ads are live: the newest is featured, the next four share from the card", async (t) => {
   const calls = [];
   const app = setup(t, {
     share: async (data) => {
       calls.push(data);
     },
   });
-  const ad1 = "https://youtube.com/shorts/4qPVyfE48rU";
-  const ad2 = "https://youtube.com/shorts/p45UxTHVa3k";
-  const ad3 = "https://youtube.com/shorts/kf1z42KVDuY";
-  const ad4 = "https://youtube.com/shorts/35M488VyA2k";
-  const ad5 = "https://youtube.com/shorts/_dRUNhfLsxY";
-  const card = app.d.querySelector(`.card[data-url="${ad5}"]`);
-  assert.ok(card);
+  const card = app.d.querySelector(`.card[data-url="${ads[3]}"]`);
+  assert.ok(card, "card links to its newest remaining ad");
+  assert.equal(app.d.querySelector("#spotlight").dataset.url, ads[4]);
   const rows = [...card.querySelectorAll(".card-variants li")];
   assert.deepEqual(
     rows.map((row) => row.querySelector("a").href),
-    [ad1, ad2, ad3, ad4, ad5],
+    ads.slice(0, 4),
   );
   for (const row of rows) {
     assert.equal(row.querySelector("a").rel, "noopener");
@@ -321,39 +333,36 @@ test("studio ads card plays and shares each ad separately", async (t) => {
   }
   assert.deepEqual(
     calls.map((call) => call.url),
-    [ad1, ad2, ad3, ad4, ad5],
+    ads.slice(0, 4),
   );
   assert.match(calls[0].text, /Take a listen/);
   assert.equal(
     app.d.querySelector("#recentCards .quick-card").dataset.url,
-    ad5,
+    ads[3],
   );
-  assert.equal(app.d.querySelector("#spotlight").dataset.url, ad5);
 });
 
 test("studio ads card shows one ad at a time behind tabs, newest first", (t) => {
   const app = setup(t);
-  const card = app.d.querySelector(
-    '.card[data-url="https://youtube.com/shorts/_dRUNhfLsxY"]',
-  );
+  const card = app.d.querySelector(`.card[data-url="${ads[3]}"]`);
   const tabs = [...card.querySelectorAll('.variant-tabs [role="tab"]')];
   const rows = [...card.querySelectorAll(".card-variants li")];
   assert.deepEqual(
     tabs.map((tab) => tab.textContent),
-    ["Ad 1", "Ad 2", "Ad 3", "Ad 4", "Ad 5"],
+    ["Ad 1", "Ad 2", "Ad 3", "Ad 4"],
   );
   const visible = () => rows.map((row) => !row.hidden);
-  assert.deepEqual(visible(), [false, false, false, false, true]);
-  assert.equal(tabs[4].getAttribute("aria-selected"), "true");
+  assert.deepEqual(visible(), [false, false, false, true]);
+  assert.equal(tabs[3].getAttribute("aria-selected"), "true");
   tabs[0].click();
-  assert.deepEqual(visible(), [true, false, false, false, false]);
+  assert.deepEqual(visible(), [true, false, false, false]);
   assert.equal(tabs[0].tabIndex, 0);
-  assert.equal(tabs[4].tabIndex, -1);
+  assert.equal(tabs[3].tabIndex, -1);
   tabs[0].dispatchEvent(
     new app.w.KeyboardEvent("keydown", { key: "ArrowLeft", bubbles: true }),
   );
-  assert.deepEqual(visible(), [false, false, false, false, true]);
-  assert.equal(rows[4].getAttribute("aria-labelledby"), tabs[4].id);
+  assert.deepEqual(visible(), [false, false, false, true]);
+  assert.equal(rows[3].getAttribute("aria-labelledby"), tabs[3].id);
 });
 
 test("business card dials on iOS: no nested auto-link, no icon stealing the tap", () => {
@@ -520,26 +529,32 @@ test("a stale spotlight stops claiming this week", (t) => {
   );
   assert.equal(app.d.querySelector("#spotlightNote").hidden, true);
 });
-test("a new ad is one new row: card, Newest tag, spotlight and favorites follow it", (t) => {
-  const ad5 = "https://youtube.com/shorts/_dRUNhfLsxY";
+test("a new ad is one new row: the oldest retires and the rest move down a notch", (t) => {
   const ad6 = "https://youtube.com/shorts/example6";
-  const row = `<li data-week="${isoDaysAgo(1)}"><a href="${ad6}" target="_blank" rel="noopener"><span>Ad 6</span></a><button type="button" class="quiet-button variant-share" data-url="${ad6}" data-title="Heartstrings Studio — Studio Ad 6" aria-label="Share Studio Ad 6">Share</button></li>`;
   const app = setup(t, {
-    html: html.replace(/(<ul class="card-variants"[\s\S]*?)(\s*<\/ul>)/, `$1${row}$2`),
-    storage: { [savedKey]: JSON.stringify([ad5]) },
+    html: withAdRows(adRow(6, ad6, isoDaysAgo(1))),
+    storage: { [savedKey]: JSON.stringify([ads[3]]) },
   });
   const d = app.d;
-  const card = d.querySelector(`.card[data-url="${ad6}"]`);
-  assert.ok(card, "card follows the newest row");
-  assert.equal(card.querySelector(".card-main").href, ad6);
-  const tags = [...card.querySelectorAll(".variant-sub")];
-  assert.equal(tags.length, 1);
-  assert.equal(tags[0].closest("li").querySelector("a").href, ad6);
   assert.equal(d.querySelector("#spotlight").dataset.url, ad6);
   assert.equal(d.querySelector("#spotlightSong").textContent, "Studio Ad 6");
   assert.match(d.querySelector("#spotlightLabel").textContent, /^NEW STUDIO AD · /);
+  const card = d.querySelector(`.card[data-url="${ads[4]}"]`);
+  assert.ok(card, "card follows its newest remaining ad");
+  assert.equal(card.querySelector(".card-main").href, ads[4]);
+  assert.deepEqual(
+    [...card.querySelectorAll('.variant-tabs [role="tab"]')].map((tab) => tab.textContent),
+    ["Ad 2", "Ad 3", "Ad 4", "Ad 5"],
+  );
+  assert.ok(!d.querySelector(`.card-variants a[href="${ads[0]}"]`), "Ad 1 retired");
   assert.equal(card.querySelector(".save-btn").getAttribute("aria-pressed"), "true");
   assert.equal(app.visible().length, 13);
+});
+test("with a song in the spotlight, the card keeps all five ads", (t) => {
+  const app = setup(t, { html: withSpotlight(isoDaysAgo(1)) });
+  const card = app.d.querySelector(`.card[data-url="${ads[4]}"]`);
+  assert.ok(card);
+  assert.equal(card.querySelectorAll(".card-variants li").length, 5);
 });
 test("the ad spotlight is named after the ad, never 'newest'", (t) => {
   const app = setup(t);
