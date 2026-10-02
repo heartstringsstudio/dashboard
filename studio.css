@@ -136,7 +136,7 @@ svg {
 }
 .eyebrow {
   color: var(--copper);
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   font-weight: 500;
   letter-spacing: 0.13em;
   line-height: 1.6;
@@ -954,7 +954,7 @@ dialog::backdrop {
   width: 22%;
   aspect-ratio: 1;
   transform: translate(-50%, -50%);
-  background: #fff url("logo.png") center / 112% no-repeat;
+  background: #fff url("logo-160.png") center / 112% no-repeat;
   border-radius: 18%;
 }
 #qrTitle {
@@ -1166,9 +1166,6 @@ html.motion-off {
   .toolbar-top h2 {
     font-size: 2.1rem;
   }
-  .toolbar-top .eyebrow {
-    font-size: 0.625rem;
-  }
   .studio-scene {
     height: 86px;
     padding: 14px 16px;
@@ -1252,7 +1249,7 @@ html.motion-off {
     border-radius: 8px;
     background: transparent;
     color: var(--muted);
-    font-size: 0.6875rem;
+    font-size: 0.75rem;
   }
   .dock-button svg {
     width: 19px;

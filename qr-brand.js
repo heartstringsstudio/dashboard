@@ -13,7 +13,7 @@ const QRBrand = (() => {
       const image = new Image();
       image.onload = () => resolve(image);
       image.onerror = () => resolve(null);
-      image.src = "logo.png";
+      image.src = "logo-160.png";
     });
     return logo;
   }

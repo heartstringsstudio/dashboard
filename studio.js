@@ -261,10 +261,6 @@ function syncSaved() {
     const isSaved = saved.has(card.dataset.url);
     const button = card.querySelector(".save-btn");
     button.setAttribute("aria-pressed", String(isSaved));
-    button.setAttribute(
-      "aria-label",
-      `${isSaved ? "Unsave" : "Save"} ${labelFor(card)}`,
-    );
     button.title = isSaved ? "Remove from saved" : "Save on this device";
   });
   renderFavorites();

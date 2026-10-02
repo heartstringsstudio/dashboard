@@ -54,7 +54,14 @@
       name="twitter:image"
       content="https://heartstringsstudio.github.io/dashboard/assets/studio-card-banner.jpg"
     />
-    <link rel="stylesheet" href="studio.css?v=18" />
+    <link
+      rel="preload"
+      href="fonts/libre-caslon-display-400-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link rel="stylesheet" href="studio.css?v=19" />
   </head>
   <body>
     <svg
@@ -170,7 +177,7 @@
     <div class="app-shell">
       <header class="app-header">
         <div class="brand">
-          <img src="logo.png" alt="" width="36" height="36" />
+          <img src="logo-160.png" alt="" width="36" height="36" />
           <div>
             <h1>
               Heartstrings Studio <span class="dashboard-label">Dashboard</span>
@@ -238,7 +245,7 @@
           hidden
         >
           <div class="spotlight-art" aria-hidden="true">
-            <img src="logo.png" alt="" width="64" height="64" />
+            <img src="logo-160.png" alt="" width="64" height="64" />
             <span class="eq"><i></i><i></i><i></i><i></i></span>
           </div>
           <div class="spotlight-text">
@@ -280,7 +287,7 @@
           </div>
           <div class="studio-scene" aria-hidden="true">
             <div class="studio-signature">
-              <img src="logo.png" alt="" width="80" height="80" />
+              <img src="logo-160.png" alt="" width="80" height="80" />
               <span>Heartstrings <span>Studio</span></span>
             </div>
           </div>
@@ -941,7 +948,7 @@
     </dialog>
     <div id="toast" role="status" aria-live="polite"></div>
     <script src="qrcode.min.js"></script>
-    <script src="qr-brand.js?v=1"></script>
-    <script src="studio.js?v=18"></script>
+    <script src="qr-brand.js?v=2"></script>
+    <script src="studio.js?v=19"></script>
   </body>
 </html>
