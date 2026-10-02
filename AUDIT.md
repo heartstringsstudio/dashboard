@@ -49,7 +49,7 @@ The card asset version bump to `?v=4` ensures phones pick up the fix.
 
 Run `npm ci && npm test` with a current Node.js version supported by jsdom. Dependencies are development-only; deployment remains plain HTML, CSS and JavaScript with no build step.
 
-26 tests cover retained destinations/assets, valid IDs and ARIA references, filtering and navigation synchronization, favorites migration/order/persistence, cross-tab updates, copying and modal feedback, share/QR history and focus, recent-link focus retention, native-share cancellation and errors, blocked/corrupt storage, reduced motion, appearance persistence, service-worker asset versions, category share messages and Copy message, high-error-correction QR, `?filter=` shortcuts, and the spotlight (hidden when empty, share/QR, stale label, ad mode), the Studio Ads tabs, and the one-row ad workflow (a new last row moves the card, Newest tag, spotlight and favorites). The last of these reads `card.html` and `card.css` directly and fails if the telephone-detection opt-out, the `tel:` href, the icon `pointer-events` rule, the row press state, or the stylesheet version bump is missing.
+29 tests cover retained destinations/assets, valid IDs and ARIA references, filtering and navigation synchronization, favorites migration/order/persistence, cross-tab updates, copying and modal feedback, share/QR history and focus, recent-link focus retention, native-share cancellation and errors, blocked/corrupt storage, reduced motion, appearance persistence, service-worker asset versions, category share messages and Copy message, high-error-correction QR, `?filter=` shortcuts, and the spotlight (hidden when empty, share/QR, stale label, ad mode), the Studio Ads tabs, and the one-row ad workflow (a new last row moves the card, Newest tag, spotlight and favorites). The last of these reads `card.html` and `card.css` directly and fails if the telephone-detection opt-out, the `tel:` href, the icon `pointer-events` rule, the row press state, or the stylesheet version bump is missing.
 
 JavaScript syntax and `git diff --check` also pass. Responsive CSS was reviewed for one navigation per breakpoint, a single-column mobile grid, 44px controls, safe-area dock clearance, and mobile sheet sizing.
 
@@ -57,9 +57,15 @@ JavaScript syntax and `git diff --check` also pass. Responsive CSS was reviewed 
 
 ## Images, fonts and type
 
-On-page logos (header, spotlight, studio strip, QR badge and QR poster) use `logo-160.png` (14KB). The 512px `logo.png` (87KB) stays for the favicon and the manifest icon. `assets/control-room.webp` is 1400px wide (67KB, was 120KB). Two unreferenced photos, `console-detail.webp` and `vocal-booth.webp`, were removed. Both pages preload the Libre Caslon headline font so headings don't visibly swap. The smallest UI text (eyebrow labels, dock labels) is 12px.
+On-page logos (header, spotlight, studio strip, QR badge and QR poster) use `logo-160.png` (14KB). The 512px `logo.png` (87KB) stays for the favicon and the manifest icon. `assets/control-room.webp` is 1400px wide (67KB, was 120KB). Two unreferenced photos, `console-detail.webp` and `vocal-booth.webp`, were removed. Both pages preload the Libre Caslon headline font so headings don't visibly swap. The smallest UI text (the spotlight label, dock labels) is 12px.
 
 Save buttons keep one accessible name ("Save Song Jukebox"); `aria-pressed` tells screen readers whether it's saved.
+
+## Colors and labels
+
+Every dashboard color lives as a token on `:root` in `studio.css`: surfaces (`--bg-deep`, `--bg`, `--panel`, `--card`, `--raised`), text (`--ink`, `--muted`, `--on-copper`) and one copper in a few strengths (`--copper`, `--copper-bright`, `--copper-wash`, `--line`, `--copper-tint`, `--copper-edge`). Only neutral black and white shadows are written inline. Change a color in one place. The background `#151413` is shared by both pages, `theme-color` and the manifest.
+
+The spotlight label is the only small all-caps label; section headings stand on their own. Section counts are plain numbers. The Appearance dialog has Motion and Compact view; the old glow slider is gone, and the glow is a fixed `--glow`. Links that open a new tab say so to screen readers.
 
 ## Maintenance
 
@@ -67,6 +73,6 @@ Source: `index.html`, `studio.css`, `studio.js`, `qr-brand.js`, `sw.js`. New lin
 
 Existing storage keys remain unchanged. Favorites order is insertion order in the existing saved-links array. Unknown destinations are ignored. Add moved addresses to MOVED to preserve favorites/history.
 
-The service-worker cache is v27; dashboard CSS and JS use query version 19, card CSS and JS use version 5, and `qr-brand.js` uses version 2. Update cache and asset references together. Preserve the `heartstrings-dashboard-` cache prefix, `/dashboard/` manifest scope, and separate navigation cache keys for the dashboard and business card.
+The service-worker cache is v28; dashboard CSS and JS use query version 20, card CSS uses version 6, card JS uses version 5, and `qr-brand.js` uses version 2. Update cache and asset references together. Preserve the `heartstrings-dashboard-` cache prefix, `/dashboard/` manifest scope, and separate navigation cache keys for the dashboard and business card.
 
 Business-card contacts live in `card.js`'s CONTACT object and `card.html`'s contact rows. Its JPEG and WebP banner assets should stay in sync when changed.

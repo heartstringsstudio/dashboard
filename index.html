@@ -15,7 +15,7 @@
       name="apple-mobile-web-app-title"
       content="Heartstrings Studio Dashboard"
     />
-    <meta name="theme-color" content="#141110" />
+    <meta name="theme-color" content="#151413" />
     <link rel="manifest" href="manifest.json" />
     <link rel="icon" href="logo.png" type="image/png" />
     <link rel="apple-touch-icon" href="apple-touch-icon.png" />
@@ -61,7 +61,7 @@
       type="font/woff2"
       crossorigin
     />
-    <link rel="stylesheet" href="studio.css?v=19" />
+    <link rel="stylesheet" href="studio.css?v=20" />
   </head>
   <body>
     <svg
@@ -278,7 +278,6 @@
         <div class="directory-toolbar" id="directory">
           <div class="toolbar-top">
             <div>
-              <p class="eyebrow">YOUR STUDIO. WITHIN REACH.</p>
               <h2>Share Links</h2>
             </div>
             <span class="toolbar-note"
@@ -327,7 +326,6 @@
         >
           <div class="section-head">
             <div>
-              <p class="eyebrow">ALWAYS CLOSE</p>
               <h2 id="favoritesHeading">Your favorites</h2>
             </div>
             <button id="orderFavorites" class="text-button" type="button">
@@ -353,10 +351,9 @@
           >
             <div class="section-head">
               <div>
-                <p class="eyebrow">STUDIO LINKS</p>
                 <h2 id="studioHeading">Studio & partners</h2>
               </div>
-              <span class="section-count">02</span>
+              <span class="section-count">2</span>
             </div>
             <div class="cards">
               <article
@@ -413,10 +410,9 @@
           >
             <div class="section-head">
               <div>
-                <p class="eyebrow">SONGS & VIDEOS</p>
                 <h2 id="listenHeading">Music & playlists</h2>
               </div>
-              <span class="section-count">07</span>
+              <span class="section-count">8</span>
             </div>
             <div class="cards">
               <article
@@ -696,10 +692,9 @@
           >
             <div class="section-head">
               <div>
-                <p class="eyebrow">EXPLORE</p>
                 <h2 id="extrasHeading">Other links</h2>
               </div>
-              <span class="section-count">03</span>
+              <span class="section-count">3</span>
             </div>
             <div class="cards">
               <article
@@ -831,7 +826,6 @@
     <dialog id="appearanceDialog" aria-labelledby="appearanceTitle">
       <div class="dialog-header">
         <div>
-          <p class="eyebrow">MAKE IT YOURS</p>
           <h2 id="appearanceTitle">Appearance</h2>
         </div>
         <button
@@ -843,17 +837,6 @@
         </button>
       </div>
       <section class="console-settings" aria-label="Dashboard controls" hidden>
-        <label class="glow-control" for="glowRange"
-          >Control glow
-          <input
-            id="glowRange"
-            type="range"
-            min="0"
-            max="100"
-            step="5"
-            value="35"
-          /><output id="glowValue" for="glowRange">35%</output></label
-        >
         <button class="setting-toggle" id="motionToggle" aria-pressed="true">
           <span class="toggle-track" aria-hidden="true"></span>Motion
         </button>
@@ -870,7 +853,6 @@
     >
       <div class="dialog-header">
         <div>
-          <p class="eyebrow">YOUR SHORTLIST</p>
           <h2 id="favoritesTitle">Arrange favorites</h2>
         </div>
         <button
@@ -894,7 +876,7 @@
       aria-describedby="shareHint"
     >
       <div class="dialog-header">
-        <p class="eyebrow">READY TO SEND</p>
+        <h2 id="shareTitle"></h2>
         <button
           class="icon-button"
           data-close="shareDialog"
@@ -903,7 +885,6 @@
           ×
         </button>
       </div>
-      <h2 id="shareTitle"></h2>
       <p id="shareHint" class="dialog-hint">
         Copy the link or a ready-to-send message, or show its QR code.
       </p>
@@ -925,7 +906,6 @@
     </dialog>
     <dialog id="qrDialog" aria-labelledby="qrTitle" aria-describedby="qrHint">
       <div class="dialog-header">
-        <p class="eyebrow">SHARE LINK</p>
         <button
           class="icon-button"
           data-close="qrDialog"
@@ -949,6 +929,6 @@
     <div id="toast" role="status" aria-live="polite"></div>
     <script src="qrcode.min.js"></script>
     <script src="qr-brand.js?v=2"></script>
-    <script src="studio.js?v=19"></script>
+    <script src="studio.js?v=20"></script>
   </body>
 </html>
