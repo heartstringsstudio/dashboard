@@ -1,7 +1,5 @@
 "use strict";
 const $ = (id) => document.getElementById(id);
-const cards = [...document.querySelectorAll(".card[data-url]")];
-const catalog = new Map(cards.map((card) => [card.dataset.url, card]));
 // Destinations that changed address, so saved links and recents survive the move.
 const MOVED = new Map([
   [
@@ -9,6 +7,35 @@ const MOVED = new Map([
     "https://tinyurl.com/heartstringswv",
   ],
 ]);
+// The Studio Ads card lists its ads oldest first, so a new ad is one new row.
+// The card's own link, the "Newest" tag and an ad spotlight follow the last
+// row, and a favorite saved under an older ad moves to the newest.
+let newestAd = null;
+document.querySelectorAll(".card[data-ads]").forEach((card) => {
+  const rows = [...card.querySelectorAll(".card-variants li")];
+  const newest = rows.at(-1);
+  if (!newest) return;
+  const link = newest.querySelector("a");
+  const url = link.getAttribute("href");
+  [card.dataset.url, ...rows.map((row) => row.querySelector("a").href)]
+    .filter((old) => old !== url)
+    .forEach((old) => MOVED.set(old, url));
+  card.dataset.url = url;
+  card.querySelector(".card-main").href = url;
+  const tag = document.createElement("span");
+  tag.className = "variant-sub";
+  tag.textContent = "Newest";
+  link.append(tag);
+  newestAd ||= {
+    url,
+    name: newest
+      .querySelector(".variant-share")
+      .dataset.title.replace(/^Heartstrings Studio — /, ""),
+    week: newest.dataset.week || "",
+  };
+});
+const cards = [...document.querySelectorAll(".card[data-url]")];
+const catalog = new Map(cards.map((card) => [card.dataset.url, card]));
 const RECENT_KEY = "heartstrings_dashboard_recent_links";
 const SAVED_KEY = "heartstrings_dashboard_saved_links";
 const INSTALL_KEY = "heartstrings_dashboard_install_dismissed";
@@ -584,6 +611,16 @@ const SPOTLIGHT_FRESH_DAYS = 13;
 let spotlight = null;
 function setupSpotlight(now = new Date()) {
   const section = $("spotlight");
+  // data-url="newest" features the newest studio ad, named and dated by its row.
+  if (section.dataset.url === "newest") {
+    if (!newestAd) return;
+    Object.assign(section.dataset, {
+      url: newestAd.url,
+      song: section.dataset.song || newestAd.name,
+      week: section.dataset.week || newestAd.week,
+      kind: "ad",
+    });
+  }
   const { url, song, note, week, kind } = section.dataset;
   if (!url || !song || !/^https:\/\//.test(url)) return;
   const ad = kind === "ad";
