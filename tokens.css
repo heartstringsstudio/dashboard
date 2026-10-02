@@ -1,0 +1,56 @@
+/* Shared by the dashboard (studio.css) and the business card (card.css).
+   Every color either page uses is defined here; change it once. */
+@font-face {
+  font-family: "DM Sans";
+  src: url("fonts/dm-sans-latin.woff2") format("woff2");
+  font-weight: 400 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Libre Caslon";
+  src: url("fonts/libre-caslon-display-400-latin.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+:root {
+  color-scheme: dark;
+  /* Surfaces, darkest to lightest. */
+  --bg-deep: #100e0c;
+  --bg: #151413;
+  --panel: #211f1d;
+  --card: #26221f;
+  --raised: #31271f;
+  /* Text. */
+  --ink: #f4eee7;
+  --ink-soft: #e6d7c8;
+  --ink-warm: #ffe6ca;
+  --muted: #b5aaa0;
+  --on-copper: #2b2018;
+  /* One copper, in a few strengths. */
+  --copper: #ddb08c;
+  --copper-bright: #f2c9a4;
+  --copper-wash: color-mix(in srgb, var(--copper) 7%, transparent);
+  --line: color-mix(in srgb, var(--copper) 15%, transparent);
+  --copper-tint: color-mix(in srgb, var(--copper) 18%, transparent);
+  --copper-edge: color-mix(in srgb, var(--copper) 35%, transparent);
+  --copper-strong: color-mix(in srgb, var(--copper) 55%, transparent);
+  --copper-deep: #74432c;
+  --metal: linear-gradient(115deg, #c18c66, #e8bf9a 48%, #cf9b75);
+  --metal-hover: linear-gradient(115deg, #d29b74, #f0caa7 48%, #dca881);
+  /* Deeper, polished copper for the business card's bar and main button. */
+  --metal-deep: linear-gradient(
+    115deg,
+    #995b3e 0%,
+    #d49a70 28%,
+    #f8dbba 49%,
+    #d39970 66%,
+    #ad6b47 100%
+  );
+  --glow: rgb(224 132 65 / 0.35);
+  --ambient: #94603912;
+  --halo: #b567392b;
+  --font: "DM Sans", system-ui, sans-serif;
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+}

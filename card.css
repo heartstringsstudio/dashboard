@@ -1,36 +1,5 @@
-/* Standalone digital business card. Shares the dashboard's copper palette
-   but stays independent of studio.css so the card loads on its own. */
-@font-face {
-  font-family: "DM Sans";
-  src: url("fonts/dm-sans-latin.woff2") format("woff2");
-  font-weight: 400 600;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Libre Caslon";
-  src: url("fonts/libre-caslon-display-400-latin.woff2") format("woff2");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-:root {
-  color-scheme: dark;
-  --bg: #151413;
-  --ink: #f7eee6;
-  --muted: #bfb0a4;
-  --line: #dca67b29;
-  --copper: #e8b38d;
-  --font: "DM Sans", system-ui, sans-serif;
-  --metal: linear-gradient(
-    115deg,
-    #995b3e 0%,
-    #d49a70 28%,
-    #f8dbba 49%,
-    #d39970 66%,
-    #ad6b47 100%
-  );
-}
+/* Standalone digital business card. Colors and fonts come from tokens.css,
+   shared with the dashboard; it stays independent of studio.css. */
 * {
   box-sizing: border-box;
 }
@@ -57,7 +26,7 @@ body::before {
   position: fixed;
   inset: 0;
   pointer-events: none;
-  background: radial-gradient(ellipse at 50% 0%, #b567392b, transparent 65%);
+  background: radial-gradient(ellipse at 50% 0%, var(--halo), transparent 65%);
   z-index: -1;
 }
 button,
@@ -91,7 +60,7 @@ svg {
   flex-shrink: 0;
 }
 :focus-visible {
-  outline: 3px solid #ffd5ac;
+  outline: 3px solid var(--copper-bright);
   outline-offset: 4px;
 }
 .card-page {
@@ -100,7 +69,7 @@ svg {
   padding: clamp(20px, 5vw, 48px) 20px calc(40px + env(safe-area-inset-bottom));
 }
 .eyebrow {
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   letter-spacing: 0.16em;
   font-weight: 500;
   color: var(--copper);
@@ -112,12 +81,12 @@ svg {
   position: relative;
   --pad: clamp(22px, 5vw, 32px);
   padding: var(--pad);
-  border: 1px solid #dca67b52;
+  border: 1px solid var(--copper-edge);
   border-radius: 20px;
-  background: linear-gradient(140deg, #3a2c21, #211b17 55%, #33261c);
+  background: linear-gradient(140deg, var(--raised), var(--panel) 55%, var(--raised));
   box-shadow:
-    inset 0 1px #ffe4c226,
-    0 10px 0 #0d0a0866,
+    inset 0 1px color-mix(in srgb, var(--copper-bright) 15%, transparent),
+    0 10px 0 color-mix(in srgb, var(--bg-deep) 40%, transparent),
     0 26px 60px #0007;
   overflow: hidden;
 }
@@ -126,7 +95,7 @@ svg {
   position: absolute;
   inset: 0 0 auto;
   height: 3px;
-  background: var(--metal);
+  background: var(--metal-deep);
 }
 /* The banner bleeds to the card's edges, so it cancels the card padding. */
 .card-banner {
@@ -136,8 +105,8 @@ svg {
   margin: calc(var(--pad) * -1) calc(var(--pad) * -1) 0;
   aspect-ratio: 1672 / 941;
   object-fit: cover;
-  border-bottom: 1px solid #dca67b45;
-  background: #f1ece6;
+  border-bottom: 1px solid var(--copper-edge);
+  background: var(--ink);
 }
 .calling-card-top {
   padding-top: 22px;
@@ -146,7 +115,7 @@ svg {
   font: 400 clamp(1.3rem, 4.4vw, 1.6rem) / 1.25 "Libre Caslon", Georgia, serif;
   letter-spacing: -0.01em;
   margin-top: 6px;
-  color: #ffe6ca;
+  color: var(--ink-warm);
 }
 .locale {
   margin-top: 8px;
@@ -160,7 +129,7 @@ svg {
   border-top: 1px solid var(--line);
   font-size: 0.9375rem;
   line-height: 1.65;
-  color: #e4d5c7;
+  color: var(--ink-soft);
 }
 
 /* Contact rows */
@@ -175,9 +144,9 @@ svg {
   gap: 14px;
   min-height: 60px;
   padding: 10px 14px;
-  border: 1px solid #c59b7833;
+  border: 1px solid var(--copper-tint);
   border-radius: 12px;
-  background: linear-gradient(135deg, #322920, #221d19 65%);
+  background: linear-gradient(135deg, var(--raised), var(--panel) 65%);
   text-decoration: none;
   transition:
     transform 0.18s,
@@ -189,12 +158,17 @@ svg {
   width: 38px;
   height: 38px;
   border-radius: 10px;
-  background: linear-gradient(145deg, #957357, #49382b 50%, #5f4532);
-  border: 1px solid #d5b68c4f;
-  color: #f3cfaa;
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--copper) 60%, var(--bg)),
+    color-mix(in srgb, var(--copper) 23%, var(--bg)) 50%,
+    color-mix(in srgb, var(--copper) 31%, var(--bg))
+  );
+  border: 1px solid var(--copper-edge);
+  color: var(--copper-bright);
   box-shadow:
-    inset 0 1px #ffe5c747,
-    0 3px #100a0770;
+    inset 0 1px color-mix(in srgb, var(--copper-bright) 28%, transparent),
+    0 3px color-mix(in srgb, var(--bg-deep) 44%, transparent);
   flex-shrink: 0;
 }
 .contact-icon svg {
@@ -221,7 +195,7 @@ svg {
 .row-arrow {
   width: 16px;
   height: 16px;
-  color: #b6a392;
+  color: var(--muted);
   transform: rotate(-40deg);
   transition: transform 0.2s;
 }
@@ -251,25 +225,29 @@ svg {
 }
 .primary-button {
   flex: 1 1 100%;
-  border: 1px solid #f9cfac;
-  background: var(--metal);
-  color: #28170d;
+  border: 1px solid var(--copper-bright);
+  background: var(--metal-deep);
+  color: var(--on-copper);
   font-weight: 600;
   font-size: 0.875rem;
   box-shadow:
-    inset 0 1px #fff5e2b3,
-    0 4px #74432c,
+    inset 0 1px color-mix(in srgb, var(--ink) 70%, transparent),
+    0 4px var(--copper-deep),
     0 8px 24px #0005;
 }
 .quiet-button {
   flex: 1 1 0;
   min-width: 140px;
-  background: linear-gradient(160deg, #3d342e, #251f1b);
-  border: 1px solid #d5b89c36;
-  color: #e7d8c9;
+  background: linear-gradient(
+    160deg,
+    color-mix(in srgb, var(--card), var(--ink) 10%),
+    var(--panel)
+  );
+  border: 1px solid var(--copper-tint);
+  color: var(--ink-soft);
   box-shadow:
-    inset 0 1px #f8dfc52b,
-    0 3px #090706,
+    inset 0 1px color-mix(in srgb, var(--copper-bright) 17%, transparent),
+    0 3px var(--bg-deep),
     0 5px 10px #0003;
 }
 .primary-button svg,
@@ -323,7 +301,7 @@ svg {
   color: var(--muted);
 }
 .qr-note strong {
-  color: #e4d5c7;
+  color: var(--ink-soft);
   font-weight: 500;
 }
 .qr-note .quiet-button {
@@ -363,9 +341,9 @@ svg {
   padding: 12px 22px;
   max-width: calc(100% - 32px);
   width: max-content;
-  border: 1px solid #dcb18570;
-  background: #3d2b1e;
-  color: #ffe1c1;
+  border: 1px solid var(--copper-edge);
+  background: var(--raised);
+  color: var(--ink-warm);
   border-radius: 12px;
   box-shadow: 0 8px 40px #0009;
   z-index: 2000;
@@ -384,7 +362,7 @@ svg {
 
 @media (hover: hover) {
   .contact-list a:hover {
-    border-color: #d5a5768c;
+    border-color: var(--copper-strong);
     transform: translateY(-2px);
   }
   .contact-list a:hover .row-arrow {
@@ -411,8 +389,12 @@ svg {
 /* Touch devices get no hover, and the tap highlight is off, so the press
    state is the only sign a row registered the tap. */
 .contact-list a:active {
-  border-color: #d5a5768c;
-  background: linear-gradient(135deg, #3d3226, #2a231d 65%);
+  border-color: var(--copper-strong);
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--raised), var(--ink) 6%),
+    var(--card) 65%
+  );
   transform: translateY(1px);
 }
 

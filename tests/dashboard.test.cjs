@@ -284,11 +284,12 @@ test("reduced motion disables filter animation and appearance setting persists",
 test("cache manifest includes versioned assets and retained business card files", () => {
   const sw = readFileSync(resolve(root, "sw.js"), "utf8");
   for (const asset of [
-    "studio.css?v=20",
+    "tokens.css?v=1",
+    "studio.css?v=21",
     "studio.js?v=20",
     "qr-brand.js?v=2",
     "card.html",
-    "card.css?v=6",
+    "card.css?v=7",
     "card.js?v=5",
   ])
     assert.ok(sw.includes(asset), asset);
@@ -371,7 +372,7 @@ test("business card dials on iOS: no nested auto-link, no icon stealing the tap"
   // Rows had a hover state only: a tap looked like nothing happened.
   assert.match(cardCss, /\.contact-list a:active \{/);
   // The stylesheet fix only reaches iPhones if the cached copy is superseded.
-  assert.match(cardHtml, /card\.css\?v=6/);
+  assert.match(cardHtml, /card\.css\?v=7/);
 });
 
 test("shares carry a category message, and the fallback copies it with the link", async (t) => {
@@ -579,10 +580,23 @@ test("external links tell screen readers they open a new tab", (t) => {
 test("one background color across pages, manifest and theme-color", () => {
   const card = readFileSync(resolve(root, "card.html"), "utf8");
   const manifest = JSON.parse(readFileSync(resolve(root, "manifest.json"), "utf8"));
-  const css = readFileSync(resolve(root, "studio.css"), "utf8");
+  const css = readFileSync(resolve(root, "tokens.css"), "utf8");
   const bg = css.match(/--bg: (#[0-9a-f]{6});/)[1];
   assert.match(html, new RegExp(`name="theme-color" content="${bg}"`));
   assert.match(card, new RegExp(`name="theme-color" content="${bg}"`));
   assert.equal(manifest.theme_color, bg);
   assert.equal(manifest.background_color, bg);
+});
+test("both pages take every color from tokens.css", () => {
+  const card = readFileSync(resolve(root, "card.html"), "utf8");
+  for (const page of [html, card])
+    assert.match(page, /href="tokens\.css\?v=\d+"[\s\S]*href="(studio|card)\.css/);
+  // Only neutral black or white (shadows, highlights) may be written inline.
+  const neutral = /^#(0{3}|f{3}|0{6}|f{6})([0-9a-f]{1,2})?$|^#(0|f){3,4}$/i;
+  for (const file of ["studio.css", "card.css"]) {
+    const css = readFileSync(resolve(root, file), "utf8");
+    assert.doesNotMatch(css, /:root\s*\{/, `${file} defines no tokens of its own`);
+    for (const hex of css.match(/#[0-9a-f]{3,8}\b/gi) || [])
+      assert.match(hex, neutral, `${file}: ${hex} should be a token`);
+  }
 });
