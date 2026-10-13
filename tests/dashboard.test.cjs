@@ -302,6 +302,13 @@ const ads = [
   "https://youtube.com/shorts/35M488VyA2k",
   "https://youtube.com/shorts/_dRUNhfLsxY",
 ];
+// Ad tests feature the newest ad whatever the published spotlight holds.
+function featuringNewestAd(page = html) {
+  return page.replace(
+    /data-url="[^"]*"\s+data-song="[^"]*"\s+data-note="[^"]*"\s+data-week="[^"]*"(\s+data-kind="[^"]*")?/,
+    'data-url="newest" data-song="" data-note="" data-week="" data-kind="ad"',
+  );
+}
 function adRow(n, url, week = "") {
   return `<li${week ? ` data-week="${week}"` : ""}><a href="${url}" target="_blank" rel="noopener"><span>Ad ${n}</span></a><button type="button" class="quiet-button variant-share" data-url="${url}" data-title="Heartstrings Studio — Studio Ad ${n}" aria-label="Share Studio Ad ${n}">Share</button></li>`;
 }
@@ -314,6 +321,7 @@ function withAdRows(...rows) {
 test("five ads are live: the newest is featured, the next four share from the card", async (t) => {
   const calls = [];
   const app = setup(t, {
+    html: featuringNewestAd(),
     share: async (data) => {
       calls.push(data);
     },
@@ -343,7 +351,7 @@ test("five ads are live: the newest is featured, the next four share from the ca
 });
 
 test("studio ads card shows one ad at a time behind tabs, newest first", (t) => {
-  const app = setup(t);
+  const app = setup(t, { html: featuringNewestAd() });
   const card = app.d.querySelector(`.card[data-url="${ads[3]}"]`);
   const tabs = [...card.querySelectorAll('.variant-tabs [role="tab"]')];
   const rows = [...card.querySelectorAll(".card-variants li")];
@@ -532,7 +540,7 @@ test("a stale spotlight stops claiming this week", (t) => {
 test("a new ad is one new row: the oldest retires and the rest move down a notch", (t) => {
   const ad6 = "https://youtube.com/shorts/example6";
   const app = setup(t, {
-    html: withAdRows(adRow(6, ad6, isoDaysAgo(1))),
+    html: featuringNewestAd(withAdRows(adRow(6, ad6, isoDaysAgo(1)))),
     storage: { [savedKey]: JSON.stringify([ads[3]]) },
   });
   const d = app.d;
@@ -557,7 +565,7 @@ test("with a song in the spotlight, the card keeps all five ads", (t) => {
   assert.equal(card.querySelectorAll(".card-variants li").length, 5);
 });
 test("the ad spotlight is named after the ad, never 'newest'", (t) => {
-  const app = setup(t);
+  const app = setup(t, { html: featuringNewestAd() });
   const song = app.d.querySelector("#spotlightSong").textContent;
   assert.equal(song, "Studio Ad 5");
   assert.doesNotMatch(song, /newest/i);
