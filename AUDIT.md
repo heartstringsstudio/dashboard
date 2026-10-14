@@ -33,6 +33,8 @@ A spotlight card sits between the business-card strip and Share Links. It has Li
 
 **Song of the Week instead:** set the `#spotlight` element's `data-url` to the song link, `data-song` (the headline), `data-note` (optional) and `data-week`, and remove `data-kind="ad"`. If `data-url` is empty, or isn't `https://` or `newest`, the card stays hidden. For the first 13 days after `data-week`, the label reads "SONG OF THE WEEK · SEP 21" (or "NEW STUDIO AD · SEP 28"). After that it switches to "FEATURED SONG" or "FEATURED AD", so a missed week never shows an outdated "this week" claim. The ad spotlight's headline, QR title and poster title use the ad's own name ("Studio Ad 5"), never "newest", so saved posters don't go stale.
 
+**"I'm Still Here" is a standing card, not a Song of the Week.** It sits under Studio & partners next to Funeral Home Partners, with its own Share, QR and star, and a share message written for funeral homes (`data-share-text`). Changing the spotlight never touches it.
+
 ## Digital business card
 
 The standalone card remains at `card.html`, with its existing banner, contact details, vCard download, QR and sharing behavior. Dashboard sharing uses the canonical URL from `og:url`, so previews still share the production card address.
