@@ -11,7 +11,7 @@ const savedKey = "heartstrings_dashboard_saved_links";
 const settingsKey = "heartstrings_dashboard_console_settings";
 const main = "https://tinyurl.com/heartstringswv";
 const jukebox = "https://tinyurl.com/hsjukebox";
-const partner = "https://tinyurl.com/heartstringsfh";
+const alarm = "https://heartstringsstudio.github.io/alarm/";
 const tick = () => new Promise((resolve) => setTimeout(resolve, 20));
 function setup(t, options = {}) {
   const dom = new JSDOM(options.html || html, {
@@ -169,9 +169,9 @@ test("favorites migrate old addresses, reorder, persist and synchronize between 
     app.d.querySelector("#favoritesDialog .dialog-status").textContent,
     /moved down/,
   );
-  app.w.localStorage.setItem(savedKey, JSON.stringify([partner]));
+  app.w.localStorage.setItem(savedKey, JSON.stringify([alarm]));
   app.w.dispatchEvent(new app.w.StorageEvent("storage", { key: savedKey }));
-  assert.deepEqual(order(), [partner]);
+  assert.deepEqual(order(), [alarm]);
   assert.equal(app.d.querySelector("#dockSavedCount").textContent, "1");
 });
 test("share fallback copies correct URL and keeps feedback inside the modal", async (t) => {
