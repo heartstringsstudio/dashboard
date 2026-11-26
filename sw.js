@@ -1,5 +1,5 @@
 const CACHE_PREFIX = "heartstrings-dashboard-";
-const CACHE = `${CACHE_PREFIX}v37`;
+const CACHE = `${CACHE_PREFIX}v38`;
 const SHELL = [
   "./",
   "./index.html",

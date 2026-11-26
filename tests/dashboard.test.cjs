@@ -624,7 +624,7 @@ test("both pages take every color from tokens.css", () => {
   }
 });
 
-test("I'm Still Here has its own shareable card for funeral homes", async (t) => {
+test("I'm Still Here has its own shareable card", async (t) => {
   const calls = [];
   const url = "https://youtu.be/a50GgjTQago";
   const app = setup(t, {
@@ -642,5 +642,5 @@ test("I'm Still Here has its own shareable card for funeral homes", async (t) =>
   if (sheet && !calls.length) sheet.click();
   await tick();
   assert.equal(calls.at(-1)?.url, url);
-  assert.match(calls.at(-1).text, /families you serve/);
+  assert.match(calls.at(-1).text, /A memorial song from Heartstrings Studio/);
 });
